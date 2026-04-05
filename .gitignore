@@ -1,0 +1,56 @@
+# Godot 4+ specific ignores
+.godot/
+
+# Godot-specific ignores
+*.import
+*.translation
+export.cfg
+
+# Imported translations (automatically generated from CSV files)
+*.translation
+
+# Mono-specific ignores
+.mono/
+data_*/
+mono_crash.*.json
+
+# System/tool-specific ignores
+.directory
+*~
+*.swp
+.DS_Store
+
+# Build outputs
+builds/
+*.exe
+*.apk
+*.aab
+*.zip
+*.pck
+
+# IDE specific
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+*.old
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Scripts de ayuda (no ignorar)
+!git_commit_helper.sh
+!generate_commit_history.sh
+!setup_git.sh
+!export_presets.cfg
+/android/
