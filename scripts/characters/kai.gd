@@ -4,7 +4,7 @@ extends CharacterBody2D
 @onready var sprite := $AnimatedSprite2D
 
 # ── Constantes de movimiento ──────────────────────────────────────
-const SPEED       := 120.0   # velocidad caminando
+const SPEED       := 110.0   # velocidad caminando
 const RUN_SPEED   := 220.0   # velocidad corriendo
 const CROUCH_SPEED := 60.0   # velocidad agachado
 const CLIMB_SPEED := 80.0    # velocidad trepando
