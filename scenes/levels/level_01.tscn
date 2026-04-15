@@ -1,0 +1,211 @@
+[gd_scene format=3 uid="uid://b4ptokpwkelwu"]
+
+[ext_resource type="Texture2D" uid="uid://c7yykig1nojgy" path="res://assets/backgrounds/level_01_background_sector_b2.png" id="1_m802k"]
+[ext_resource type="Script" uid="uid://44au5iw2tkex" path="res://scripts/levels/death_zone.gd" id="2_i2aat"]
+[ext_resource type="Script" uid="uid://b8te30shvveuk" path="res://scripts/levels/ladder.gd" id="2_ladder"]
+[ext_resource type="PackedScene" uid="uid://cnc1ao3mcg26o" path="res://scenes/characters/kai.tscn" id="3_2djvx"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m802k"]
+size = Vector2(381.5, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i2aat"]
+size = Vector2(553, 43)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2djvx"]
+size = Vector2(212.33337, 41.333344)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uvc87"]
+size = Vector2(921.5, 41)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qdh5e"]
+size = Vector2(227.54688, 41.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_50wog"]
+size = Vector2(140.77344, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1ey3t"]
+size = Vector2(1077.22, 41.375)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t0hvh"]
+size = Vector2(33.4375, 241)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kfebt"]
+size = Vector2(33.4375, 259.25)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jmes4"]
+size = Vector2(33.4375, 259.25)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r72dd"]
+size = Vector2(31.71875, 377.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ijn0p"]
+size = Vector2(30, 522.75)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tyxjt"]
+size = Vector2(1519, 25)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cwffn"]
+size = Vector2(44, 271)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e6lid"]
+size = Vector2(44, 253.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3g50r"]
+size = Vector2(46.333344, 253.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iu1m7"]
+size = Vector2(46.666718, 317.75)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_07lms"]
+size = Vector2(429, 76.25)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gi8m4"]
+size = Vector2(1077, 39.5)
+
+[node name="Level01" type="Node2D" unique_id=1534496963]
+
+[node name="World" type="Node2D" parent="." unique_id=170826409]
+scale = Vector2(0.6, 0.6)
+
+[node name="Background" type="Parallax2D" parent="World" unique_id=1934809806]
+
+[node name="Sprite2D" type="Sprite2D" parent="World/Background" unique_id=682138484]
+texture = ExtResource("1_m802k")
+
+[node name="Environment" type="Node2D" parent="World" unique_id=1372210427]
+
+[node name="Floors" type="Node2D" parent="World/Environment" unique_id=1064390058]
+
+[node name="Floor_L1_Left" type="StaticBody2D" parent="World/Environment/Floors" unique_id=1777586327]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Floors/Floor_L1_Left" unique_id=285745408]
+position = Vector2(-575, 385.00003)
+shape = SubResource("RectangleShape2D_m802k")
+
+[node name="Floor_L1_Right" type="StaticBody2D" parent="World/Environment/Floors" unique_id=556584508]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Floors/Floor_L1_Right" unique_id=78209512]
+position = Vector2(89.5, 381.5)
+shape = SubResource("RectangleShape2D_i2aat")
+
+[node name="Floor_L2_Left" type="StaticBody2D" parent="World/Environment/Floors" unique_id=834832101]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Floors/Floor_L2_Left" unique_id=1536950132]
+position = Vector2(-657.8333, 112.333336)
+shape = SubResource("RectangleShape2D_2djvx")
+
+[node name="Floor_L2_CenterLeft" type="StaticBody2D" parent="World/Environment/Floors" unique_id=1672683312]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Floors/Floor_L2_CenterLeft" unique_id=1078457079]
+position = Vector2(-27.75, 111.5)
+shape = SubResource("RectangleShape2D_uvc87")
+
+[node name="Floor_L2_Rights" type="StaticBody2D" parent="World/Environment/Floors" unique_id=1338466079]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Floors/Floor_L2_Rights" unique_id=1964404150]
+position = Vector2(652.22656, 114.25)
+shape = SubResource("RectangleShape2D_qdh5e")
+
+[node name="Floor_L3_Left" type="StaticBody2D" parent="World/Environment/Floors" unique_id=1591510824]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Floors/Floor_L3_Left" unique_id=1086809211]
+position = Vector2(-695.3867, -140)
+shape = SubResource("RectangleShape2D_50wog")
+
+[node name="Floor_L3_Center" type="StaticBody2D" parent="World/Environment/Floors" unique_id=1273565811]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Floors/Floor_L3_Center" unique_id=944820195]
+position = Vector2(-25.276703, -140.6875)
+shape = SubResource("RectangleShape2D_1ey3t")
+
+[node name="Walls" type="Node2D" parent="World/Environment" unique_id=1105981805]
+
+[node name="Walls_left" type="StaticBody2D" parent="World/Environment/Walls" unique_id=231549090]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Walls/Walls_left" unique_id=1076791976]
+position = Vector2(-749.28125, 248.5)
+shape = SubResource("RectangleShape2D_t0hvh")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="World/Environment/Walls/Walls_left" unique_id=1786499157]
+position = Vector2(-748, -297)
+shape = SubResource("RectangleShape2D_kfebt")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="World/Environment/Walls/Walls_left" unique_id=217389306]
+position = Vector2(-748, -15)
+shape = SubResource("RectangleShape2D_jmes4")
+
+[node name="Walls_Right" type="StaticBody2D" parent="World/Environment/Walls" unique_id=1886237226]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Walls/Walls_Right" unique_id=416759306]
+position = Vector2(752.1406, 324.25)
+shape = SubResource("RectangleShape2D_r72dd")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="World/Environment/Walls/Walls_Right" unique_id=1465441281]
+position = Vector2(753, -161.375)
+shape = SubResource("RectangleShape2D_ijn0p")
+
+[node name="Walls_up" type="StaticBody2D" parent="World/Environment/Walls" unique_id=1219599448]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Walls/Walls_up" unique_id=155402665]
+position = Vector2(1.5, -410.5)
+shape = SubResource("RectangleShape2D_tyxjt")
+
+[node name="Ladders" type="Node2D" parent="World/Environment" unique_id=640974828]
+
+[node name="Ladder_L1" type="Area2D" parent="World/Environment/Ladders" unique_id=228375605 groups=["ladders"]]
+script = ExtResource("2_ladder")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Ladders/Ladder_L1" unique_id=765915022]
+position = Vector2(-519, 228.5)
+shape = SubResource("RectangleShape2D_cwffn")
+
+[node name="Ladder_L2" type="Area2D" parent="World/Environment/Ladders" unique_id=1993333925 groups=["ladders"]]
+script = ExtResource("2_ladder")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Ladders/Ladder_L2" unique_id=1706460926]
+position = Vector2(-595, -35.25)
+shape = SubResource("RectangleShape2D_e6lid")
+
+[node name="Ladder_R1" type="Area2D" parent="World/Environment/Ladders" unique_id=180461140 groups=["ladders"]]
+script = ExtResource("2_ladder")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Ladders/Ladder_R1" unique_id=1273813077]
+position = Vector2(399.83334, -281)
+shape = SubResource("RectangleShape2D_3g50r")
+
+[node name="Ladder_R2" type="Area2D" parent="World/Environment/Ladders" unique_id=33173358 groups=["ladders"]]
+script = ExtResource("2_ladder")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Ladders/Ladder_R2" unique_id=42423665]
+position = Vector2(486.66666, 259.125)
+shape = SubResource("RectangleShape2D_iu1m7")
+
+[node name="Obstacles" type="Node2D" parent="World/Environment" unique_id=957377746]
+
+[node name="Hazards" type="Node2D" parent="World/Environment" unique_id=159036872]
+
+[node name="DeathZone_Waters" type="Area2D" parent="World/Environment/Hazards" unique_id=755123633]
+script = ExtResource("2_i2aat")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Hazards/DeathZone_Waters" unique_id=1405642665]
+position = Vector2(524, 471.125)
+shape = SubResource("RectangleShape2D_07lms")
+debug_color = Color(0.8380412, 0.17305702, 0.15790051, 0.41960785)
+
+[node name="DeathZone_Pit" type="Area2D" parent="World/Environment/Hazards" unique_id=1609690681]
+script = ExtResource("2_i2aat")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Hazards/DeathZone_Pit" unique_id=1353409164]
+position = Vector2(-229.5, 491.25)
+shape = SubResource("RectangleShape2D_gi8m4")
+debug_color = Color(1, 1, 1, 0.41960785)
+
+[node name="Interactables" type="Node2D" parent="World/Environment" unique_id=60384250]
+
+[node name="Characters" type="Node2D" parent="." unique_id=840783516]
+
+[node name="kai" parent="Characters" unique_id=1413245610 instance=ExtResource("3_2djvx")]
+position = Vector2(-404, 178)
+scale = Vector2(1.5, 1.5)
+
+[editable path="Characters/kai"]
