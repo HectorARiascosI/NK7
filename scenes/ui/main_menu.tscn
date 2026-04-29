@@ -1,0 +1,188 @@
+[gd_scene load_steps=3 format=3 uid="uid://main_menu_nk7"]
+
+[ext_resource type="Script" path="res://scripts/ui/main_menu.gd" id="1_main"]
+[ext_resource type="Texture2D" path="res://assets/ui/menu_bg.png" id="2_bg"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_main")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_bg")
+expand_mode = 3
+stretch_mode = 1
+
+[node name="RightPanel" type="Control" parent="."]
+layout_mode = 1
+anchor_left = 0.55
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelBG" type="ColorRect" parent="RightPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.051, 0.055, 0.067, 0.90)
+
+[node name="LeftBorder" type="ColorRect" parent="RightPanel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_right = 0.0
+offset_right = 2.0
+anchor_bottom = 1.0
+grow_vertical = 2
+color = Color(0.800, 0.133, 0.000, 1.0)
+
+[node name="TitleLabel" type="Label" parent="RightPanel"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_top = 20.0
+offset_bottom = 160.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 78
+theme_override_colors/font_color = Color(0.910, 0.886, 0.922, 1.0)
+theme_override_colors/font_shadow_color = Color(0.800, 0.133, 0.000, 0.5)
+theme_override_constants/shadow_offset_x = 4
+theme_override_constants/shadow_offset_y = 4
+text = "NK7"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SubLabel" type="Label" parent="RightPanel"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_top = 162.0
+offset_bottom = 186.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.290, 0.314, 0.376, 1.0)
+text = "— ESCAPE DEL COMPLEJO ENERGÉTICO —"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Divider" type="ColorRect" parent="RightPanel"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_left = 20.0
+offset_top = 192.0
+offset_right = -20.0
+offset_bottom = 193.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.180, 0.200, 0.251, 0.7)
+
+[node name="ButtonsArea" type="VBoxContainer" parent="RightPanel"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_left = 16.0
+offset_top = 200.0
+offset_right = -16.0
+offset_bottom = 570.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 4
+
+[node name="PlayButton" type="Button" parent="RightPanel/ButtonsArea"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_vertical = 3
+text = "NUEVA PARTIDA"
+
+[node name="ContinueButton" type="Button" parent="RightPanel/ButtonsArea"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_vertical = 3
+text = "CONTINUAR"
+
+[node name="SettingsButton" type="Button" parent="RightPanel/ButtonsArea"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_vertical = 3
+text = "CONFIGURACIÓN"
+
+[node name="CreditsButton" type="Button" parent="RightPanel/ButtonsArea"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_vertical = 3
+text = "CRÉDITOS"
+
+[node name="QuitButton" type="Button" parent="RightPanel/ButtonsArea"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_vertical = 3
+text = "SALIR"
+
+[node name="StatusBar" type="ColorRect" parent="RightPanel"]
+layout_mode = 1
+anchors_preset = 12
+anchor_left = 0.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -56.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0.035, 0.039, 0.047, 0.98)
+
+[node name="StatusTopLine" type="ColorRect" parent="RightPanel/StatusBar"]
+layout_mode = 1
+anchors_preset = 1
+anchor_right = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+color = Color(0.180, 0.200, 0.251, 0.7)
+
+[node name="StatusLabel" type="Label" parent="RightPanel/StatusBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 14.0
+offset_right = -14.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.290, 0.314, 0.376, 1.0)
+text = "> _"
+vertical_alignment = 1
+
+[connection signal="pressed" from="RightPanel/ButtonsArea/PlayButton"     to="." method="_on_play_pressed"]
+[connection signal="pressed" from="RightPanel/ButtonsArea/ContinueButton" to="." method="_on_continue_pressed"]
+[connection signal="pressed" from="RightPanel/ButtonsArea/SettingsButton" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="RightPanel/ButtonsArea/CreditsButton"  to="." method="_on_credits_pressed"]
+[connection signal="pressed" from="RightPanel/ButtonsArea/QuitButton"     to="." method="_on_quit_pressed"]
