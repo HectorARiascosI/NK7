@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://laser_nk7"]
+
+[ext_resource type="Script" path="res://scripts/objects/laser.gd" id="1_laser"]
+[ext_resource type="Texture2D" path="res://assets/objects/lasers.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_beam"]
+size = Vector2(200, 8)
+
+[node name="Laser" type="Node2D"]
+script = ExtResource("1_laser")
+
+[node name="BeamArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 1
+
+[node name="BeamShape" type="CollisionShape2D" parent="BeamArea"]
+position = Vector2(100, 0)
+shape = SubResource("RectangleShape2D_beam")
+
+[node name="EmitterSprite" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.5, 0.5)

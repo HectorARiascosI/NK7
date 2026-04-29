@@ -1,0 +1,56 @@
+[gd_scene load_steps=4 format=3 uid="uid://eleczone_nk7"]
+
+[ext_resource type="Script" path="res://scripts/objects/electric_zone.gd" id="1_ez"]
+[ext_resource type="Texture2D" path="res://assets/objects/electric_zones.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_zone"]
+size = Vector2(120, 40)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ez"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_tex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_tex")
+}],
+"loop": true,
+"name": &"active",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_tex")
+}],
+"loop": false,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_tex")
+}],
+"loop": false,
+"name": &"off",
+"speed": 5.0
+}]
+
+[node name="ElectricZone" type="Area2D"]
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1_ez")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_zone")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_ez")
+animation = &"active"
