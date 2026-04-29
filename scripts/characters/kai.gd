@@ -4,28 +4,62 @@ extends CharacterBody2D
 @onready var sprite := $AnimatedSprite2D
 
 # ── Constantes de movimiento ──────────────────────────────────────
-const SPEED       := 120.0   # velocidad caminando
-const RUN_SPEED   := 220.0   # velocidad corriendo
-const CROUCH_SPEED := 60.0   # velocidad agachado
-const CLIMB_SPEED := 80.0    # velocidad trepando
-const JUMP_FORCE  := -300.0  # fuerza del salto (negativo = hacia arriba)
-const GRAVITY     := 980.0   # gravedad
+const SPEED        := 120.0
+const RUN_SPEED    := 220.0
+const CROUCH_SPEED := 60.0
+const CLIMB_SPEED  := 80.0
+const JUMP_FORCE   := -300.0
+const GRAVITY      := 980.0
 
 # ── Variables de estado ───────────────────────────────────────────
-var is_running    := false
-var is_crouching  := false
-var is_climbing   := false
-var is_doing_action := false  # para acciones que bloquean movimiento
-var facing_right  := true
-var can_climb     := false    # está cerca de una escalera
-var current_ladder: Area2D = null
+var is_running      := false
+var is_crouching    := false
+var is_climbing     := false
+var is_doing_action := false
+var facing_right    := true
+var can_climb       := false
+var current_ladder  : Area2D = null
+
+# ── Referencia al DialogueBox (cacheada) ─────────────────────────
+var _dialogue_box : Node = null
 
 
 func _ready() -> void:
-	pass  # Las señales se conectarán automáticamente cuando KAI entre en las áreas
+	# Buscar el DialogueBox una sola vez al iniciar
+	await get_tree().process_frame
+	_dialogue_box = _search_node(get_tree().root, "DialogueBox")
+
+
+func _is_dialogue_open() -> bool:
+	if _dialogue_box == null:
+		_dialogue_box = _search_node(get_tree().root, "DialogueBox")
+	if _dialogue_box == null:
+		return false
+	# Leer la variable estática is_active del DialogueBox
+	var val = _dialogue_box.get("is_active")
+	return val != null and bool(val)
+
+
+func _search_node(node: Node, target_name: String) -> Node:
+	if node.name == target_name:
+		return node
+	for child in node.get_children():
+		var result := _search_node(child, target_name)
+		if result:
+			return result
+	return null
 
 
 func _physics_process(delta: float) -> void:
+	# ── Bloquear todo si hay diálogo activo ───────────────────────
+	if _is_dialogue_open():
+		velocity.x = move_toward(velocity.x, 0, SPEED * 2.0)
+		if not is_on_floor():
+			velocity.y += GRAVITY * delta
+		move_and_slide()
+		sprite.play("idle")
+		return
+
 	# Manejar escaleras
 	_handle_climbing()
 	
