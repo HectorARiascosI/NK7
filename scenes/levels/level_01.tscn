@@ -4,6 +4,9 @@
 [ext_resource type="Script" uid="uid://44au5iw2tkex" path="res://scripts/levels/death_zone.gd" id="2_i2aat"]
 [ext_resource type="Script" uid="uid://b8te30shvveuk" path="res://scripts/levels/ladder.gd" id="2_ladder"]
 [ext_resource type="PackedScene" uid="uid://cnc1ao3mcg26o" path="res://scenes/characters/kai.tscn" id="3_2djvx"]
+[ext_resource type="PackedScene" uid="uid://c8vx3k2m5n7qa" path="res://scenes/ui/pause_menu.tscn" id="5_pause"]
+[ext_resource type="Script" uid="uid://cu47yo3ylr3ym" path="res://scripts/levels/level_01_tutorial.gd" id="6_tutorial"]
+[ext_resource type="Script" uid="uid://bglycsqhc7ks6" path="res://scripts/ui/dialogue_box.gd" id="7_dialogue"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m802k"]
 size = Vector2(381.5, 40)
@@ -68,11 +71,16 @@ size = Vector2(1077, 39.5)
 scale = Vector2(0.6, 0.6)
 
 [node name="Background" type="Parallax2D" parent="World" unique_id=1934809806]
+scale = Vector2(1.39, 1.39)
 
 [node name="Sprite2D" type="Sprite2D" parent="World/Background" unique_id=682138484]
+position = Vector2(-2.3758545, 21.582699)
+scale = Vector2(0.99766827, 0.8430754)
 texture = ExtResource("1_m802k")
 
 [node name="Environment" type="Node2D" parent="World" unique_id=1372210427]
+position = Vector2(0, 22.583)
+scale = Vector2(1.39, 1.16)
 
 [node name="Floors" type="Node2D" parent="World/Environment" unique_id=1064390058]
 
@@ -205,7 +213,18 @@ debug_color = Color(1, 1, 1, 0.41960785)
 [node name="Characters" type="Node2D" parent="." unique_id=840783516]
 
 [node name="kai" parent="Characters" unique_id=1413245610 instance=ExtResource("3_2djvx")]
-position = Vector2(-404, 178)
+position = Vector2(-551, 225.00002)
 scale = Vector2(1.5, 1.5)
+metadata/_edit_group_ = true
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1732096819]
+
+[node name="PauseMenu" parent="UI" unique_id=1087837299 instance=ExtResource("5_pause")]
+
+[node name="DialogueBox" type="CanvasLayer" parent="." unique_id=25778097]
+script = ExtResource("7_dialogue")
+
+[node name="TutorialManager" type="Node" parent="." unique_id=62299246]
+script = ExtResource("6_tutorial")
 
 [editable path="Characters/kai"]

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bd6ohr12vpyfp" path="res://scripts/characters/kai.gd" id="1_sh5xu"]
 [ext_resource type="Texture2D" uid="uid://5dva4c531mqy" path="res://assets/characters/kai/kai_spritesheet_v2.png" id="1_shn3y"]
+[ext_resource type="Script" path="res://scripts/camera/smart_camera.gd" id="3_camera"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_h84hm"]
 atlas = ExtResource("1_shn3y")
@@ -304,7 +305,7 @@ animations = [{
 radius = 11.0
 height = 56.0
 
-[node name="kai" type="CharacterBody2D" unique_id=1413245610]
+[node name="kai" type="CharacterBody2D" unique_id=1413245610 groups=["player"]]
 script = ExtResource("1_sh5xu")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1677559532]
@@ -316,11 +317,11 @@ animation = &"idle"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=360408128]
 shape = SubResource("CapsuleShape2D_shn3y")
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="SmartCamera" type="Camera2D" parent="."]
 enabled = true
-limit_left = -450
-limit_right = 450
-limit_top = -250
-limit_bottom = 300
-position_smoothing_enabled = true
-position_smoothing_speed = 4.5
+limit_left = -449
+limit_right = 452
+limit_top = -246
+limit_bottom = 283
+position_smoothing_enabled = false
+script = ExtResource("3_camera")
