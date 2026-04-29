@@ -1,0 +1,63 @@
+[gd_scene load_steps=4 format=3 uid="uid://switch_nk7"]
+
+[ext_resource type="Script" path="res://scripts/objects/switch.gd" id="1_switch"]
+[ext_resource type="Texture2D" path="res://assets/objects/interactables.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_detect"]
+size = Vector2(80, 60)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_switch"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_tex")
+}],
+"loop": false,
+"name": &"off",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_tex")
+}],
+"loop": true,
+"name": &"on",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_tex")
+}],
+"loop": false,
+"name": &"left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_tex")
+}],
+"loop": false,
+"name": &"right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_tex")
+}],
+"loop": true,
+"name": &"active",
+"speed": 5.0
+}]
+
+[node name="Switch" type="Area2D"]
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1_switch")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_detect")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_switch")
+animation = &"off"
