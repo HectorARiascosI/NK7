@@ -1,0 +1,59 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script"    path="res://scripts/objects/exit_door.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/objects/doors.png"     id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(60, 120)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_detect"]
+size = Vector2(90, 140)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_door"]
+animations = [{
+"frames": [{"duration": 1.0, "texture": ExtResource("2_tex")}],
+"loop": false,
+"name": &"closed",
+"speed": 5.0
+}, {
+"frames": [{"duration": 1.0, "texture": ExtResource("2_tex")}],
+"loop": false,
+"name": &"opening",
+"speed": 8.0
+}, {
+"frames": [{"duration": 1.0, "texture": ExtResource("2_tex")}],
+"loop": false,
+"name": &"open",
+"speed": 5.0
+}]
+
+[node name="ExitDoor" type="Node2D"]
+script = ExtResource("1_script")
+next_level = 1
+
+[node name="StaticBody" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody"]
+shape = SubResource("RectangleShape2D_body")
+
+[node name="DetectionArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask  = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+shape = SubResource("RectangleShape2D_detect")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_door")
+animation = &"closed"
+
+[node name="Label" type="Label" parent="."]
+offset_left  = -50.0
+offset_top   = -55.0
+offset_right =  50.0
+offset_bottom = -35.0
+theme_override_colors/font_color = Color(0.3, 1.0, 0.5, 1)
+theme_override_font_sizes/font_size = 11
+horizontal_alignment = 1
+text = "[E] Salir"
