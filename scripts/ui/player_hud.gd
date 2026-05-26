@@ -2,41 +2,29 @@ extends CanvasLayer
 class_name PlayerHUD
 
 ## ════════════════════════════════════════════════════════════════
-## HUD DEL JUGADOR — NK-7  (UIv2 pixel art bars)
-## Textura por barra: [icono 96px | fill 192px] = 288px @ 3x
+## HUD DEL JUGADOR — NK-7
 ## ════════════════════════════════════════════════════════════════
 
-# ── Nodos barras ──────────────────────────────────────────────────
-@onready var _health_clip : Control     = $Root/BarsPanel/RowHealth/BarClip_Health
-@onready var _energy_clip : Control     = $Root/BarsPanel/RowEnergy/BarClip_Energy
-@onready var _tool_clip   : Control     = $Root/BarsPanel/RowTool/BarClip_Tool
-@onready var _health_fill : TextureRect = $Root/BarsPanel/RowHealth/BarClip_Health/BarFill_Health
-@onready var _energy_fill : TextureRect = $Root/BarsPanel/RowEnergy/BarClip_Energy/BarFill_Energy
-@onready var _tool_fill   : TextureRect = $Root/BarsPanel/RowTool/BarClip_Tool/BarFill_Tool
-
-# ── Nodos coleccionables ──────────────────────────────────────────
-@onready var _label_coins : Label = $Root/CollectablesPanel/LabelCoins
-@onready var _label_cubes : Label = $Root/CollectablesPanel/LabelCubes
-
-# ── Timer / Score ─────────────────────────────────────────────────
-@onready var _timer_panel : Control = $Root/TimerPanel
-@onready var _timer_label : Label   = $Root/TimerPanel/LabelTimer
-@onready var _score_label : Label   = $Root/LabelScore
+# ── Nodos ─────────────────────────────────────────────────────────
+@onready var _heart_display : HeartDisplay = $Root/HeartDisplay
+@onready var _stamina_clip  : Control      = $Root/RowStamina/BarClip_Stamina
+@onready var _stamina_fill  : TextureRect  = $Root/RowStamina/BarClip_Stamina/BarFill_Stamina
+@onready var _label_coins   : Label        = $Root/CollectablesPanel/LabelCoins
+@onready var _label_cubes   : Label        = $Root/CollectablesPanel/LabelCubes
+@onready var _timer_panel   : Control      = $Root/TimerPanel
+@onready var _timer_label   : Label        = $Root/TimerPanel/LabelTimer
+@onready var _score_label   : Label        = $Root/LabelScore
 
 # ── Constantes ────────────────────────────────────────────────────
-## Zona de barra fill por textura (ancho total 201px - icono)
-const BAR_MAX_HP   : float = 162.0   ## 201 - 39 (icono cuadrado health)
-const BAR_MAX_NRG  : float = 154.0   ## 201 - 47 (icono energy)
-const BAR_MAX_TOOL : float = 154.0   ## 201 - 47 (icono stamina)
-const LOW_HP_THRESHOLD   : float = 0.25
-const LOW_NRG_THRESHOLD  : float = 0.20
-const LOW_TOOL_THRESHOLD : float = 0.20
+## offset_left del BarClip_Stamina = 30, ancho fill = 262px
+const STAMINA_OFFSET_LEFT   : float = 30.0
+const BAR_MAX_STAMINA       : float = 262.0
+const LOW_STAMINA_THRESHOLD : float = 0.20
 
 # ── Estado ────────────────────────────────────────────────────────
 var player         : CharacterBody2D = null
 var _timer_running : bool  = false
 var _timer_seconds : float = 0.0
-var _blink_timer   : float = 0.0
 
 # ══════════════════════════════════════════════════════════════════
 
@@ -48,7 +36,7 @@ func _process(delta: float) -> void:
 	if not player or not is_instance_valid(player):
 		_find_player()
 		return
-	_update_bars(delta)
+	_update_bars()
 	_update_collectables()
 	_update_timer(delta)
 	_update_score()
@@ -57,30 +45,17 @@ func _process(delta: float) -> void:
 # BARRAS
 # ══════════════════════════════════════════════════════════════════
 
-func _update_bars(delta: float) -> void:
-	var hp  : float = player.get_health_percent()
-	var nrg : float = player.get_energy_percent()
-	var tl  : float = player.get_tool_durability_percent()
+func _update_bars() -> void:
+	# ── Corazones ─────────────────────────────────────────────────
+	if _heart_display:
+		var current_hp : int = player.get_health()
+		var max_health : int = player.get_max_health()
+		_heart_display.update_hearts(current_hp, max_health)
 
-	# Clip width = porcentaje × ancho máximo de la zona de barra
-	_health_clip.size.x = hp  * BAR_MAX_HP
-	_energy_clip.size.x = nrg * BAR_MAX_NRG
-	_tool_clip.size.x   = tl  * BAR_MAX_TOOL
-
-	# Salud baja (≤25%): parpadeo cálido
-	if hp <= LOW_HP_THRESHOLD:
-		_blink_timer += delta * 8.0
-		var t : float = 0.5 + 0.5 * sin(_blink_timer)
-		_health_fill.modulate = Color(1.0, 0.2 + t * 0.3, 0.1 + t * 0.15)
-	else:
-		_blink_timer = 0.0
-		_health_fill.modulate = Color.WHITE
-
-	# Energía baja (≤20%): tinte azul oscuro
-	_energy_fill.modulate = Color(0.4, 0.4, 0.9) if nrg <= LOW_NRG_THRESHOLD else Color.WHITE
-
-	# Stamina baja (≤20%): tinte marrón
-	_tool_fill.modulate = Color(0.7, 0.5, 0.2) if tl <= LOW_TOOL_THRESHOLD else Color.WHITE
+	# ── Stamina ────────────────────────────────────────────────────
+	var stam : float = player.get_tool_durability_percent()
+	_stamina_clip.offset_right = 30.0 + stam * 262.0
+	_stamina_fill.modulate = Color(1.0, 0.5, 0.1) if stam <= LOW_STAMINA_THRESHOLD else Color.WHITE
 
 # ══════════════════════════════════════════════════════════════════
 # COLECCIONABLES
@@ -146,8 +121,5 @@ func get_elapsed_time() -> float:
 	return _timer_seconds
 
 func flash_damage() -> void:
-	if not _health_fill:
-		return
-	var tw := create_tween()
-	tw.tween_property(_health_fill, "modulate", Color(2.5, 2.5, 2.5), 0.05)
-	tw.tween_property(_health_fill, "modulate", Color.WHITE, 0.3)
+	if _heart_display:
+		_heart_display.flash_damage()

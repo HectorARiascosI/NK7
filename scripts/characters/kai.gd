@@ -576,6 +576,12 @@ func die() -> void:
 func get_health_percent() -> float:
 	return health / float(MAX_HEALTH)
 
+func get_health() -> int:
+	return int(health)
+
+func get_max_health() -> int:
+	return MAX_HEALTH
+
 func get_energy_percent() -> float:
 	return energy / float(MAX_ENERGY)
 

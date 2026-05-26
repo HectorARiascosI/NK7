@@ -1,17 +1,16 @@
-[gd_scene load_steps=9 format=3 uid="uid://cg4lv665lj8ey"]
+[gd_scene load_steps=7 format=3 uid="uid://cg4lv665lj8ey"]
 
-[ext_resource type="Script"    uid="uid://c7f6wxijylro5" path="res://scripts/ui/player_hud.gd"         id="1_script"]
-[ext_resource type="Texture2D"                           path="res://assets/ui/hud/hud_icon_timer.png" id="2_timer"]
-[ext_resource type="Texture2D"                           path="res://assets/ui/hud/hud_bar_health.png" id="3_bar_hp"]
-[ext_resource type="Texture2D"                           path="res://assets/ui/hud/hud_bar_energy.png" id="4_bar_nrg"]
-[ext_resource type="Texture2D"                           path="res://assets/ui/hud/hud_bar_tool.png"   id="5_bar_tool"]
-[ext_resource type="Texture2D"                           path="res://assets/ui/hud/hud_icon_coin.png"  id="6_ico_coin"]
-[ext_resource type="Texture2D"                           path="res://assets/ui/hud/hud_icon_cube.png"  id="7_ico_cube"]
+[ext_resource type="Script" uid="uid://c7f6wxijylro5" path="res://scripts/ui/player_hud.gd"              id="1_script"]
+[ext_resource type="Script"                           path="res://scripts/ui/heart_display.gd"            id="2_heart_script"]
+[ext_resource type="Texture2D"                        path="res://assets/ui/hud/hud_icon_timer.png"       id="3_timer"]
+[ext_resource type="Texture2D"                        path="res://assets/ui/hud/hud_bar_stamina_frame.png" id="4_bar_stamina"]
+[ext_resource type="Texture2D"                        path="res://assets/ui/hud/hud_bar_stamina_fill.png" id="5_bar_stamina_fill"]
+[ext_resource type="Texture2D"                        path="res://assets/ui/hud/hud_icon_coin.png"        id="6_ico_coin"]
+[ext_resource type="Texture2D"                        path="res://assets/ui/hud/hud_icon_cube.png"        id="7_ico_cube"]
 
-;; Texturas extraídas del SVG a 3x:
-;;   health: 201x39   energy: 201x47   stamina: 201x47
-;; Icono ocupa ~39px izq (cuadrado), barra fill = 162px restantes
-;; BarClip empieza en x=39, clipea 162px según porcentaje
+;; hud_bar_stamina.png    : 311x40  fill verde/azul
+;; hud_bar_stamina_bg.png : 311x40  mismo shape, relleno gris (fondo vacío)
+;; Fill region: x=20, w=271
 
 [node name="PlayerHUD" type="CanvasLayer"]
 layer = 5
@@ -26,139 +25,70 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="BarsPanel" type="Control" parent="Root"]
-layout_mode = 1
-anchors_preset = 0
+;; ── CORAZONES ────────────────────────────────────────────────────
+
+[node name="HeartDisplay" type="HBoxContainer" parent="Root"]
+layout_mode = 0
 offset_left = 14.0
 offset_top = 14.0
 offset_right = 220.0
-offset_bottom = 175.0
+offset_bottom = 76.0
+theme_override_constants/separation = 6
+mouse_filter = 2
+script = ExtResource("2_heart_script")
+
+;; ── STAMINA ──────────────────────────────────────────────────────
+;; Capas (abajo→arriba): BgGris → FillVerde/Azul (recortado) → Marco encima
+
+[node name="RowStamina" type="Control" parent="Root"]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 84.0
+offset_right = 325.0
+offset_bottom = 124.0
 mouse_filter = 2
 
-;; ── SALUD (rosa) ─────────────────────────────────────────────────
-
-[node name="RowHealth" type="Control" parent="Root/BarsPanel"]
+;; 1. Fondo gris — siempre visible, dentro del area interior
+[node name="BgStamina" type="ColorRect" parent="Root/RowStamina"]
 layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 201.0
-offset_bottom = 39.0
+offset_left = 30.0
+offset_top = 5.0
+offset_right = 292.0
+offset_bottom = 35.0
 mouse_filter = 2
+color = Color(0.15, 0.16, 0.18, 1.0)
 
-[node name="IconPart_Health" type="TextureRect" parent="Root/BarsPanel/RowHealth"]
+;; 2. Fill verde/azul — se recorta de derecha a izquierda
+[node name="BarClip_Stamina" type="Control" parent="Root/RowStamina"]
 layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 201.0
-offset_bottom = 39.0
-mouse_filter = 2
-texture = ExtResource("3_bar_hp")
-stretch_mode = 5
-
-[node name="BarClip_Health" type="Control" parent="Root/BarsPanel/RowHealth"]
-layout_mode = 0
-offset_left = 39.0
-offset_top = 0.0
-offset_right = 201.0
-offset_bottom = 39.0
+offset_left = 30.0
+offset_top = 5.0
+offset_right = 292.0
+offset_bottom = 35.0
 clip_contents = true
 mouse_filter = 2
 
-[node name="BarFill_Health" type="TextureRect" parent="Root/BarsPanel/RowHealth/BarClip_Health"]
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 162.0
-offset_bottom = 39.0
+[node name="BarFill_Stamina" type="TextureRect" parent="Root/RowStamina/BarClip_Stamina"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 mouse_filter = 2
-texture = ExtResource("3_bar_hp")
-region_enabled = true
-region_rect = Rect2(39, 0, 162, 39)
+texture = ExtResource("5_bar_stamina_fill")
 stretch_mode = 5
 
-;; ── ENERGÍA (azul) ───────────────────────────────────────────────
-
-[node name="RowEnergy" type="Control" parent="Root/BarsPanel"]
-layout_mode = 0
-offset_left = 0.0
-offset_top = 47.0
-offset_right = 201.0
-offset_bottom = 94.0
-mouse_filter = 2
-
-[node name="IconPart_Energy" type="TextureRect" parent="Root/BarsPanel/RowEnergy"]
+;; 3. Marco encima — la textura completa con marco oscuro, mouse_filter ignore
+[node name="FrameStamina" type="TextureRect" parent="Root/RowStamina"]
 layout_mode = 0
 offset_left = 0.0
 offset_top = 0.0
-offset_right = 201.0
-offset_bottom = 47.0
+offset_right = 311.0
+offset_bottom = 40.0
 mouse_filter = 2
-texture = ExtResource("4_bar_nrg")
+texture = ExtResource("4_bar_stamina")
 stretch_mode = 5
 
-[node name="BarClip_Energy" type="Control" parent="Root/BarsPanel/RowEnergy"]
-layout_mode = 0
-offset_left = 47.0
-offset_top = 0.0
-offset_right = 201.0
-offset_bottom = 47.0
-clip_contents = true
-mouse_filter = 2
-
-[node name="BarFill_Energy" type="TextureRect" parent="Root/BarsPanel/RowEnergy/BarClip_Energy"]
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 154.0
-offset_bottom = 47.0
-mouse_filter = 2
-texture = ExtResource("4_bar_nrg")
-region_enabled = true
-region_rect = Rect2(47, 0, 154, 47)
-stretch_mode = 5
-
-;; ── STAMINA (dorado) ─────────────────────────────────────────────
-
-[node name="RowTool" type="Control" parent="Root/BarsPanel"]
-layout_mode = 0
-offset_left = 0.0
-offset_top = 102.0
-offset_right = 201.0
-offset_bottom = 149.0
-mouse_filter = 2
-
-[node name="IconPart_Tool" type="TextureRect" parent="Root/BarsPanel/RowTool"]
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 201.0
-offset_bottom = 47.0
-mouse_filter = 2
-texture = ExtResource("5_bar_tool")
-stretch_mode = 5
-
-[node name="BarClip_Tool" type="Control" parent="Root/BarsPanel/RowTool"]
-layout_mode = 0
-offset_left = 47.0
-offset_top = 0.0
-offset_right = 201.0
-offset_bottom = 47.0
-clip_contents = true
-mouse_filter = 2
-
-[node name="BarFill_Tool" type="TextureRect" parent="Root/BarsPanel/RowTool/BarClip_Tool"]
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 154.0
-offset_bottom = 47.0
-mouse_filter = 2
-texture = ExtResource("5_bar_tool")
-region_enabled = true
-region_rect = Rect2(47, 0, 154, 47)
-stretch_mode = 5
-
-;; ── COLECCIONABLES ────────────────────────────────────────────────
+;; ── COLECCIONABLES ───────────────────────────────────────────────
 
 [node name="CollectablesPanel" type="HBoxContainer" parent="Root"]
 layout_mode = 1
@@ -199,7 +129,7 @@ layout_mode = 2
 size_flags_vertical = 4
 text = "x 0"
 
-;; ── TIMER ─────────────────────────────────────────────────────────
+;; ── TIMER ────────────────────────────────────────────────────────
 
 [node name="TimerPanel" type="HBoxContainer" parent="Root"]
 visible = false
@@ -220,7 +150,7 @@ layout_mode = 2
 custom_minimum_size = Vector2(16, 16)
 size_flags_vertical = 4
 mouse_filter = 2
-texture = ExtResource("2_timer")
+texture = ExtResource("3_timer")
 stretch_mode = 6
 
 [node name="LabelTimer" type="Label" parent="Root/TimerPanel"]
@@ -228,7 +158,7 @@ layout_mode = 2
 size_flags_vertical = 4
 text = "00:00"
 
-;; ── SCORE ─────────────────────────────────────────────────────────
+;; ── SCORE ────────────────────────────────────────────────────────
 
 [node name="LabelScore" type="Label" parent="Root"]
 layout_mode = 1
