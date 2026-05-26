@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b4ptokpwkelwu"]
 
-[ext_resource type="Texture2D" uid="uid://c7yykig1nojgy" path="res://public/backgrounds/level_01_background_sector_b2.png" id="1_m802k"]
+[ext_resource type="Texture2D" uid="uid://c7yykig1nojgy" path="res://assets/backgrounds/level_01_background_sector_b2.png" id="1_m802k"]
 [ext_resource type="Script" uid="uid://44au5iw2tkex" path="res://scripts/levels/death_zone.gd" id="2_i2aat"]
 [ext_resource type="Script" uid="uid://b8te30shvveuk" path="res://scripts/levels/ladder.gd" id="2_ladder"]
 [ext_resource type="PackedScene" uid="uid://cnc1ao3mcg26o" path="res://scenes/characters/kai.tscn" id="3_2djvx"]
@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" path="res://scenes/enemies/ukibuki.tscn" id="13_ukibuki"]
 [ext_resource type="PackedScene" path="res://scenes/objects/laser_v.tscn" id="15_laser_v"]
 [ext_resource type="Script" uid="uid://0b2orn32hm8c" path="res://scripts/objects/laser_switch.gd" id="17_switch_script"]
+[ext_resource type="PackedScene" path="res://scenes/objects/exit_door.tscn" id="18_exit_door"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m802k"]
 size = Vector2(381.5, 44.540253)
@@ -282,10 +283,11 @@ scale = Vector2(0.99999934, 0.9999999)
 [node name="Interactables" type="Node2D" parent="World/Environment" unique_id=60384250]
 
 [node name="SwitchLaserH" type="Area2D" parent="World/Environment/Interactables" unique_id=393295856]
-position = Vector2(-319, 60)
+position = Vector2(-426.85846, 19.325)
 collision_layer = 0
 script = ExtResource("17_switch_script")
 laser_node_path = NodePath("../../../../Environment/Hazards/Laser_Vertical1")
+metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Interactables/SwitchLaserH" unique_id=1885004822]
 shape = SubResource("RectangleShape2D_switch")
@@ -297,8 +299,8 @@ offset_right = 40.0
 offset_bottom = -20.0
 theme_override_colors/font_color = Color(0, 1, 0.4, 1)
 theme_override_font_sizes/font_size = 10
-horizontal_alignment = 1
 text = "[E] Desactivar"
+horizontal_alignment = 1
 
 [node name="Coin" parent="World/Environment/Interactables" unique_id=886148928 instance=ExtResource("4_coin")]
 position = Vector2(-450, 340)
@@ -351,6 +353,9 @@ position = Vector2(-400, -200)
 [node name="Keycard1" parent="World/Environment/Interactables" unique_id=2092422594 instance=ExtResource("7_keycard")]
 position = Vector2(650, 80)
 keycard_id = "card_control_room"
+
+[node name="ExitDoor" parent="World/Environment/Interactables" unique_id=854606622 instance=ExtResource("18_exit_door")]
+position = Vector2(680, -200)
 
 [node name="SafeZones" type="Node2D" parent="World/Environment" unique_id=1359102393]
 
@@ -440,19 +445,20 @@ shape = SubResource("RectangleShape2D_safe9")
 [node name="kai" parent="Characters" unique_id=1413245610 instance=ExtResource("3_2djvx")]
 position = Vector2(-562, 233)
 
-[node name="Enemies" type="Node2D" parent="."]
+[node name="Enemies" type="Node2D" parent="." unique_id=897160402]
+visible = false
 
-[node name="Ukibuki1" parent="Enemies" instance=ExtResource("13_ukibuki")]
+[node name="Ukibuki1" parent="Enemies" unique_id=2111849881 instance=ExtResource("13_ukibuki")]
 position = Vector2(200, 60)
 unique_id = "ukibuki_l01_01"
 
-[node name="Ukibuki2" parent="Enemies" instance=ExtResource("13_ukibuki")]
+[node name="Ukibuki2" parent="Enemies" unique_id=649787222 instance=ExtResource("13_ukibuki")]
 position = Vector2(-100, -200)
 unique_id = "ukibuki_l01_02"
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1732096819]
 
-[node name="PlayerHUD" parent="UI" instance=ExtResource("12_gi8m4")]
+[node name="PlayerHUD" parent="UI" unique_id=119334261 instance=ExtResource("12_gi8m4")]
 
 [node name="TutorialSystem" type="CanvasLayer" parent="." unique_id=25778098]
 script = ExtResource("9_tutorial_system")
