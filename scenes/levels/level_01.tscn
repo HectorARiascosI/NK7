@@ -5,7 +5,6 @@
 [ext_resource type="Script" uid="uid://b8te30shvveuk" path="res://scripts/levels/ladder.gd" id="2_ladder"]
 [ext_resource type="PackedScene" uid="uid://cnc1ao3mcg26o" path="res://scenes/characters/kai.tscn" id="3_2djvx"]
 [ext_resource type="PackedScene" uid="uid://cuvnfx6am47jn" path="res://scenes/objects/coin.tscn" id="4_coin"]
-[ext_resource type="PackedScene" path="res://scenes/objects/laser_v.tscn" id="5_cwffn"]
 [ext_resource type="PackedScene" path="res://scenes/objects/energy_tube.tscn" id="5_energy"]
 [ext_resource type="PackedScene" path="res://scenes/objects/data_cube.tscn" id="6_cube"]
 [ext_resource type="PackedScene" path="res://scenes/objects/keycard.tscn" id="7_keycard"]
@@ -17,7 +16,7 @@
 [ext_resource type="Script" uid="uid://douo1mundbl1d" path="res://scripts/levels/safe_zone.gd" id="12_safe_zone"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/ukibuki.tscn" id="13_ukibuki"]
 [ext_resource type="PackedScene" path="res://scenes/objects/laser_v.tscn" id="15_laser_v"]
-[ext_resource type="Script"    path="res://scripts/objects/laser_switch.gd"    id="17_switch_script"]
+[ext_resource type="Script" uid="uid://0b2orn32hm8c" path="res://scripts/objects/laser_switch.gd" id="17_switch_script"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m802k"]
 size = Vector2(381.5, 44.540253)
@@ -259,8 +258,7 @@ scale = Vector2(0.6, 0.76)
 mode = 0
 
 [node name="Sprite" parent="World/Environment/Hazards/Laser_Vertical1" index="0"]
-position = Vector2(0, -147.45917)
-metadata/_edit_group_ = true
+position = Vector2(0, -3.8146973e-06)
 
 [node name="BeamShape" parent="World/Environment/Hazards/Laser_Vertical1/BeamArea" index="0"]
 position = Vector2(-0.9992218, 5.6715045)
@@ -275,7 +273,6 @@ metadata/_edit_group_ = true
 [node name="Sprite" parent="World/Environment/Hazards/Laser_Vertical2" index="0"]
 position = Vector2(0, -9.682114)
 scale = Vector2(1, 1.0658647)
-offset = Vector2(0, 0)
 metadata/_edit_group_ = true
 
 [node name="BeamShape" parent="World/Environment/Hazards/Laser_Vertical2/BeamArea" index="0"]
@@ -288,7 +285,6 @@ scale = Vector2(0.99999934, 0.9999999)
 position = Vector2(-319, 60)
 collision_layer = 0
 script = ExtResource("17_switch_script")
-laser_node_path = NodePath("")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Interactables/SwitchLaserH" unique_id=1885004822]
 shape = SubResource("RectangleShape2D_switch")
