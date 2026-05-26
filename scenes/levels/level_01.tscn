@@ -285,17 +285,19 @@ scale = Vector2(0.99999934, 0.9999999)
 position = Vector2(-319, 60)
 collision_layer = 0
 script = ExtResource("17_switch_script")
+laser_node_path = NodePath("../../../../Environment/Hazards/Laser_Vertical1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Interactables/SwitchLaserH" unique_id=1885004822]
 shape = SubResource("RectangleShape2D_switch")
 
 [node name="InteractLabel" type="Label" parent="World/Environment/Interactables/SwitchLaserH" unique_id=598197482]
-offset_left = -30.0
-offset_top = -25.0
-offset_right = -30.0
-offset_bottom = -25.0
+offset_left = -40.0
+offset_top = -40.0
+offset_right = 40.0
+offset_bottom = -20.0
 theme_override_colors/font_color = Color(0, 1, 0.4, 1)
 theme_override_font_sizes/font_size = 10
+horizontal_alignment = 1
 text = "[E] Desactivar"
 
 [node name="Coin" parent="World/Environment/Interactables" unique_id=886148928 instance=ExtResource("4_coin")]
@@ -438,36 +440,19 @@ shape = SubResource("RectangleShape2D_safe9")
 [node name="kai" parent="Characters" unique_id=1413245610 instance=ExtResource("3_2djvx")]
 position = Vector2(-562, 233)
 
-[node name="Enemies" type="Node2D" parent="." unique_id=111222333]
-visible = false
+[node name="Enemies" type="Node2D" parent="."]
 
-[node name="Ukibuki1" parent="Enemies" unique_id=295413072 instance=ExtResource("13_ukibuki")]
+[node name="Ukibuki1" parent="Enemies" instance=ExtResource("13_ukibuki")]
 position = Vector2(200, 60)
-max_health = 60
-damage = 22
-patrol_distance = 180.0
-detection_range = 320.0
-attack_range = 260.0
-attack_cooldown = 2.2
-float_amplitude = 7.0
-float_speed = 1.8
-projectile_speed = 210.0
+unique_id = "ukibuki_l01_01"
 
-[node name="Ukibuki2" parent="Enemies" unique_id=280963445 instance=ExtResource("13_ukibuki")]
+[node name="Ukibuki2" parent="Enemies" instance=ExtResource("13_ukibuki")]
 position = Vector2(-100, -200)
-max_health = 60
-damage = 22
-patrol_distance = 150.0
-detection_range = 320.0
-attack_range = 260.0
-attack_cooldown = 2.2
-float_amplitude = 7.0
-float_speed = 1.8
-projectile_speed = 210.0
-
-[node name="PlayerHUD" parent="Enemies" unique_id=1586240734 instance=ExtResource("12_gi8m4")]
+unique_id = "ukibuki_l01_02"
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1732096819]
+
+[node name="PlayerHUD" parent="UI" instance=ExtResource("12_gi8m4")]
 
 [node name="TutorialSystem" type="CanvasLayer" parent="." unique_id=25778098]
 script = ExtResource("9_tutorial_system")

@@ -30,14 +30,18 @@ func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 
-	# Buscar el láser conectado
+	# Buscar el láser por NodePath primero
 	if laser_node_path != NodePath(""):
 		_laser = get_node_or_null(laser_node_path)
-		if not _laser:
-			# Intentar desde la raíz de la escena
-			_laser = get_tree().root.find_child(
-				laser_node_path.get_name(laser_node_path.get_name_count()-1),
-				true, false)
+	
+	# Fallback: buscar por nombre desde la raíz
+	if not _laser:
+		_laser = get_tree().root.find_child("Laser_Vertical2", true, false)
+	
+	if _laser:
+		print("Switch: laser encontrado → ", _laser.name)
+	else:
+		print("Switch: ERROR - no se encontró laser")
 
 	_update_visuals()
 
