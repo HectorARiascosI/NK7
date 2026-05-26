@@ -570,8 +570,21 @@ func die() -> void:
 		AudioManager.play_sfx("die")
 	if has_node("/root/GameManager"):
 		GameManager.player_death()
+	# Esperar animación de muerte y mostrar Game Over
 	await get_tree().create_timer(1.5).timeout
-	get_tree().reload_current_scene()
+	_show_game_over()
+
+func _show_game_over() -> void:
+	var go_scene := load("res://scenes/ui/game_over_screen.tscn") as PackedScene
+	if go_scene:
+		# Agregar como CanvasLayer para que esté encima de todo
+		var canvas := CanvasLayer.new()
+		canvas.layer = 10
+		get_tree().root.add_child(canvas)
+		var go := go_scene.instantiate()
+		canvas.add_child(go)
+	else:
+		get_tree().reload_current_scene()
 
 func get_health_percent() -> float:
 	return health / float(MAX_HEALTH)
