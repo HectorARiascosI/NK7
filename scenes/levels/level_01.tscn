@@ -1,18 +1,29 @@
 [gd_scene format=3 uid="uid://b4ptokpwkelwu"]
 
-[ext_resource type="Texture2D" uid="uid://c7yykig1nojgy" path="res://assets/backgrounds/level_01_background_sector_b2.png" id="1_m802k"]
+[ext_resource type="Texture2D" uid="uid://c7yykig1nojgy" path="res://public/backgrounds/level_01_background_sector_b2.png" id="1_m802k"]
 [ext_resource type="Script" uid="uid://44au5iw2tkex" path="res://scripts/levels/death_zone.gd" id="2_i2aat"]
 [ext_resource type="Script" uid="uid://b8te30shvveuk" path="res://scripts/levels/ladder.gd" id="2_ladder"]
 [ext_resource type="PackedScene" uid="uid://cnc1ao3mcg26o" path="res://scenes/characters/kai.tscn" id="3_2djvx"]
-[ext_resource type="PackedScene" uid="uid://c8vx3k2m5n7qa" path="res://scenes/ui/pause_menu.tscn" id="5_pause"]
-[ext_resource type="Script" uid="uid://cu47yo3ylr3ym" path="res://scripts/levels/level_01_tutorial.gd" id="6_tutorial"]
-[ext_resource type="Script" uid="uid://bglycsqhc7ks6" path="res://scripts/ui/dialogue_box.gd" id="7_dialogue"]
+[ext_resource type="PackedScene" uid="uid://cuvnfx6am47jn" path="res://scenes/objects/coin.tscn" id="4_coin"]
+[ext_resource type="PackedScene" path="res://scenes/objects/laser_v.tscn" id="5_cwffn"]
+[ext_resource type="PackedScene" path="res://scenes/objects/energy_tube.tscn" id="5_energy"]
+[ext_resource type="PackedScene" path="res://scenes/objects/data_cube.tscn" id="6_cube"]
+[ext_resource type="PackedScene" path="res://scenes/objects/keycard.tscn" id="7_keycard"]
+[ext_resource type="Script" uid="uid://cu47yo3ylr3ym" path="res://scripts/levels/level_01_tutorial.gd" id="8_tutorial"]
+[ext_resource type="Script" uid="uid://bam386ifsc5te" path="res://scripts/ui/tutorial_system.gd" id="9_tutorial_system"]
+[ext_resource type="Script" uid="uid://bukfxbx5rxa2i" path="res://scripts/levels/level_base.gd" id="10_level_base"]
+[ext_resource type="Script" uid="uid://de4o5h2ojrruv" path="res://scripts/levels/smart_checkpoint_system.gd" id="11_smart_checkpoint"]
+[ext_resource type="PackedScene" uid="uid://cg4lv665lj8ey" path="res://scenes/ui/player_hud.tscn" id="12_gi8m4"]
+[ext_resource type="Script" uid="uid://douo1mundbl1d" path="res://scripts/levels/safe_zone.gd" id="12_safe_zone"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/ukibuki.tscn" id="13_ukibuki"]
+[ext_resource type="PackedScene" path="res://scenes/objects/laser_v.tscn" id="15_laser_v"]
+[ext_resource type="Script"    path="res://scripts/objects/laser_switch.gd"    id="17_switch_script"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m802k"]
-size = Vector2(381.5, 40)
+size = Vector2(381.5, 44.540253)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i2aat"]
-size = Vector2(553, 43)
+size = Vector2(552.27936, 43)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2djvx"]
 size = Vector2(212.33337, 41.333344)
@@ -60,12 +71,43 @@ size = Vector2(46.333344, 253.5)
 size = Vector2(46.666718, 317.75)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_07lms"]
-size = Vector2(429, 76.25)
+size = Vector2(429, 44.522705)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gi8m4"]
 size = Vector2(1077, 39.5)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_switch"]
+size = Vector2(40, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_safe1"]
+size = Vector2(200, 100)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_safe2"]
+size = Vector2(150, 100)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_safe3"]
+size = Vector2(150, 100)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_safe4"]
+size = Vector2(150, 100)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_safe5"]
+size = Vector2(150, 100)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_safe6"]
+size = Vector2(150, 100)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_safe7"]
+size = Vector2(150, 100)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_safe8"]
+size = Vector2(150, 100)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_safe9"]
+size = Vector2(200, 100)
+
 [node name="Level01" type="Node2D" unique_id=1534496963]
+script = ExtResource("10_level_base")
 
 [node name="World" type="Node2D" parent="." unique_id=170826409]
 scale = Vector2(0.6, 0.6)
@@ -80,50 +122,52 @@ texture = ExtResource("1_m802k")
 
 [node name="Environment" type="Node2D" parent="World" unique_id=1372210427]
 position = Vector2(0, 22.583)
-scale = Vector2(1.39, 1.16)
+scale = Vector2(1.3900001, 1.16)
 
 [node name="Floors" type="Node2D" parent="World/Environment" unique_id=1064390058]
 
 [node name="Floor_L1_Left" type="StaticBody2D" parent="World/Environment/Floors" unique_id=1777586327]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Floors/Floor_L1_Left" unique_id=285745408]
-position = Vector2(-575, 385.00003)
+position = Vector2(-576.7386, 395.76178)
+scale = Vector2(1.0000002, 1)
 shape = SubResource("RectangleShape2D_m802k")
 
 [node name="Floor_L1_Right" type="StaticBody2D" parent="World/Environment/Floors" unique_id=556584508]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Floors/Floor_L1_Right" unique_id=78209512]
-position = Vector2(89.5, 381.5)
+position = Vector2(85.49225, 390.01465)
+scale = Vector2(1.0000002, 1)
 shape = SubResource("RectangleShape2D_i2aat")
 
 [node name="Floor_L2_Left" type="StaticBody2D" parent="World/Environment/Floors" unique_id=834832101]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Floors/Floor_L2_Left" unique_id=1536950132]
-position = Vector2(-657.8333, 112.333336)
+position = Vector2(-657.07434, 119.89972)
 shape = SubResource("RectangleShape2D_2djvx")
 
 [node name="Floor_L2_CenterLeft" type="StaticBody2D" parent="World/Environment/Floors" unique_id=1672683312]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Floors/Floor_L2_CenterLeft" unique_id=1078457079]
-position = Vector2(-27.75, 111.5)
+position = Vector2(-28.776978, 121.3365)
 shape = SubResource("RectangleShape2D_uvc87")
 
 [node name="Floor_L2_Rights" type="StaticBody2D" parent="World/Environment/Floors" unique_id=1338466079]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Floors/Floor_L2_Rights" unique_id=1964404150]
-position = Vector2(652.22656, 114.25)
+position = Vector2(649.88007, 119.89972)
 shape = SubResource("RectangleShape2D_qdh5e")
 
 [node name="Floor_L3_Left" type="StaticBody2D" parent="World/Environment/Floors" unique_id=1591510824]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Floors/Floor_L3_Left" unique_id=1086809211]
-position = Vector2(-695.3867, -140)
+position = Vector2(-695.4436, -134.41063)
 shape = SubResource("RectangleShape2D_50wog")
 
 [node name="Floor_L3_Center" type="StaticBody2D" parent="World/Environment/Floors" unique_id=1273565811]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Floors/Floor_L3_Center" unique_id=944820195]
-position = Vector2(-25.276703, -140.6875)
+position = Vector2(-23.980812, -134.41063)
 shape = SubResource("RectangleShape2D_1ey3t")
 
 [node name="Walls" type="Node2D" parent="World/Environment" unique_id=1105981805]
@@ -196,9 +240,10 @@ shape = SubResource("RectangleShape2D_iu1m7")
 script = ExtResource("2_i2aat")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Hazards/DeathZone_Waters" unique_id=1405642665]
-position = Vector2(524, 471.125)
+position = Vector2(525.1799, 493.46292)
+scale = Vector2(1.0000001, 1)
 shape = SubResource("RectangleShape2D_07lms")
-debug_color = Color(0.8380412, 0.17305702, 0.15790051, 0.41960785)
+debug_color = Color(0.84, 0.013999986, 0, 0.41960785)
 
 [node name="DeathZone_Pit" type="Area2D" parent="World/Environment/Hazards" unique_id=1609690681]
 script = ExtResource("2_i2aat")
@@ -206,25 +251,237 @@ script = ExtResource("2_i2aat")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Hazards/DeathZone_Pit" unique_id=1353409164]
 position = Vector2(-229.5, 491.25)
 shape = SubResource("RectangleShape2D_gi8m4")
-debug_color = Color(1, 1, 1, 0.41960785)
+debug_color = Color(1, 0, 0, 0.41960785)
+
+[node name="Laser_Vertical1" parent="World/Environment/Hazards" unique_id=1759629680 instance=ExtResource("15_laser_v")]
+position = Vector2(133.0935, -13.720978)
+scale = Vector2(0.6, 0.76)
+mode = 0
+
+[node name="Sprite" parent="World/Environment/Hazards/Laser_Vertical1" index="0"]
+position = Vector2(0, -147.45917)
+metadata/_edit_group_ = true
+
+[node name="BeamShape" parent="World/Environment/Hazards/Laser_Vertical1/BeamArea" index="0"]
+position = Vector2(-0.9992218, 5.6715045)
+scale = Vector2(0.99999946, 0.9999999)
+
+[node name="Laser_Vertical2" parent="World/Environment/Hazards" unique_id=348834336 instance=ExtResource("15_laser_v")]
+position = Vector2(137.88966, -268.0313)
+scale = Vector2(0.6, 0.76)
+mode = 0
+metadata/_edit_group_ = true
+
+[node name="Sprite" parent="World/Environment/Hazards/Laser_Vertical2" index="0"]
+position = Vector2(0, -9.682114)
+scale = Vector2(1, 1.0658647)
+offset = Vector2(0, 0)
+metadata/_edit_group_ = true
+
+[node name="BeamShape" parent="World/Environment/Hazards/Laser_Vertical2/BeamArea" index="0"]
+position = Vector2(-0.9991913, -3.7810364)
+scale = Vector2(0.99999934, 0.9999999)
 
 [node name="Interactables" type="Node2D" parent="World/Environment" unique_id=60384250]
+
+[node name="SwitchLaserH" type="Area2D" parent="World/Environment/Interactables" unique_id=393295856]
+position = Vector2(-319, 60)
+collision_layer = 0
+script = ExtResource("17_switch_script")
+laser_node_path = NodePath("")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Interactables/SwitchLaserH" unique_id=1885004822]
+shape = SubResource("RectangleShape2D_switch")
+
+[node name="InteractLabel" type="Label" parent="World/Environment/Interactables/SwitchLaserH" unique_id=598197482]
+offset_left = -30.0
+offset_top = -25.0
+offset_right = -30.0
+offset_bottom = -25.0
+theme_override_colors/font_color = Color(0, 1, 0.4, 1)
+theme_override_font_sizes/font_size = 10
+text = "[E] Desactivar"
+
+[node name="Coin" parent="World/Environment/Interactables" unique_id=886148928 instance=ExtResource("4_coin")]
+position = Vector2(-450, 340)
+
+[node name="Coin2" parent="World/Environment/Interactables" unique_id=1667375245 instance=ExtResource("4_coin")]
+position = Vector2(-353.71698, 250.64685)
+
+[node name="Coin3" parent="World/Environment/Interactables" unique_id=992975984 instance=ExtResource("4_coin")]
+position = Vector2(-693.0455, -186.1348)
+
+[node name="Coin4" parent="World/Environment/Interactables" unique_id=733389892 instance=ExtResource("4_coin")]
+position = Vector2(-150, 340)
+
+[node name="Coin5" parent="World/Environment/Interactables" unique_id=634098126 instance=ExtResource("4_coin")]
+position = Vector2(-134.29254, 68.175575)
+
+[node name="Coin6" parent="World/Environment/Interactables" unique_id=293666527 instance=ExtResource("4_coin")]
+position = Vector2(151.07912, -6.5370636)
+
+[node name="Coin7" parent="World/Environment/Interactables" unique_id=2122816988 instance=ExtResource("4_coin")]
+position = Vector2(250, 80)
+
+[node name="Coin8" parent="World/Environment/Interactables" unique_id=1204954929 instance=ExtResource("4_coin")]
+position = Vector2(-100, -170)
+
+[node name="Coin9" parent="World/Environment/Interactables" unique_id=2102690432 instance=ExtResource("4_coin")]
+position = Vector2(0, -170)
+
+[node name="Coin10" parent="World/Environment/Interactables" unique_id=1835688850 instance=ExtResource("4_coin")]
+position = Vector2(100, -170)
+
+[node name="EnergyTube1" parent="World/Environment/Interactables" unique_id=1471545777 instance=ExtResource("5_energy")]
+position = Vector2(697.8417, -178.95093)
+
+[node name="EnergyTube2" parent="World/Environment/Interactables" unique_id=43488392 instance=ExtResource("5_energy")]
+position = Vector2(-600, 80)
+
+[node name="EnergyTube3" parent="World/Environment/Interactables" unique_id=1952860814 instance=ExtResource("5_energy")]
+position = Vector2(484.4124, 219.03766)
+
+[node name="DataCube1" parent="World/Environment/Interactables" unique_id=991685125 instance=ExtResource("6_cube")]
+position = Vector2(-225.41963, 252.08363)
+
+[node name="DataCube2" parent="World/Environment/Interactables" unique_id=1298583906 instance=ExtResource("6_cube")]
+position = Vector2(300, 40)
+
+[node name="DataCube3" parent="World/Environment/Interactables" unique_id=91284608 instance=ExtResource("6_cube")]
+position = Vector2(-400, -200)
+
+[node name="Keycard1" parent="World/Environment/Interactables" unique_id=2092422594 instance=ExtResource("7_keycard")]
+position = Vector2(650, 80)
+keycard_id = "card_control_room"
+
+[node name="SafeZones" type="Node2D" parent="World/Environment" unique_id=1359102393]
+
+[node name="SafeZone1_Spawn" type="Area2D" parent="World/Environment/SafeZones" unique_id=732492482 groups=["safe_zones"]]
+position = Vector2(-535.9712, 326.79626)
+script = ExtResource("12_safe_zone")
+zone_id = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/SafeZones/SafeZone1_Spawn" unique_id=566645385]
+position = Vector2(1.1990409, 0)
+shape = SubResource("RectangleShape2D_safe1")
+
+[node name="SafeZone2_Floor1" type="Area2D" parent="World/Environment/SafeZones" unique_id=2096890105 groups=["safe_zones"]]
+position = Vector2(-106.71462, 346.91122)
+script = ExtResource("12_safe_zone")
+zone_id = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/SafeZones/SafeZone2_Floor1" unique_id=1254244064]
+position = Vector2(5.995208, -24.425308)
+shape = SubResource("RectangleShape2D_safe2")
+
+[node name="SafeZone3_Floor1End" type="Area2D" parent="World/Environment/SafeZones" unique_id=1418568474 groups=["safe_zones"]]
+position = Vector2(100, 360)
+script = ExtResource("12_safe_zone")
+zone_id = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/SafeZones/SafeZone3_Floor1End" unique_id=1081858856]
+position = Vector2(35.491604, -34.640522)
+shape = SubResource("RectangleShape2D_safe3")
+
+[node name="SafeZone4_Floor2Start" type="Area2D" parent="World/Environment/SafeZones" unique_id=223017606 groups=["safe_zones"]]
+position = Vector2(-400, 90)
+script = ExtResource("12_safe_zone")
+zone_id = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/SafeZones/SafeZone4_Floor2Start" unique_id=1758600190]
+position = Vector2(5.515595, -46.24972)
+shape = SubResource("RectangleShape2D_safe4")
+
+[node name="SafeZone5_Floor2Mid" type="Area2D" parent="World/Environment/SafeZones" unique_id=1092420591 groups=["safe_zones"]]
+position = Vector2(0, 90)
+script = ExtResource("12_safe_zone")
+zone_id = 5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/SafeZones/SafeZone5_Floor2Mid" unique_id=1714207561]
+position = Vector2(1.1990408, -36.19225)
+shape = SubResource("RectangleShape2D_safe5")
+
+[node name="SafeZone6_Floor2End" type="Area2D" parent="World/Environment/SafeZones" unique_id=109952500 groups=["safe_zones"]]
+position = Vector2(291.36688, 60.99166)
+script = ExtResource("12_safe_zone")
+zone_id = 6
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/SafeZones/SafeZone6_Floor2End" unique_id=100178163]
+position = Vector2(-3.5971222, 5.722046e-06)
+shape = SubResource("RectangleShape2D_safe6")
+
+[node name="SafeZone7_Floor3Start" type="Area2D" parent="World/Environment/SafeZones" unique_id=773682524 groups=["safe_zones"]]
+position = Vector2(-400, -160)
+script = ExtResource("12_safe_zone")
+zone_id = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/SafeZones/SafeZone7_Floor3Start" unique_id=1757741641]
+position = Vector2(7.9136767, -46.249718)
+shape = SubResource("RectangleShape2D_safe7")
+
+[node name="SafeZone8_Floor3Mid" type="Area2D" parent="World/Environment/SafeZones" unique_id=990681872 groups=["safe_zones"]]
+position = Vector2(0, -160)
+script = ExtResource("12_safe_zone")
+zone_id = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/SafeZones/SafeZone8_Floor3Mid" unique_id=966875010]
+position = Vector2(2.3980813, -49.123283)
+shape = SubResource("RectangleShape2D_safe8")
+
+[node name="SafeZone9_Exit" type="Area2D" parent="World/Environment/SafeZones" unique_id=952542793 groups=["safe_zones"]]
+position = Vector2(245.80333, -227.80145)
+script = ExtResource("12_safe_zone")
+zone_id = 9
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/SafeZones/SafeZone9_Exit" unique_id=2116793917]
+position = Vector2(-8.393268, 17.241379)
+shape = SubResource("RectangleShape2D_safe9")
 
 [node name="Characters" type="Node2D" parent="." unique_id=840783516]
 
 [node name="kai" parent="Characters" unique_id=1413245610 instance=ExtResource("3_2djvx")]
-position = Vector2(-551, 225.00002)
-scale = Vector2(1.5, 1.5)
-metadata/_edit_group_ = true
+position = Vector2(-562, 233)
+
+[node name="Enemies" type="Node2D" parent="." unique_id=111222333]
+visible = false
+
+[node name="Ukibuki1" parent="Enemies" unique_id=295413072 instance=ExtResource("13_ukibuki")]
+position = Vector2(200, 60)
+max_health = 60
+damage = 22
+patrol_distance = 180.0
+detection_range = 320.0
+attack_range = 260.0
+attack_cooldown = 2.2
+float_amplitude = 7.0
+float_speed = 1.8
+projectile_speed = 210.0
+
+[node name="Ukibuki2" parent="Enemies" unique_id=280963445 instance=ExtResource("13_ukibuki")]
+position = Vector2(-100, -200)
+max_health = 60
+damage = 22
+patrol_distance = 150.0
+detection_range = 320.0
+attack_range = 260.0
+attack_cooldown = 2.2
+float_amplitude = 7.0
+float_speed = 1.8
+projectile_speed = 210.0
+
+[node name="PlayerHUD" parent="Enemies" unique_id=1586240734 instance=ExtResource("12_gi8m4")]
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1732096819]
 
-[node name="PauseMenu" parent="UI" unique_id=1087837299 instance=ExtResource("5_pause")]
-
-[node name="DialogueBox" type="CanvasLayer" parent="." unique_id=25778097]
-script = ExtResource("7_dialogue")
+[node name="TutorialSystem" type="CanvasLayer" parent="." unique_id=25778098]
+script = ExtResource("9_tutorial_system")
 
 [node name="TutorialManager" type="Node" parent="." unique_id=62299246]
-script = ExtResource("6_tutorial")
+script = ExtResource("8_tutorial")
 
+[node name="SmartCheckpointSystem" type="Node" parent="." unique_id=697206761]
+script = ExtResource("11_smart_checkpoint")
+
+[editable path="World/Environment/Hazards/Laser_Vertical1"]
+[editable path="World/Environment/Hazards/Laser_Vertical2"]
 [editable path="Characters/kai"]

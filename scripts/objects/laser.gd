@@ -1,175 +1,137 @@
 extends Node2D
 class_name Laser
 
-## Láser de seguridad NK7
-## Soporta: horizontal, vertical y rotatorio (diagonal)
-## Se puede activar/desactivar mediante señales o interruptores
+## ════════════════════════════════════════════════════════════════
+## LÁSER DE SEGURIDAD NK-7
+## ════════════════════════════════════════════════════════════════
+## Modos:
+##   0 = always_on  → siempre activo, sin parpadeo
+##   1 = blink      → parpadea ON/OFF con tiempos configurables
+##   2 = patrol     → ON largo → advertencia rápida → OFF → ON...
+## ════════════════════════════════════════════════════════════════
 
 signal player_hit
-
-# ── Configuración ─────────────────────────────────────────────
-@export_group("Tipo")
-@export_enum("Horizontal", "Vertical", "Rotating") var laser_type : int = 0
-@export var laser_length  : float = 200.0
-@export var laser_width   : float = 4.0
+signal activated
+signal deactivated
 
 @export_group("Comportamiento")
-@export var is_active     : bool  = true
-@export var blink_enabled : bool  = false
-@export var blink_on_time : float = 1.5
-@export var blink_off_time: float = 0.8
-@export var rotate_speed  : float = 45.0   # grados/segundo (solo tipo Rotating)
+@export_enum("always_on","blink","patrol") var mode : int = 0
+@export var blink_on_time  : float = 2.0
+@export var blink_off_time : float = 0.8
 
 @export_group("Daño")
-@export var kill_on_touch : bool  = true
-@export var damage        : int   = 1
+@export var kill_on_touch : bool = true
 
-# ── Nodos ─────────────────────────────────────────────────────
-@onready var beam_area    : Area2D       = $BeamArea
-@onready var beam_shape   : CollisionShape2D = $BeamArea/BeamShape
-@onready var emitter_sprite : AnimatedSprite2D = $EmitterSprite
+# ── Nodos ─────────────────────────────────────────────────────────
+@onready var sprite      : Node2D            = $Sprite       ## Sprite2D o AnimatedSprite2D
+@onready var beam_area   : Area2D            = $BeamArea
+@onready var beam_shape  : CollisionShape2D  = $BeamArea/BeamShape
+## BeamSprite solo existe en laser_h
+var beam_sprite : Sprite2D = null
 
-# ── Estado ────────────────────────────────────────────────────
+# ── Estado ────────────────────────────────────────────────────────
+var is_active    : bool  = true
+var _beam_on     : bool  = true
 var _blink_timer : float = 0.0
-var _blink_on    : bool  = true
-var _rotation_deg: float = 0.0
-
-# ── Colores ───────────────────────────────────────────────────
-const C_BEAM_ACTIVE  := Color(1.0, 0.10, 0.05, 0.85)
-const C_BEAM_GLOW    := Color(1.0, 0.30, 0.20, 0.25)
-const C_BEAM_OFF     := Color(0.30, 0.05, 0.02, 0.3)
-
-# ════════════════════════════════════════════════════════════════
-# INICIALIZACIÓN
-# ════════════════════════════════════════════════════════════════
+var _warn_phase  : bool  = false
+var _warn_timer  : float = 0.0
+const WARN_TIME  : float = 0.3   ## s de advertencia (parpadeo rápido)
 
 func _ready() -> void:
-	_setup_collision()
-	beam_area.body_entered.connect(_on_body_entered)
-	_update_active_state()
+	process_mode = Node.PROCESS_MODE_PAUSABLE
 
-func _setup_collision() -> void:
-	var shape := RectangleShape2D.new()
-	match laser_type:
-		0:  # Horizontal
-			shape.size = Vector2(laser_length, laser_width * 2.0)
-			beam_shape.position = Vector2(laser_length * 0.5, 0)
-		1:  # Vertical
-			shape.size = Vector2(laser_width * 2.0, laser_length)
-			beam_shape.position = Vector2(0, laser_length * 0.5)
-		2:  # Rotating — empieza horizontal
-			shape.size = Vector2(laser_length, laser_width * 2.0)
-			beam_shape.position = Vector2(laser_length * 0.5, 0)
-	beam_shape.shape = shape
+	# Buscar BeamSprite si existe (solo laser_h)
+	if has_node("BeamSprite"):
+		beam_sprite = $BeamSprite
 
+	if beam_area:
+		beam_area.body_entered.connect(_on_body_entered)
 
-# ════════════════════════════════════════════════════════════════
-# PROCESO
-# ════════════════════════════════════════════════════════════════
+	# Offset aleatorio para que no todos parpadeen al mismo tiempo
+	_blink_timer = randf_range(0.0, blink_on_time * 0.5)
+	_apply_state()
 
 func _process(delta: float) -> void:
-	# Parpadeo
-	if blink_enabled and is_active:
-		_blink_timer += delta
-		var threshold := blink_on_time if _blink_on else blink_off_time
-		if _blink_timer >= threshold:
+	match mode:
+		0: pass   # always_on — nada que hacer
+		1: _process_blink(delta)
+		2: _process_patrol(delta)
+
+# ── Blink: ON ↔ OFF ───────────────────────────────────────────────
+func _process_blink(delta: float) -> void:
+	if not is_active: return
+	_blink_timer += delta
+	var threshold := blink_on_time if _beam_on else blink_off_time
+	if _blink_timer >= threshold:
+		_blink_timer = 0.0
+		_beam_on = not _beam_on
+		_apply_state()
+
+# ── Patrol: ON largo → parpadeo rápido de advertencia → OFF → ON ──
+func _process_patrol(delta: float) -> void:
+	if not is_active: return
+	_blink_timer += delta
+
+	if _beam_on:
+		if _blink_timer >= blink_on_time:
 			_blink_timer = 0.0
-			_blink_on = not _blink_on
-			beam_area.monitoring = _blink_on
-
-	# Rotación
-	if laser_type == 2 and is_active:
-		_rotation_deg += rotate_speed * delta
-		rotation_degrees = _rotation_deg
-
-	queue_redraw()
-
-func _draw() -> void:
-	if not is_active:
-		_draw_beam(C_BEAM_OFF, false)
-		return
-
-	var visible_beam := _blink_on if blink_enabled else true
-	if visible_beam:
-		_draw_beam(C_BEAM_ACTIVE, true)
+			_beam_on     = false
+			_warn_phase  = false
+			_apply_state()
 	else:
-		_draw_beam(C_BEAM_OFF, false)
+		# Fase advertencia: parpadeo muy rápido antes de encender
+		if not _warn_phase and _blink_timer >= blink_off_time * 0.5:
+			_warn_phase = true
+			_warn_timer = 0.0
 
-func _draw_beam(color: Color, glowing: bool) -> void:
-	var start := Vector2.ZERO
-	var end   : Vector2
+		if _warn_phase:
+			_warn_timer += delta
+			# Parpadeo rápido visual durante la advertencia
+			var fast_blink : bool = fmod(_warn_timer, 0.12) < 0.06
+			_set_beam_visible(fast_blink)
+			if beam_area:
+				beam_area.monitoring = false  # No mata durante advertencia
 
-	match laser_type:
-		0, 2:  # Horizontal / Rotating
-			end = Vector2(laser_length, 0)
-		1:     # Vertical
-			end = Vector2(0, laser_length)
+			if _warn_timer >= WARN_TIME:
+				_beam_on     = true
+				_warn_phase  = false
+				_blink_timer = 0.0
+				_apply_state()
 
-	# Halo exterior
-	if glowing:
-		draw_line(start, end, Color(color.r, color.g, color.b, 0.15), laser_width * 4.0)
-		draw_line(start, end, Color(color.r, color.g, color.b, 0.30), laser_width * 2.5)
+# ── Aplicar estado visual y de colisión ───────────────────────────
+func _apply_state() -> void:
+	var on : bool = is_active and _beam_on
+	_set_beam_visible(on)
+	if beam_area:
+		beam_area.monitoring = on
 
-	# Núcleo del láser
-	draw_line(start, end, color, laser_width)
+func _set_beam_visible(on: bool) -> void:
+	if sprite:
+		sprite.visible = on
+	if beam_sprite:
+		beam_sprite.visible = on
 
-	# Línea central brillante
-	if glowing:
-		draw_line(start, end, Color(1.0, 0.8, 0.8, 0.9), laser_width * 0.4)
-
-	# Emisor (punto de origen)
-	draw_circle(start, laser_width * 1.5, color)
-	if glowing:
-		draw_circle(start, laser_width * 0.6, Color(1, 1, 1, 0.9))
-
-
-# ════════════════════════════════════════════════════════════════
-# COLISIÓN
-# ════════════════════════════════════════════════════════════════
-
+# ── Colisión ──────────────────────────────────────────────────────
 func _on_body_entered(body: Node2D) -> void:
-	if not is_active:
-		return
-	if blink_enabled and not _blink_on:
-		return
-
+	if not is_active or not _beam_on: return
 	if body.is_in_group("player") or body.name == "kai":
 		player_hit.emit()
-		if kill_on_touch:
-			_kill_player(body)
+		if kill_on_touch and body.has_method("take_damage"):
+			body.take_damage(9999)
 
-func _kill_player(player: Node2D) -> void:
-	if player.has_node("AnimatedSprite2D"):
-		player.get_node("AnimatedSprite2D").play("dead")
-	player.set_physics_process(false)
-	# Sacudir cámara
-	if has_node("/root/GameManager"):
-		get_node("/root/GameManager").shake_camera(12.0, 0.3)
-	await get_tree().create_timer(1.5).timeout
-	get_tree().reload_current_scene()
-
-
-# ════════════════════════════════════════════════════════════════
-# API PÚBLICA
-# ════════════════════════════════════════════════════════════════
-
+# ── API pública ───────────────────────────────────────────────────
 func activate() -> void:
 	is_active = true
-	beam_area.monitoring = true
-	_update_active_state()
+	_beam_on  = true
+	_apply_state()
+	activated.emit()
 
 func deactivate() -> void:
 	is_active = false
-	beam_area.monitoring = false
-	_update_active_state()
+	_beam_on  = false
+	_apply_state()
+	deactivated.emit()
 
 func toggle() -> void:
-	if is_active:
-		deactivate()
-	else:
-		activate()
-
-func _update_active_state() -> void:
-	if beam_area:
-		beam_area.monitoring = is_active and (_blink_on if blink_enabled else true)
-	queue_redraw()
+	if is_active: deactivate()
+	else: activate()

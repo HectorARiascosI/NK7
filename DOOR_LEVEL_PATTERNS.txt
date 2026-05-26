@@ -1,0 +1,471 @@
+════════════════════════════════════════════════════════════════════════════════
+PATRONES DE DISEÑO DE NIVELES - PUERTAS ELECTRIFICADAS NK-7
+════════════════════════════════════════════════════════════════════════════════
+
+Este documento contiene patrones de diseño probados para crear desafíos
+interesantes y balanceados usando el sistema de puertas electrificadas.
+
+════════════════════════════════════════════════════════════════════════════════
+PATRÓN 1: TUTORIAL PROGRESIVO
+════════════════════════════════════════════════════════════════════════════════
+
+OBJETIVO: Enseñar las mecánicas básicas paso a paso
+
+CONFIGURACIÓN:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Puerta 1: Introducción a Reparación                                         │
+│ - damage_level = LIGHT (1 paso)                                             │
+│ - repair_time_per_step = 1.5 (rápido)                                       │
+│ - tool_durability_cost = 5 (bajo)                                           │
+│ - Kit de reparación visible cerca                                           │
+│ - Texto: "Usa [ESPACIO] para reparar"                                       │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Puerta 2: Introducción a Hackeo                                             │
+│ - damage_level = NONE (ya reparada)                                         │
+│ - initial_state = LOCKED_FIXED                                              │
+│ - hack_time = 2.0 (rápido)                                                  │
+│ - Texto: "Usa [E] para hackear el sistema"                                  │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Puerta 3: Combinación Completa                                              │
+│ - damage_level = MEDIUM (2 pasos)                                           │
+│ - Requiere reparación + hackeo                                              │
+│ - Texto: "Ahora hazlo tú solo"                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+LAYOUT SUGERIDO:
+```
+[Spawn] → [Puerta1] → [Kit] → [Puerta2] → [Puerta3] → [Salida]
+```
+
+════════════════════════════════════════════════════════════════════════════════
+PATRÓN 2: GESTIÓN DE RECURSOS
+════════════════════════════════════════════════════════════════════════════════
+
+OBJETIVO: Forzar decisiones estratégicas sobre uso de recursos
+
+CONFIGURACIÓN:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Escenario: 3 puertas, durabilidad limitada (100 puntos)                     │
+│                                                                              │
+│ Puerta A (Ruta Fácil):                                                      │
+│ - damage_level = HEAVY (3 pasos)                                            │
+│ - tool_durability_cost = 15 por paso                                        │
+│ - Total: 45 puntos                                                          │
+│ - Recompensa: Kit de reparación (+50)                                       │
+│                                                                              │
+│ Puerta B (Ruta Media):                                                      │
+│ - damage_level = MEDIUM (2 pasos)                                           │
+│ - tool_durability_cost = 20 por paso                                        │
+│ - Total: 40 puntos                                                          │
+│ - Recompensa: Batería de energía                                            │
+│                                                                              │
+│ Puerta C (Ruta Difícil):                                                    │
+│ - damage_level = LIGHT (1 paso)                                             │
+│ - tool_durability_cost = 30                                                 │
+│ - Total: 30 puntos                                                          │
+│ - Recompensa: Botiquín de salud                                             │
+│                                                                              │
+│ DECISIÓN: ¿Qué ruta tomar? ¿Qué recompensa necesitas más?                  │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+LAYOUT SUGERIDO:
+```
+                    ┌─[Puerta A]─→ [Kit]
+                    │
+[Spawn]─→[Bifurcación]─[Puerta B]─→ [Batería]
+                    │
+                    └─[Puerta C]─→ [Botiquín]
+                    
+                    (Todas convergen en salida)
+```
+
+════════════════════════════════════════════════════════════════════════════════
+PATRÓN 3: PUZZLE DE INTERRUPTORES
+════════════════════════════════════════════════════════════════════════════════
+
+OBJETIVO: Exploración y resolución de puzzles espaciales
+
+CONFIGURACIÓN:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Puerta Principal:                                                            │
+│ - starts_electrified = true                                                 │
+│ - damage_level = MEDIUM                                                     │
+│ - Bloqueada hasta desactivar electricidad                                   │
+│                                                                              │
+│ Interruptor 1 (Fácil de encontrar):                                         │
+│ - Desactiva electricidad                                                    │
+│ - Ubicación: Plataforma visible                                             │
+│                                                                              │
+│ Interruptor 2 (Oculto):                                                     │
+│ - Proporciona energía a la puerta                                           │
+│ - Ubicación: Área secreta                                                   │
+│                                                                              │
+│ SECUENCIA:                                                                   │
+│ 1. Jugador ve puerta electrificada                                          │
+│ 2. Explora y encuentra Interruptor 1                                        │
+│ 3. Desactiva electricidad                                                   │
+│ 4. Repara la puerta                                                         │
+│ 5. Busca Interruptor 2 para energía                                         │
+│ 6. Activa y abre la puerta                                                  │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+LAYOUT SUGERIDO:
+```
+[Spawn]
+   │
+   ↓
+[Puerta Electrificada] ← (bloqueada)
+   │
+   ├─→ [Plataforma Alta] → [Interruptor 1]
+   │
+   └─→ [Área Secreta] → [Interruptor 2]
+```
+
+════════════════════════════════════════════════════════════════════════════════
+PATRÓN 4: DESAFÍO DE TIMING
+════════════════════════════════════════════════════════════════════════════════
+
+OBJETIVO: Combinar habilidad de plataformeo con mecánicas de puerta
+
+CONFIGURACIÓN:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Puerta 1:                                                                    │
+│ - auto_close = true                                                         │
+│ - auto_close_delay = 4.0                                                    │
+│ - Interruptor a distancia                                                   │
+│                                                                              │
+│ Puerta 2:                                                                    │
+│ - auto_close = true                                                         │
+│ - auto_close_delay = 3.0                                                    │
+│ - Más cerca pero más rápida                                                 │
+│                                                                              │
+│ Puerta 3:                                                                    │
+│ - auto_close = true                                                         │
+│ - auto_close_delay = 2.0                                                    │
+│ - Muy cerca pero muy rápida                                                 │
+│                                                                              │
+│ DESAFÍO: Activar interruptor y llegar antes de que cierre                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+LAYOUT SUGERIDO:
+```
+[Interruptor] ←─── 10m ───→ [Puerta 1] → [Salida]
+                                ↑
+                            (4 segundos)
+
+[Interruptor] ←─── 7m ────→ [Puerta 2] → [Salida]
+                                ↑
+                            (3 segundos)
+
+[Interruptor] ←─── 4m ────→ [Puerta 3] → [Salida]
+                                ↑
+                            (2 segundos)
+```
+
+════════════════════════════════════════════════════════════════════════════════
+PATRÓN 5: SECUENCIA NARRATIVA
+════════════════════════════════════════════════════════════════════════════════
+
+OBJETIVO: Contar una historia a través de las puertas
+
+CONFIGURACIÓN:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Sector A - "Zona de Mantenimiento"                                          │
+│ - Puertas con damage_level = LIGHT                                          │
+│ - Muchos kits de reparación                                                 │
+│ - Ambiente: Limpio, organizado                                              │
+│                                                                              │
+│ Sector B - "Zona de Emergencia"                                             │
+│ - Puertas con damage_level = MEDIUM                                         │
+│ - Algunas electrificadas                                                    │
+│ - Recursos escasos                                                          │
+│ - Ambiente: Luces parpadeantes, alarmas                                     │
+│                                                                              │
+│ Sector C - "Zona de Cuarentena"                                             │
+│ - Puertas con damage_level = HEAVY                                          │
+│ - Todas electrificadas                                                      │
+│ - Sin recursos                                                              │
+│ - Ambiente: Oscuro, peligroso                                               │
+│                                                                              │
+│ NARRATIVA: La situación empeora progresivamente                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+════════════════════════════════════════════════════════════════════════════════
+PATRÓN 6: BOSS ROOM
+════════════════════════════════════════════════════════════════════════════════
+
+OBJETIVO: Usar puertas como parte de un encuentro de jefe
+
+CONFIGURACIÓN:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Fase 1: Entrada                                                              │
+│ - Puerta de entrada se cierra al entrar                                     │
+│ - auto_close = true, auto_close_delay = 1.0                                 │
+│                                                                              │
+│ Fase 2: Combate                                                              │
+│ - 4 puertas laterales se abren periódicamente                               │
+│ - Enemigos salen de ellas                                                   │
+│ - Jugador debe cerrarlas reparándolas                                       │
+│                                                                              │
+│ Fase 3: Escape                                                               │
+│ - Puerta de salida electrificada                                            │
+│ - Debe desactivarse derrotando al jefe                                      │
+│ - Temporizador de auto-cierre después de abrirse                            │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+LAYOUT SUGERIDO:
+```
+                [Puerta Lateral 1]
+                        │
+[Entrada] → [Arena Central] ← [Puerta Lateral 2]
+                        │
+                [Puerta Lateral 3]
+                        │
+                [Puerta Lateral 4]
+                        │
+                    [Salida]
+```
+
+════════════════════════════════════════════════════════════════════════════════
+PATRÓN 7: ROMPECABEZAS DE SECUENCIA
+════════════════════════════════════════════════════════════════════════════════
+
+OBJETIVO: Resolver un puzzle de orden correcto
+
+CONFIGURACIÓN:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 5 Puertas en fila, cada una con un interruptor                              │
+│                                                                              │
+│ REGLA: Deben abrirse en orden específico (ej: 3-1-4-2-5)                    │
+│                                                                              │
+│ Si se abre en orden incorrecto:                                             │
+│ - Todas las puertas se cierran                                              │
+│ - Se electrifican temporalmente                                             │
+│ - Jugador debe esperar 10 segundos                                          │
+│                                                                              │
+│ PISTAS:                                                                      │
+│ - Números en las paredes                                                    │
+│ - Colores de las luces                                                      │
+│ - Símbolos en los paneles                                                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+IMPLEMENTACIÓN:
+```gdscript
+var correct_sequence = [3, 1, 4, 2, 5]
+var current_sequence = []
+
+func _on_door_opened(door_id: int):
+    current_sequence.append(door_id)
+    
+    if current_sequence.size() == correct_sequence.size():
+        if current_sequence == correct_sequence:
+            _unlock_exit()
+        else:
+            _reset_puzzle()
+            _electrify_all_doors()
+
+func _reset_puzzle():
+    current_sequence.clear()
+    for door in doors:
+        door.close_door()
+
+func _electrify_all_doors():
+    for door in doors:
+        door.electrify()
+    
+    await get_tree().create_timer(10.0).timeout
+    
+    for door in doors:
+        door.de_electrify()
+```
+
+════════════════════════════════════════════════════════════════════════════════
+PATRÓN 8: CARRERA CONTRA EL TIEMPO
+════════════════════════════════════════════════════════════════════════════════
+
+OBJETIVO: Presión temporal con múltiples puertas
+
+CONFIGURACIÓN:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ ESCENARIO: Alarma activada, 60 segundos para escapar                        │
+│                                                                              │
+│ Puerta 1 (0-20 segundos):                                                   │
+│ - damage_level = LIGHT                                                      │
+│ - Fácil y rápida                                                            │
+│                                                                              │
+│ Puerta 2 (20-40 segundos):                                                  │
+│ - damage_level = MEDIUM                                                     │
+│ - Requiere decisión: ¿reparar o buscar bypass?                              │
+│                                                                              │
+│ Puerta 3 (40-60 segundos):                                                  │
+│ - damage_level = HEAVY                                                      │
+│ - Interruptor de emergencia disponible                                      │
+│ - Decisión crítica bajo presión                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+IMPLEMENTACIÓN:
+```gdscript
+var time_remaining = 60.0
+
+func _process(delta):
+    time_remaining -= delta
+    update_timer_ui()
+    
+    if time_remaining <= 0:
+        game_over()
+    
+    # Aumentar presión visual
+    if time_remaining < 20:
+        flash_red_lights()
+        increase_alarm_volume()
+```
+
+════════════════════════════════════════════════════════════════════════════════
+PATRÓN 9: ZONA DE ENTRENAMIENTO
+════════════════════════════════════════════════════════════════════════════════
+
+OBJETIVO: Área opcional para practicar mecánicas
+
+CONFIGURACIÓN:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Área separada del nivel principal                                           │
+│                                                                              │
+│ Estación 1: Reparación Básica                                               │
+│ - Puerta infinitamente reparable                                            │
+│ - Kits de reparación ilimitados                                             │
+│                                                                              │
+│ Estación 2: Hackeo Avanzado                                                 │
+│ - Múltiples puertas con diferentes hack_time                                │
+│ - Práctica de timing                                                        │
+│                                                                              │
+│ Estación 3: Peligros                                                        │
+│ - Puertas electrificadas con botiquines                                     │
+│ - Práctica de evasión                                                       │
+│                                                                              │
+│ Estación 4: Timing                                                          │
+│ - Puertas con auto_close                                                    │
+│ - Diferentes velocidades                                                    │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+════════════════════════════════════════════════════════════════════════════════
+PATRÓN 10: METROIDVANIA - PROGRESIÓN BLOQUEADA
+════════════════════════════════════════════════════════════════════════════════
+
+OBJETIVO: Puertas que requieren mejoras del jugador
+
+CONFIGURACIÓN:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Puerta Nivel 1:                                                              │
+│ - damage_level = LIGHT                                                      │
+│ - Accesible desde el inicio                                                 │
+│                                                                              │
+│ Puerta Nivel 2:                                                              │
+│ - damage_level = MEDIUM                                                     │
+│ - Requiere "Herramienta Mejorada"                                           │
+│ - tool_durability_cost = 15 (muy alto sin mejora)                           │
+│                                                                              │
+│ Puerta Nivel 3:                                                              │
+│ - damage_level = HEAVY                                                      │
+│ - Requiere "Herramienta Avanzada"                                           │
+│ - Imposible sin la mejora                                                   │
+│                                                                              │
+│ PROGRESIÓN:                                                                  │
+│ 1. Jugador encuentra puertas bloqueadas                                     │
+│ 2. Explora otras áreas                                                      │
+│ 3. Obtiene mejoras de herramienta                                           │
+│ 4. Regresa y abre nuevas áreas                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+IMPLEMENTACIÓN:
+```gdscript
+# En kai.gd
+enum ToolLevel { BASIC, IMPROVED, ADVANCED }
+var tool_level = ToolLevel.BASIC
+
+# En electric_door.gd
+@export var required_tool_level : int = 0  # ToolLevel
+
+func _start_repair():
+    var player = player_nearby
+    if player.tool_level < required_tool_level:
+        _show_error_message("Herramienta insuficiente")
+        return
+    
+    # Continuar con reparación normal...
+```
+
+════════════════════════════════════════════════════════════════════════════════
+CONSEJOS DE DISEÑO GENERAL
+════════════════════════════════════════════════════════════════════════════════
+
+1. TELEGRAFÍA VISUAL
+   - Usa colores de luz para indicar estado
+   - Partículas para mostrar peligro
+   - Animaciones claras para feedback
+
+2. CURVA DE DIFICULTAD
+   - Empieza fácil (1 paso, sin peligros)
+   - Aumenta gradualmente (más pasos, electricidad)
+   - Picos de dificultad en momentos clave
+
+3. RECOMPENSAS PROPORCIONALES
+   - Puertas difíciles → Mejores recompensas
+   - Rutas opcionales → Recursos extra
+   - Desafíos de timing → Logros/achievements
+
+4. VARIEDAD
+   - Mezcla diferentes tipos de puertas
+   - Combina con otros obstáculos
+   - Alterna entre acción y puzzle
+
+5. RESPETO AL JUGADOR
+   - Siempre hay una solución
+   - Checkpoints antes de secciones difíciles
+   - Recursos suficientes (pero no excesivos)
+
+6. TESTING
+   - Juega tu nivel completo varias veces
+   - Observa a otros jugadores
+   - Ajusta basándote en feedback
+
+════════════════════════════════════════════════════════════════════════════════
+MÉTRICAS RECOMENDADAS
+════════════════════════════════════════════════════════════════════════════════
+
+TIEMPO DE REPARACIÓN:
+- Tutorial: 1.0-1.5 segundos por paso
+- Normal: 2.0 segundos por paso
+- Difícil: 2.5-3.0 segundos por paso
+
+TIEMPO DE HACKEO:
+- Fácil: 2.0 segundos
+- Normal: 3.0 segundos
+- Difícil: 4.0-5.0 segundos
+
+COSTE DE DURABILIDAD:
+- Tutorial: 5 puntos por paso
+- Normal: 10 puntos por paso
+- Difícil: 15-20 puntos por paso
+
+AUTO-CIERRE:
+- Generoso: 5.0+ segundos
+- Normal: 3.0-4.0 segundos
+- Desafiante: 2.0-2.5 segundos
+- Extremo: 1.0-1.5 segundos
+
+DAÑO ELÉCTRICO:
+- Leve: 10-15 puntos
+- Normal: 20-25 puntos
+- Severo: 30-40 puntos
+- Letal: 50+ puntos
+
+════════════════════════════════════════════════════════════════════════════════
+FIN DEL DOCUMENTO
+════════════════════════════════════════════════════════════════════════════════
+
+Estos patrones son puntos de partida. Combínalos, modifícalos y crea tus propios
+diseños únicos. ¡La creatividad es el límite!

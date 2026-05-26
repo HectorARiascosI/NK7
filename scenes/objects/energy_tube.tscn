@@ -1,0 +1,91 @@
+[gd_scene load_steps=11 format=3 uid="uid://energy_tube_nk7"]
+
+[ext_resource type="Script" path="res://scripts/objects/collectible.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/objects/collectibles_sheet.png" id="2"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_energy_0"]
+atlas = ExtResource("2")
+region = Rect2(0, 626, 313, 313)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_energy_1"]
+atlas = ExtResource("2")
+region = Rect2(313, 626, 313, 313)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_energy_2"]
+atlas = ExtResource("2")
+region = Rect2(626, 626, 313, 313)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_energy_3"]
+atlas = ExtResource("2")
+region = Rect2(939, 626, 313, 313)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_energy"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_energy_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_energy_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_energy_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_energy_3")
+}],
+"loop": true,
+"name": &"energy",
+"speed": 6.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_energy"]
+radius = 20.0
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_energy"]
+particle_flag_disable_z = true
+emission_shape = 0
+direction = Vector3(0, -1, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 40.0
+initial_velocity_max = 80.0
+scale_min = 0.4
+scale_max = 1.0
+color = Color(0.2, 1.0, 0.9, 1.0)
+
+[node name="EnergyTube" type="Area2D" groups=["collectibles"]]
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1")
+collectible_type = 2
+value = 1
+energy_restore = 30
+float_amplitude = 8.0
+float_speed = 1.8
+rotation_speed = 0.0
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.12, 0.12)
+sprite_frames = SubResource("SpriteFrames_energy")
+animation = &"energy"
+autoplay = "energy"
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_energy")
+
+[node name="CollectParticles" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 16
+process_material = SubResource("ParticleProcessMaterial_energy")
+lifetime = 0.7
+one_shot = true
+explosiveness = 0.8
+
+[node name="Light" type="PointLight2D" parent="."]
+color = Color(0.2, 1.0, 0.9, 1.0)
+energy = 1.0
+texture_scale = 0.6
+
+[node name="CollectSound" type="AudioStreamPlayer2D" parent="."]
+max_distance = 400.0

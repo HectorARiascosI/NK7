@@ -1,7 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://b9mx7k4p2n8q5"]
+[gd_scene load_steps=3 format=3 uid="uid://credits_screen_nk7"]
 
 [ext_resource type="Script" path="res://scripts/ui/credits_screen.gd" id="1_credits"]
-[ext_resource type="Script" path="res://scripts/ui/menu_background.gd" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/ui/panels/ui_bg_credits.png" id="2_bg"]
 
 [node name="CreditsScreen" type="Control"]
 layout_mode = 3
@@ -12,319 +12,283 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_credits")
 
-[node name="BG" type="Node2D" parent="."]
-script = ExtResource("2_bg")
-
-[node name="Layout" type="VBoxContainer" parent="."]
+[node name="Background" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 0
+texture = ExtResource("2_bg")
+expand_mode = 1
+stretch_mode = 6
 
-[node name="TopAccent" type="ColorRect" parent="Layout"]
-custom_minimum_size = Vector2(0, 3)
-layout_mode = 2
-color = Color(0.80, 0.13, 0.00, 1.0)
-
-[node name="Header" type="ColorRect" parent="Layout"]
-custom_minimum_size = Vector2(0, 52)
-layout_mode = 2
-color = Color(0.11, 0.12, 0.15, 0.97)
-
-[node name="HeaderLabel" type="Label" parent="Layout/Header"]
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 20
-theme_override_colors/font_color = Color(0.82, 0.83, 0.86, 1)
-text = "CRÉDITOS DEL SISTEMA"
-horizontal_alignment = 1
-vertical_alignment = 1
+follow_focus = true
+scroll_horizontal_enabled = false
 
-[node name="HeaderLine" type="ColorRect" parent="Layout"]
-custom_minimum_size = Vector2(0, 1)
-layout_mode = 2
-color = Color(0.29, 0.31, 0.38, 0.6)
-
-[node name="ScrollContainer" type="ScrollContainer" parent="Layout"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Content" type="VBoxContainer" parent="Layout/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 0
+size_flags_vertical = 3
 
-[node name="Sp0" type="Control" parent="Layout/ScrollContainer/Content"]
-custom_minimum_size = Vector2(0, 50)
+[node name="Spacer1" type="Control" parent="ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 
-[node name="GameTitle" type="Label" parent="Layout/ScrollContainer/Content"]
+[node name="Title" type="Label" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 88
-theme_override_colors/font_color = Color(0.88, 0.88, 0.90, 1)
-theme_override_colors/font_shadow_color = Color(0.80, 0.13, 0.00, 0.5)
-theme_override_constants/shadow_offset_x = 5
-theme_override_constants/shadow_offset_y = 5
-text = "NK7"
+theme_override_colors/font_color = Color(0.91, 0.63, 0, 1)
+theme_override_font_sizes/font_size = 48
+text = "NK7-GDT"
 horizontal_alignment = 1
 
-[node name="GameSub" type="Label" parent="Layout/ScrollContainer/Content"]
+[node name="Subtitle" type="Label" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
-theme_override_colors/font_color = Color(0.45, 0.48, 0.55, 1)
-text = "ESCAPE DEL COMPLEJO ENERGÉTICO"
+theme_override_colors/font_color = Color(0.7, 0.72, 0.75, 1)
+theme_override_font_sizes/font_size = 20
+text = "Complejo Energético NK7"
 horizontal_alignment = 1
 
-[node name="Sp1" type="Control" parent="Layout/ScrollContainer/Content"]
-custom_minimum_size = Vector2(0, 50)
+[node name="Spacer2" type="Control" parent="ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 
-[node name="Sep1" type="ColorRect" parent="Layout/ScrollContainer/Content"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.0
-anchor_right = 0.5
-anchor_bottom = 0.0
-offset_left = -180.0
-offset_right = 180.0
-offset_bottom = 1.0
-grow_horizontal = 2
-custom_minimum_size = Vector2(0, 1)
-color = Color(0.29, 0.31, 0.38, 0.5)
-
-[node name="Sp2" type="Control" parent="Layout/ScrollContainer/Content"]
-custom_minimum_size = Vector2(0, 40)
+[node name="TeamTitle" type="Label" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
-
-[node name="TeamHeader" type="Label" parent="Layout/ScrollContainer/Content"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 13
-theme_override_colors/font_color = Color(0.91, 0.63, 0.00, 1)
+theme_override_colors/font_color = Color(0.91, 0.63, 0, 1)
+theme_override_font_sizes/font_size = 32
 text = "EQUIPO DE DESARROLLO"
 horizontal_alignment = 1
 
-[node name="Sp3" type="Control" parent="Layout/ScrollContainer/Content"]
-custom_minimum_size = Vector2(0, 28)
-layout_mode = 2
-
-[node name="Dev1" type="VBoxContainer" parent="Layout/ScrollContainer/Content"]
-layout_mode = 2
-theme_override_constants/separation = 3
-
-[node name="Name" type="Label" parent="Layout/ScrollContainer/Content/Dev1"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 28
-theme_override_colors/font_color = Color(0.88, 0.88, 0.90, 1)
-text = "HÉCTOR RIASCOS"
-horizontal_alignment = 1
-
-[node name="Role" type="Label" parent="Layout/ScrollContainer/Content/Dev1"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 14
-theme_override_colors/font_color = Color(0.45, 0.48, 0.55, 1)
-text = "Lead Developer  ·  Technical Director"
-horizontal_alignment = 1
-
-[node name="Sp4" type="Control" parent="Layout/ScrollContainer/Content"]
-custom_minimum_size = Vector2(0, 22)
-layout_mode = 2
-
-[node name="Dev2" type="VBoxContainer" parent="Layout/ScrollContainer/Content"]
-layout_mode = 2
-theme_override_constants/separation = 3
-
-[node name="Name" type="Label" parent="Layout/ScrollContainer/Content/Dev2"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 28
-theme_override_colors/font_color = Color(0.88, 0.88, 0.90, 1)
-text = "SEBASTIÁN ROSERO"
-horizontal_alignment = 1
-
-[node name="Role" type="Label" parent="Layout/ScrollContainer/Content/Dev2"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 14
-theme_override_colors/font_color = Color(0.45, 0.48, 0.55, 1)
-text = "Level Designer  ·  Game Balance"
-horizontal_alignment = 1
-
-[node name="Sp5" type="Control" parent="Layout/ScrollContainer/Content"]
-custom_minimum_size = Vector2(0, 22)
-layout_mode = 2
-
-[node name="Dev3" type="VBoxContainer" parent="Layout/ScrollContainer/Content"]
-layout_mode = 2
-theme_override_constants/separation = 3
-
-[node name="Name" type="Label" parent="Layout/ScrollContainer/Content/Dev3"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 28
-theme_override_colors/font_color = Color(0.88, 0.88, 0.90, 1)
-text = "STEVEN INSUASTI"
-horizontal_alignment = 1
-
-[node name="Role" type="Label" parent="Layout/ScrollContainer/Content/Dev3"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 14
-theme_override_colors/font_color = Color(0.45, 0.48, 0.55, 1)
-text = "Physics Engineer  ·  Controls System"
-horizontal_alignment = 1
-
-[node name="Sp6" type="Control" parent="Layout/ScrollContainer/Content"]
-custom_minimum_size = Vector2(0, 22)
-layout_mode = 2
-
-[node name="Dev4" type="VBoxContainer" parent="Layout/ScrollContainer/Content"]
-layout_mode = 2
-theme_override_constants/separation = 3
-
-[node name="Name" type="Label" parent="Layout/ScrollContainer/Content/Dev4"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 28
-theme_override_colors/font_color = Color(0.88, 0.88, 0.90, 1)
-text = "TATIANA TORRES"
-horizontal_alignment = 1
-
-[node name="Role" type="Label" parent="Layout/ScrollContainer/Content/Dev4"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 14
-theme_override_colors/font_color = Color(0.45, 0.48, 0.55, 1)
-text = "Animation Director  ·  Visual Design"
-horizontal_alignment = 1
-
-[node name="Sp7" type="Control" parent="Layout/ScrollContainer/Content"]
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
-
-[node name="Sep2" type="ColorRect" parent="Layout/ScrollContainer/Content"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.0
-anchor_right = 0.5
-anchor_bottom = 0.0
-offset_left = -180.0
-offset_right = 180.0
-offset_bottom = 1.0
-grow_horizontal = 2
-custom_minimum_size = Vector2(0, 1)
-color = Color(0.29, 0.31, 0.38, 0.5)
-
-[node name="Sp8" type="Control" parent="Layout/ScrollContainer/Content"]
+[node name="Spacer3" type="Control" parent="ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="AcadHeader" type="Label" parent="Layout/ScrollContainer/Content"]
+[node name="Developer1" type="Label" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 13
-theme_override_colors/font_color = Color(0.91, 0.63, 0.00, 1)
-text = "PROYECTO ACADÉMICO"
+theme_override_colors/font_color = Color(0.85, 0.86, 0.88, 1)
+theme_override_font_sizes/font_size = 24
+text = "Hector Riascos"
 horizontal_alignment = 1
 
-[node name="Sp9" type="Control" parent="Layout/ScrollContainer/Content"]
-custom_minimum_size = Vector2(0, 16)
+[node name="Role1" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.52, 0.55, 1)
+theme_override_font_sizes/font_size = 16
+text = "Programación y Diseño de Niveles"
+horizontal_alignment = 1
+
+[node name="Spacer4" type="Control" parent="ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
-[node name="AcadInfo" type="Label" parent="Layout/ScrollContainer/Content"]
+[node name="Developer2" type="Label" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.86, 0.88, 1)
+theme_override_font_sizes/font_size = 24
+text = "Sebastian Manchabajoy"
+horizontal_alignment = 1
+
+[node name="Role2" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.52, 0.55, 1)
+theme_override_font_sizes/font_size = 16
+text = "Diseño de Interfaces y Arte"
+horizontal_alignment = 1
+
+[node name="Spacer5" type="Control" parent="ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="Developer3" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.86, 0.88, 1)
+theme_override_font_sizes/font_size = 24
+text = "Steven Insuasti"
+horizontal_alignment = 1
+
+[node name="Role3" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.52, 0.55, 1)
+theme_override_font_sizes/font_size = 16
+text = "Mecánicas de Juego y Testing"
+horizontal_alignment = 1
+
+[node name="Spacer6" type="Control" parent="ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="Developer4" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.86, 0.88, 1)
+theme_override_font_sizes/font_size = 24
+text = "Tatiana Torres"
+horizontal_alignment = 1
+
+[node name="Role4" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.52, 0.55, 1)
+theme_override_font_sizes/font_size = 16
+text = "Narrativa y Documentación"
+horizontal_alignment = 1
+
+[node name="Spacer7" type="Control" parent="ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+
+[node name="UniversityTitle" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.91, 0.63, 0, 1)
+theme_override_font_sizes/font_size = 28
+text = "UNIVERSIDAD COOPERATIVA DE COLOMBIA"
+horizontal_alignment = 1
+
+[node name="Location" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.72, 0.75, 1)
 theme_override_font_sizes/font_size = 18
-theme_override_colors/font_color = Color(0.55, 0.58, 0.65, 1)
-text = "Universidad Cooperativa de Colombia
-Ingeniería de Software  ·  2026"
+text = "Pasto - Nariño"
 horizontal_alignment = 1
 
-[node name="Sp10" type="Control" parent="Layout/ScrollContainer/Content"]
+[node name="Spacer8" type="Control" parent="ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="TechHeader" type="Label" parent="Layout/ScrollContainer/Content"]
+[node name="CourseTitle" type="Label" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 13
-theme_override_colors/font_color = Color(0.91, 0.63, 0.00, 1)
+theme_override_colors/font_color = Color(0.85, 0.86, 0.88, 1)
+theme_override_font_sizes/font_size = 20
+text = "Diseño de Interfaces de Software"
+horizontal_alignment = 1
+
+[node name="Professor" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.62, 0.65, 1)
+theme_override_font_sizes/font_size = 18
+text = "Profesor: Mideros"
+horizontal_alignment = 1
+
+[node name="Year" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.62, 0.65, 1)
+theme_override_font_sizes/font_size = 18
+text = "2026"
+horizontal_alignment = 1
+
+[node name="Spacer9" type="Control" parent="ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+
+[node name="TechTitle" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.91, 0.63, 0, 1)
+theme_override_font_sizes/font_size = 28
 text = "TECNOLOGÍA"
 horizontal_alignment = 1
 
-[node name="Sp11" type="Control" parent="Layout/ScrollContainer/Content"]
-custom_minimum_size = Vector2(0, 16)
+[node name="Spacer10" type="Control" parent="ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
-[node name="TechInfo" type="Label" parent="Layout/ScrollContainer/Content"]
+[node name="Engine" type="Label" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 18
-theme_override_colors/font_color = Color(0.55, 0.58, 0.65, 1)
-text = "Godot Engine 4.6  ·  GDScript
-Pixel Art  ·  2D Platformer"
+theme_override_colors/font_color = Color(0.85, 0.86, 0.88, 1)
+theme_override_font_sizes/font_size = 20
+text = "Godot Engine 4.6"
 horizontal_alignment = 1
 
-[node name="Sp12" type="Control" parent="Layout/ScrollContainer/Content"]
-custom_minimum_size = Vector2(0, 60)
+[node name="Language" type="Label" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
-
-[node name="Thanks" type="Label" parent="Layout/ScrollContainer/Content"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-theme_override_colors/font_color = Color(0.82, 0.83, 0.86, 1)
-text = "GRACIAS POR JUGAR"
-horizontal_alignment = 1
-
-[node name="Sp13" type="Control" parent="Layout/ScrollContainer/Content"]
-custom_minimum_size = Vector2(0, 60)
-layout_mode = 2
-
-[node name="BottomBar" type="ColorRect" parent="Layout"]
-custom_minimum_size = Vector2(0, 56)
-layout_mode = 2
-color = Color(0.09, 0.10, 0.13, 0.97)
-
-[node name="BottomLine" type="ColorRect" parent="Layout/BottomBar"]
-layout_mode = 1
-anchors_preset = 1
-anchor_right = 1.0
-offset_bottom = 1.0
-grow_horizontal = 2
-color = Color(0.29, 0.31, 0.38, 0.5)
-
-[node name="BackButton" type="Button" parent="Layout/BottomBar"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -110.0
-offset_top = -20.0
-offset_right = 110.0
-offset_bottom = 20.0
-grow_horizontal = 2
-grow_vertical = 2
+theme_override_colors/font_color = Color(0.6, 0.62, 0.65, 1)
 theme_override_font_sizes/font_size = 16
-text = "VOLVER AL MENÚ"
+text = "GDScript"
+horizontal_alignment = 1
 
-[node name="HintLabel" type="Label" parent="Layout/BottomBar"]
-layout_mode = 1
-anchors_preset = 4
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -180.0
-offset_top = 18.0
-offset_right = -14.0
-offset_bottom = 38.0
-grow_horizontal = 0
-theme_override_font_sizes/font_size = 11
-theme_override_colors/font_color = Color(0.29, 0.31, 0.38, 0.7)
-text = "[ ESC ]  VOLVER"
-horizontal_alignment = 2
-
-[node name="BottomAccent" type="ColorRect" parent="Layout"]
-custom_minimum_size = Vector2(0, 2)
+[node name="Spacer11" type="Control" parent="ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
-color = Color(0.80, 0.13, 0.00, 1.0)
 
-[connection signal="pressed" from="Layout/BottomBar/BackButton" to="." method="_on_back_button_pressed"]
+[node name="ThanksTitle" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.91, 0.63, 0, 1)
+theme_override_font_sizes/font_size = 28
+text = "AGRADECIMIENTOS ESPECIALES"
+horizontal_alignment = 1
+
+[node name="Spacer12" type="Control" parent="ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="Thanks1" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.72, 0.75, 1)
+theme_override_font_sizes/font_size = 18
+text = "A la Universidad Cooperativa de Colombia"
+horizontal_alignment = 1
+
+[node name="Thanks2" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.72, 0.75, 1)
+theme_override_font_sizes/font_size = 18
+text = "Al Profesor Mideros por su guía"
+horizontal_alignment = 1
+
+[node name="Thanks3" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.72, 0.75, 1)
+theme_override_font_sizes/font_size = 18
+text = "A nuestras familias por su apoyo"
+horizontal_alignment = 1
+
+[node name="Thanks4" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.72, 0.75, 1)
+theme_override_font_sizes/font_size = 18
+text = "A la comunidad de Godot Engine"
+horizontal_alignment = 1
+
+[node name="Spacer13" type="Control" parent="ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="Copyright" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.52, 0.55, 1)
+theme_override_font_sizes/font_size = 14
+text = "© 2026 - Proyecto Académico"
+horizontal_alignment = 1
+
+[node name="License" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.52, 0.55, 1)
+theme_override_font_sizes/font_size = 14
+text = "Desarrollado con fines educativos"
+horizontal_alignment = 1
+
+[node name="Spacer14" type="Control" parent="ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -60.0
+offset_right = 100.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.91, 0.63, 0, 1)
+theme_override_font_sizes/font_size = 18
+text = "VOLVER AL MENÚ"

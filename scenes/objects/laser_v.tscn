@@ -1,0 +1,34 @@
+[gd_scene load_steps=4 format=3 uid="uid://laser_v_nk7"]
+
+[ext_resource type="Script"    path="res://scripts/objects/laser.gd"          id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/objects/laser_v_frame0.png" id="2_off"]
+[ext_resource type="Texture2D" path="res://assets/objects/laser_v_frame2.png" id="3_on"]
+
+[sub_resource type="RectangleShape2D" id="BeamShape"]
+size = Vector2(8, 256)
+
+;; ══════════════════════════════════════════════════════════════════
+;; LASER VERTICAL
+;; Sprite2D estático con el frame activo → sin parpadeo involuntario
+;; El script lo oculta/muestra cuando parpadea (modo blink/patrol)
+;; ══════════════════════════════════════════════════════════════════
+
+[node name="LaserV" type="Node2D"]
+script = ExtResource("1_script")
+mode = 1
+blink_on_time = 1.8
+blink_off_time = 0.9
+
+;; Sprite estático — frame activo del láser vertical
+[node name="Sprite" type="Sprite2D" parent="."]
+position = Vector2(0, 147)
+texture = ExtResource("3_on")
+centered = true
+
+[node name="BeamArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask  = 1
+
+[node name="BeamShape" type="CollisionShape2D" parent="BeamArea"]
+position = Vector2(0, 148)
+shape    = SubResource("BeamShape")
