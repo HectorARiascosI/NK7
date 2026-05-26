@@ -1,316 +1,226 @@
-[gd_scene load_steps=2 format=3 uid="uid://d5wy8n3p6k2m1"]
+[gd_scene load_steps=3 format=3]
 
-[ext_resource type="Script" path="res://scripts/ui/settings_menu.gd" id="1_settings"]
+[ext_resource type="Script"    path="res://scripts/ui/settings_menu.gd"          id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/ui/panels/ui_panel_settings.png" id="2_bg"]
 
-[node name="SettingsMenu" type="Control"]
-process_mode = 3
+[node name="SettingsMenu" type="CanvasLayer"]
+layer = 11
+script = ExtResource("1_script")
+
+[node name="Root" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_settings")
 
-[node name="Overlay" type="ColorRect" parent="."]
+[node name="Overlay" type="ColorRect" parent="Root"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.04, 0.04, 0.06, 0.88)
+mouse_filter = 2
+color = Color(0, 0, 0, 0.85)
 
-[node name="Window" type="VBoxContainer" parent="."]
+[node name="Panel" type="Panel" parent="Root"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -360.0
-offset_top = -260.0
-offset_right = 360.0
-offset_bottom = 260.0
+offset_left = -400.0
+offset_top = -280.0
+offset_right = 400.0
+offset_bottom = 280.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 0
 
-[node name="TopAccent" type="ColorRect" parent="Window"]
-custom_minimum_size = Vector2(720, 3)
-layout_mode = 2
-color = Color(0.80, 0.13, 0.00, 1.0)
-
-[node name="TitleBar" type="ColorRect" parent="Window"]
-custom_minimum_size = Vector2(720, 48)
-layout_mode = 2
-color = Color(0.11, 0.12, 0.15, 1.0)
-
-[node name="TitleLabel" type="Label" parent="Window/TitleBar"]
+[node name="PanelBG" type="TextureRect" parent="Root/Panel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 20
-theme_override_colors/font_color = Color(0.82, 0.83, 0.86, 1)
-text = "CONFIGURACIÓN DEL SISTEMA"
+texture = ExtResource("2_bg")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Border" type="ColorRect" parent="Root/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
+
+[node name="Content" type="VBoxContainer" parent="Root/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = 30.0
+offset_right = -40.0
+offset_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="Root/Panel/Content"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color = Color(1.0, 0.3, 0.3, 1)
+text = "— AJUSTES NK-7 —"
 horizontal_alignment = 1
-vertical_alignment = 1
 
-[node name="Content" type="ColorRect" parent="Window"]
-custom_minimum_size = Vector2(720, 420)
-layout_mode = 2
-color = Color(0.09, 0.10, 0.13, 0.99)
-
-[node name="TabContainer" type="TabContainer" parent="Window/Content"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_bottom = -56.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Audio" type="MarginContainer" parent="Window/Content/TabContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 28
-theme_override_constants/margin_top = 24
-theme_override_constants/margin_right = 28
-theme_override_constants/margin_bottom = 24
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Window/Content/TabContainer/Audio"]
-layout_mode = 2
-theme_override_constants/separation = 22
-
-[node name="MasterVolume" type="VBoxContainer" parent="Window/Content/TabContainer/Audio/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 6
-
-[node name="LabelRow" type="HBoxContainer" parent="Window/Content/TabContainer/Audio/VBoxContainer/MasterVolume"]
+[node name="HSeparator" type="HSeparator" parent="Root/Panel/Content"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Window/Content/TabContainer/Audio/VBoxContainer/MasterVolume/LabelRow"]
+[node name="AudioLabel" type="Label" parent="Root/Panel/Content"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1, 0.6, 0.3, 1)
+text = "AUDIO"
+
+[node name="MasterVolume" type="HBoxContainer" parent="Root/Panel/Content"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Label" type="Label" parent="Root/Panel/Content/MasterVolume"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+text = "Volumen Master:"
+
+[node name="Slider" type="HSlider" parent="Root/Panel/Content/MasterVolume"]
+custom_minimum_size = Vector2(400, 24)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 16
-text = "VOLUMEN GENERAL"
+max_value = 100.0
+step = 5.0
+value = 100.0
 
-[node name="ValueLabel" type="Label" parent="Window/Content/TabContainer/Audio/VBoxContainer/MasterVolume/LabelRow"]
+[node name="Value" type="Label" parent="Root/Panel/Content/MasterVolume"]
+custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
-custom_minimum_size = Vector2(48, 0)
-theme_override_font_sizes/font_size = 16
-theme_override_colors/font_color = Color(0.91, 0.63, 0.00, 1)
 text = "100%"
 horizontal_alignment = 2
 
-[node name="Slider" type="HSlider" parent="Window/Content/TabContainer/Audio/VBoxContainer/MasterVolume"]
-custom_minimum_size = Vector2(0, 18)
+[node name="MusicVolume" type="HBoxContainer" parent="Root/Panel/Content"]
 layout_mode = 2
-max_value = 100.0
-value = 100.0
+theme_override_constants/separation = 15
 
-[node name="MusicVolume" type="VBoxContainer" parent="Window/Content/TabContainer/Audio/VBoxContainer"]
+[node name="Label" type="Label" parent="Root/Panel/Content/MusicVolume"]
+custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
-theme_override_constants/separation = 6
+text = "Volumen Música:"
 
-[node name="LabelRow" type="HBoxContainer" parent="Window/Content/TabContainer/Audio/VBoxContainer/MusicVolume"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Window/Content/TabContainer/Audio/VBoxContainer/MusicVolume/LabelRow"]
+[node name="Slider" type="HSlider" parent="Root/Panel/Content/MusicVolume"]
+custom_minimum_size = Vector2(400, 24)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 16
-text = "VOLUMEN MÚSICA"
+max_value = 100.0
+step = 5.0
+value = 80.0
 
-[node name="ValueLabel" type="Label" parent="Window/Content/TabContainer/Audio/VBoxContainer/MusicVolume/LabelRow"]
+[node name="Value" type="Label" parent="Root/Panel/Content/MusicVolume"]
+custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
-custom_minimum_size = Vector2(48, 0)
-theme_override_font_sizes/font_size = 16
-theme_override_colors/font_color = Color(0.91, 0.63, 0.00, 1)
 text = "80%"
 horizontal_alignment = 2
 
-[node name="Slider" type="HSlider" parent="Window/Content/TabContainer/Audio/VBoxContainer/MusicVolume"]
-custom_minimum_size = Vector2(0, 18)
+[node name="SFXVolume" type="HBoxContainer" parent="Root/Panel/Content"]
 layout_mode = 2
-max_value = 100.0
-value = 80.0
+theme_override_constants/separation = 15
 
-[node name="SFXVolume" type="VBoxContainer" parent="Window/Content/TabContainer/Audio/VBoxContainer"]
+[node name="Label" type="Label" parent="Root/Panel/Content/SFXVolume"]
+custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
-theme_override_constants/separation = 6
+text = "Volumen SFX:"
 
-[node name="LabelRow" type="HBoxContainer" parent="Window/Content/TabContainer/Audio/VBoxContainer/SFXVolume"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Window/Content/TabContainer/Audio/VBoxContainer/SFXVolume/LabelRow"]
+[node name="Slider" type="HSlider" parent="Root/Panel/Content/SFXVolume"]
+custom_minimum_size = Vector2(400, 24)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 16
-text = "VOLUMEN EFECTOS"
+max_value = 100.0
+step = 5.0
+value = 100.0
 
-[node name="ValueLabel" type="Label" parent="Window/Content/TabContainer/Audio/VBoxContainer/SFXVolume/LabelRow"]
+[node name="Value" type="Label" parent="Root/Panel/Content/SFXVolume"]
+custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
-custom_minimum_size = Vector2(48, 0)
-theme_override_font_sizes/font_size = 16
-theme_override_colors/font_color = Color(0.91, 0.63, 0.00, 1)
 text = "100%"
 horizontal_alignment = 2
 
-[node name="Slider" type="HSlider" parent="Window/Content/TabContainer/Audio/VBoxContainer/SFXVolume"]
-custom_minimum_size = Vector2(0, 18)
-layout_mode = 2
-max_value = 100.0
-value = 100.0
-
-[node name="Video" type="MarginContainer" parent="Window/Content/TabContainer"]
-visible = false
-layout_mode = 2
-theme_override_constants/margin_left = 28
-theme_override_constants/margin_top = 24
-theme_override_constants/margin_right = 28
-theme_override_constants/margin_bottom = 24
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Window/Content/TabContainer/Video"]
-layout_mode = 2
-theme_override_constants/separation = 22
-
-[node name="Fullscreen" type="HBoxContainer" parent="Window/Content/TabContainer/Video/VBoxContainer"]
+[node name="HSeparator2" type="HSeparator" parent="Root/Panel/Content"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Window/Content/TabContainer/Video/VBoxContainer/Fullscreen"]
+[node name="AccessLabel" type="Label" parent="Root/Panel/Content"]
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 16
-text = "PANTALLA COMPLETA"
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1, 0.6, 0.3, 1)
+text = "ACCESIBILIDAD"
 
-[node name="CheckButton" type="CheckButton" parent="Window/Content/TabContainer/Video/VBoxContainer/Fullscreen"]
+[node name="ScreenShake" type="HBoxContainer" parent="Root/Panel/Content"]
 layout_mode = 2
+theme_override_constants/separation = 15
 
-[node name="VSync" type="HBoxContainer" parent="Window/Content/TabContainer/Video/VBoxContainer"]
+[node name="Label" type="Label" parent="Root/Panel/Content/ScreenShake"]
+custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
+text = "Vibración al recibir daño:"
 
-[node name="Label" type="Label" parent="Window/Content/TabContainer/Video/VBoxContainer/VSync"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 16
-text = "VSYNC"
-
-[node name="CheckButton" type="CheckButton" parent="Window/Content/TabContainer/Video/VBoxContainer/VSync"]
+[node name="CheckBox" type="CheckBox" parent="Root/Panel/Content/ScreenShake"]
 layout_mode = 2
 button_pressed = true
+text = "Activado"
 
-[node name="Resolution" type="HBoxContainer" parent="Window/Content/TabContainer/Video/VBoxContainer"]
+[node name="CameraSmoothing" type="HBoxContainer" parent="Root/Panel/Content"]
 layout_mode = 2
+theme_override_constants/separation = 15
 
-[node name="Label" type="Label" parent="Window/Content/TabContainer/Video/VBoxContainer/Resolution"]
+[node name="Label" type="Label" parent="Root/Panel/Content/CameraSmoothing"]
+custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 16
-text = "RESOLUCIÓN"
+text = "Velocidad de cámara:"
 
-[node name="OptionButton" type="OptionButton" parent="Window/Content/TabContainer/Video/VBoxContainer/Resolution"]
-layout_mode = 2
-item_count = 4
-selected = 0
-popup/item_0/text = "1920x1080"
-popup/item_1/text = "1600x900"
-popup/item_1/id = 1
-popup/item_2/text = "1366x768"
-popup/item_2/id = 2
-popup/item_3/text = "1280x720"
-popup/item_3/id = 3
-
-[node name="Accesibilidad" type="MarginContainer" parent="Window/Content/TabContainer"]
-visible = false
-layout_mode = 2
-theme_override_constants/margin_left = 28
-theme_override_constants/margin_top = 24
-theme_override_constants/margin_right = 28
-theme_override_constants/margin_bottom = 24
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Window/Content/TabContainer/Accesibilidad"]
-layout_mode = 2
-theme_override_constants/separation = 22
-
-[node name="ScreenShake" type="HBoxContainer" parent="Window/Content/TabContainer/Accesibilidad/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Window/Content/TabContainer/Accesibilidad/VBoxContainer/ScreenShake"]
+[node name="Slider" type="HSlider" parent="Root/Panel/Content/CameraSmoothing"]
+custom_minimum_size = Vector2(350, 24)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 16
-text = "SACUDIDA DE CÁMARA"
-
-[node name="CheckButton" type="CheckButton" parent="Window/Content/TabContainer/Accesibilidad/VBoxContainer/ScreenShake"]
-layout_mode = 2
-button_pressed = true
-
-[node name="CameraSmoothing" type="VBoxContainer" parent="Window/Content/TabContainer/Accesibilidad/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 6
-
-[node name="LabelRow" type="HBoxContainer" parent="Window/Content/TabContainer/Accesibilidad/VBoxContainer/CameraSmoothing"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Window/Content/TabContainer/Accesibilidad/VBoxContainer/CameraSmoothing/LabelRow"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 16
-text = "SUAVIZADO DE CÁMARA"
-
-[node name="ValueLabel" type="Label" parent="Window/Content/TabContainer/Accesibilidad/VBoxContainer/CameraSmoothing/LabelRow"]
-layout_mode = 2
-custom_minimum_size = Vector2(48, 0)
-theme_override_font_sizes/font_size = 16
-theme_override_colors/font_color = Color(0.91, 0.63, 0.00, 1)
-text = "5"
-horizontal_alignment = 2
-
-[node name="Slider" type="HSlider" parent="Window/Content/TabContainer/Accesibilidad/VBoxContainer/CameraSmoothing"]
-custom_minimum_size = Vector2(0, 18)
-layout_mode = 2
 min_value = 1.0
 max_value = 10.0
+step = 0.5
 value = 5.0
 
-[node name="ButtonsRow" type="HBoxContainer" parent="Window/Content"]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 20.0
-offset_top = -52.0
-offset_right = -20.0
-offset_bottom = -10.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_constants/separation = 14
-
-[node name="ResetButton" type="Button" parent="Window/Content/ButtonsRow"]
-custom_minimum_size = Vector2(150, 38)
+[node name="Value" type="Label" parent="Root/Panel/Content/CameraSmoothing"]
+custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 15
-theme_override_colors/font_color = Color(0.80, 0.30, 0.20, 1)
-text = "RESTABLECER"
+text = "5.0"
+horizontal_alignment = 2
 
-[node name="Spacer" type="Control" parent="Window/Content/ButtonsRow"]
+[node name="HSeparator3" type="HSeparator" parent="Root/Panel/Content"]
 layout_mode = 2
-size_flags_horizontal = 3
 
-[node name="BackButton" type="Button" parent="Window/Content/ButtonsRow"]
-custom_minimum_size = Vector2(150, 38)
+[node name="Buttons" type="HBoxContainer" parent="Root/Panel/Content"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 15
+theme_override_constants/separation = 30
+alignment = 1
+
+[node name="BtnVolver" type="Button" parent="Root/Panel/Content/Buttons"]
+custom_minimum_size = Vector2(250, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
 text = "VOLVER"
 
-[node name="BottomAccent" type="ColorRect" parent="Window"]
-custom_minimum_size = Vector2(720, 2)
+[node name="BtnGuardar" type="Button" parent="Root/Panel/Content/Buttons"]
+custom_minimum_size = Vector2(250, 50)
 layout_mode = 2
-color = Color(0.29, 0.31, 0.38, 0.5)
-
-[connection signal="pressed" from="Window/Content/ButtonsRow/ResetButton" to="." method="_on_reset_button_pressed"]
-[connection signal="pressed" from="Window/Content/ButtonsRow/BackButton"  to="." method="_on_back_button_pressed"]
+theme_override_font_sizes/font_size = 18
+text = "GUARDAR"

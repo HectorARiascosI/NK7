@@ -1,0 +1,163 @@
+════════════════════════════════════════════════════════════════════════════════
+GUÍA RÁPIDA - SISTEMA DE PUERTAS NK-7
+════════════════════════════════════════════════════════════════════════════════
+
+⚡ INICIO RÁPIDO EN 3 PASOS
+════════════════════════════════════════════════════════════════════════════════
+
+1️⃣  PROBAR
+   → Abre: scenes/levels/test_doors_level.tscn
+   → Presiona F5
+   → Prueba [F] y [Q] en las puertas
+
+2️⃣  USAR
+   → Arrastra damaged_door.tscn o locked_door.tscn a tu nivel
+   → Configura parámetros en el Inspector
+   → ¡Listo!
+
+3️⃣  PERSONALIZAR
+   → Ajusta repair_steps, hack_time, costes, etc.
+   → Conecta señales si necesitas eventos
+   → Añade player_hud.tscn para ver recursos
+
+════════════════════════════════════════════════════════════════════════════════
+🎮 CONTROLES
+════════════════════════════════════════════════════════════════════════════════
+
+[F] = Reparar puerta dañada (mantener)
+[Q] = Hackear puerta bloqueada (mantener)
+
+════════════════════════════════════════════════════════════════════════════════
+🚪 DOS TIPOS DE PUERTAS
+════════════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PUERTAS DAÑADAS                                                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ Archivo:     scenes/objects/damaged_door.tscn                               │
+│ Tecla:       [F] use_tool                                                   │
+│ Consume:     Durabilidad de herramienta                                     │
+│ Pasos:       1-3 pasos de reparación                                        │
+│ Color:       Rojo → Naranja → Verde                                         │
+│ Frames:      Fila superior del spritesheet                                  │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PUERTAS BLOQUEADAS                                                           │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ Archivo:     scenes/objects/locked_door.tscn                                │
+│ Tecla:       [Q] hack                                                       │
+│ Consume:     Energía del jugador                                            │
+│ Tiempo:      2-4 segundos de hackeo                                         │
+│ Color:       Rojo → Cyan → Verde                                            │
+│ Frames:      Fila inferior del spritesheet                                  │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+════════════════════════════════════════════════════════════════════════════════
+⚙️ CONFIGURACIÓN RÁPIDA
+════════════════════════════════════════════════════════════════════════════════
+
+PUERTA DAÑADA FÁCIL:
+```gdscript
+repair_steps = 1
+repair_time_per_step = 1.5
+tool_cost_per_step = 5
+```
+
+PUERTA DAÑADA DIFÍCIL:
+```gdscript
+repair_steps = 3
+repair_time_per_step = 2.5
+tool_cost_per_step = 15
+```
+
+PUERTA BLOQUEADA FÁCIL:
+```gdscript
+hack_time = 2.0
+energy_cost = 15
+```
+
+PUERTA BLOQUEADA DIFÍCIL:
+```gdscript
+hack_time = 4.0
+energy_cost = 30
+```
+
+════════════════════════════════════════════════════════════════════════════════
+📁 ARCHIVOS IMPORTANTES
+════════════════════════════════════════════════════════════════════════════════
+
+USAR ESTAS ESCENAS:
+✓ scenes/objects/damaged_door.tscn      [Arrastra a tu nivel]
+✓ scenes/objects/locked_door.tscn       [Arrastra a tu nivel]
+✓ scenes/ui/player_hud.tscn             [Añade como CanvasLayer]
+
+PROBAR AQUÍ:
+✓ scenes/levels/test_doors_level.tscn   [Nivel de prueba completo]
+
+LEER DOCUMENTACIÓN:
+✓ DOOR_SYSTEM_FINAL.txt                 [Guía completa]
+✓ DOOR_SYSTEM_DESIGN.txt                [Diseño técnico]
+✓ DOOR_LEVEL_PATTERNS.txt               [Patrones de niveles]
+
+════════════════════════════════════════════════════════════════════════════════
+💡 TIPS RÁPIDOS
+════════════════════════════════════════════════════════════════════════════════
+
+✓ Las escenas .tscn ya tienen TODO configurado (nodos, animaciones, luces)
+✓ Solo arrastra y configura parámetros en el Inspector
+✓ No necesitas programar nada
+✓ Los frames del spritesheet ya están mapeados
+✓ Las teclas [F] y [Q] ya están configuradas en project.godot
+✓ El sistema de recursos ya está en kai.gd
+✓ El HUD ya está listo para mostrar recursos
+
+════════════════════════════════════════════════════════════════════════════════
+🎯 EJEMPLO DE USO
+════════════════════════════════════════════════════════════════════════════════
+
+1. Abre tu nivel en Godot
+2. Arrastra "damaged_door.tscn" a la escena
+3. Posiciónala donde quieras
+4. En el Inspector, configura:
+   - repair_steps = 2
+   - repair_time_per_step = 2.0
+5. ¡Listo! Ejecuta y prueba con [F]
+
+════════════════════════════════════════════════════════════════════════════════
+❓ PROBLEMAS COMUNES
+════════════════════════════════════════════════════════════════════════════════
+
+P: "No puedo reparar/hackear"
+R: Verifica que tengas durabilidad/energía suficiente
+
+P: "Los hints no aparecen"
+R: Asegúrate de que Kai esté en el grupo "player"
+
+P: "Las animaciones no se ven"
+R: Verifica que doors.png esté en assets/objects/
+
+P: "Las teclas no responden"
+R: Las acciones "use_tool" y "hack" ya están en project.godot
+
+════════════════════════════════════════════════════════════════════════════════
+✅ CHECKLIST
+════════════════════════════════════════════════════════════════════════════════
+
+□ Ejecuté test_doors_level.tscn y funciona
+□ Probé [F] en puertas dañadas
+□ Probé [Q] en puertas bloqueadas
+□ Añadí puertas a mi nivel
+□ Configuré los parámetros que necesito
+□ Añadí el HUD para ver recursos
+□ Todo funciona correctamente
+
+════════════════════════════════════════════════════════════════════════════════
+🚀 ¡LISTO PARA USAR!
+════════════════════════════════════════════════════════════════════════════════
+
+El sistema está 100% completo. Solo abre Godot y empieza a crear niveles.
+
+Para más detalles, lee: DOOR_SYSTEM_FINAL.txt
+
+════════════════════════════════════════════════════════════════════════════════

@@ -1,232 +1,149 @@
-extends Control
+extends CanvasLayer
 
-## Menú de configuración de NK7
-## Gestiona audio, video, controles y accesibilidad
+## SettingsMenu — NK7
+## Menú de ajustes simplificado y funcional
 
-signal back_pressed
+@onready var _master_slider : HSlider  = $Root/Panel/Content/MasterVolume/Slider
+@onready var _master_value  : Label    = $Root/Panel/Content/MasterVolume/Value
+@onready var _music_slider  : HSlider  = $Root/Panel/Content/MusicVolume/Slider
+@onready var _music_value   : Label    = $Root/Panel/Content/MusicVolume/Value
+@onready var _sfx_slider    : HSlider  = $Root/Panel/Content/SFXVolume/Slider
+@onready var _sfx_value     : Label    = $Root/Panel/Content/SFXVolume/Value
 
-# ══════════════════════════════════════════════════════════════════
-# NODOS - AUDIO
-# ══════════════════════════════════════════════════════════════════
+@onready var _shake_check   : CheckBox = $Root/Panel/Content/ScreenShake/CheckBox
+@onready var _smooth_slider : HSlider  = $Root/Panel/Content/CameraSmoothing/Slider
+@onready var _smooth_value  : Label    = $Root/Panel/Content/CameraSmoothing/Value
 
-@onready var master_volume_slider := $Window/Content/TabContainer/Audio/VBoxContainer/MasterVolume/Slider
-@onready var music_volume_slider  := $Window/Content/TabContainer/Audio/VBoxContainer/MusicVolume/Slider
-@onready var sfx_volume_slider    := $Window/Content/TabContainer/Audio/VBoxContainer/SFXVolume/Slider
+@onready var _btn_volver    : Button   = $Root/Panel/Content/Buttons/BtnVolver
+@onready var _btn_guardar   : Button   = $Root/Panel/Content/Buttons/BtnGuardar
 
-@onready var master_value_label := $Window/Content/TabContainer/Audio/VBoxContainer/MasterVolume/LabelRow/ValueLabel
-@onready var music_value_label  := $Window/Content/TabContainer/Audio/VBoxContainer/MusicVolume/LabelRow/ValueLabel
-@onready var sfx_value_label    := $Window/Content/TabContainer/Audio/VBoxContainer/SFXVolume/LabelRow/ValueLabel
-
-# ══════════════════════════════════════════════════════════════════
-# NODOS - VIDEO
-# ══════════════════════════════════════════════════════════════════
-
-@onready var fullscreen_check  := $Window/Content/TabContainer/Video/VBoxContainer/Fullscreen/CheckButton
-@onready var vsync_check       := $Window/Content/TabContainer/Video/VBoxContainer/VSync/CheckButton
-@onready var resolution_option := $Window/Content/TabContainer/Video/VBoxContainer/Resolution/OptionButton
-
-# ══════════════════════════════════════════════════════════════════
-# NODOS - ACCESIBILIDAD
-# ══════════════════════════════════════════════════════════════════
-
-@onready var screen_shake_check      := $Window/Content/TabContainer/Accesibilidad/VBoxContainer/ScreenShake/CheckButton
-@onready var camera_smoothing_slider := $Window/Content/TabContainer/Accesibilidad/VBoxContainer/CameraSmoothing/Slider
-@onready var smoothing_value_label   := $Window/Content/TabContainer/Accesibilidad/VBoxContainer/CameraSmoothing/LabelRow/ValueLabel
-
-# ══════════════════════════════════════════════════════════════════
-# CONSTANTES
-# ══════════════════════════════════════════════════════════════════
-
-const RESOLUTIONS := {
-	"1920x1080": Vector2i(1920, 1080),
-	"1600x900":  Vector2i(1600, 900),
-	"1366x768":  Vector2i(1366, 768),
-	"1280x720":  Vector2i(1280, 720),
-}
-
-# ══════════════════════════════════════════════════════════════════
-# INICIALIZACIÓN
-# ══════════════════════════════════════════════════════════════════
+@onready var _panel : Panel = $Root/Panel
 
 func _ready() -> void:
-	# Aplicar tema NK7
-	if has_node("/root/NK7Theme"):
-		theme = get_node("/root/NK7Theme").get_nk7_theme()
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	
-	_load_settings()
-	_setup_resolution_options()
+	_load_current_settings()
 	_connect_signals()
+	_animate_in()
 	
-	# Animación de entrada
-	modulate.a = 0.0
-	var tween := create_tween()
-	tween.tween_property(self, "modulate:a", 1.0, 0.2)
-
-
-func _setup_resolution_options() -> void:
-	resolution_option.clear()
-	for res_name in RESOLUTIONS.keys():
-		resolution_option.add_item(res_name)
+	print("[Settings] Menú de ajustes cargado")
 
 
 func _connect_signals() -> void:
-	master_volume_slider.value_changed.connect(_on_master_volume_changed)
-	music_volume_slider.value_changed.connect(_on_music_volume_changed)
-	sfx_volume_slider.value_changed.connect(_on_sfx_volume_changed)
-	fullscreen_check.toggled.connect(_on_fullscreen_toggled)
-	vsync_check.toggled.connect(_on_vsync_toggled)
-	resolution_option.item_selected.connect(_on_resolution_selected)
-	screen_shake_check.toggled.connect(_on_screen_shake_toggled)
-	camera_smoothing_slider.value_changed.connect(_on_camera_smoothing_changed)
+	_master_slider.value_changed.connect(_on_master_changed)
+	_music_slider.value_changed.connect(_on_music_changed)
+	_sfx_slider.value_changed.connect(_on_sfx_changed)
+	_shake_check.toggled.connect(_on_shake_toggled)
+	_smooth_slider.value_changed.connect(_on_smooth_changed)
+	
+	_btn_volver.pressed.connect(_on_volver)
+	_btn_guardar.pressed.connect(_on_guardar)
 
 
-# ══════════════════════════════════════════════════════════════════
-# CARGAR/GUARDAR CONFIGURACIÓN
-# ══════════════════════════════════════════════════════════════════
+func _load_current_settings() -> void:
+	_master_slider.value = GameManager.master_volume * 100.0
+	_music_slider.value  = GameManager.music_volume * 100.0
+	_sfx_slider.value    = GameManager.sfx_volume * 100.0
+	
+	_shake_check.button_pressed = GameManager.screen_shake_enabled
+	_smooth_slider.value = GameManager.camera_smoothing_speed
+	
+	_update_labels()
 
-func _load_settings() -> void:
-	var config := ConfigFile.new()
-	var err := config.load("user://settings.cfg")
-	
-	if err != OK:
-		_set_default_settings()
-		return
-	
-	master_volume_slider.value = config.get_value("audio", "master_volume", 100)
-	music_volume_slider.value  = config.get_value("audio", "music_volume", 80)
-	sfx_volume_slider.value    = config.get_value("audio", "sfx_volume", 100)
-	
-	fullscreen_check.button_pressed = config.get_value("video", "fullscreen", false)
-	vsync_check.button_pressed      = config.get_value("video", "vsync", true)
-	
-	screen_shake_check.button_pressed  = config.get_value("accessibility", "screen_shake", true)
-	camera_smoothing_slider.value      = config.get_value("accessibility", "camera_smoothing", 5.0)
-	
-	_update_value_labels()
+
+func _on_master_changed(value: float) -> void:
+	GameManager.master_volume = value / 100.0
+	_master_value.text = "%d%%" % int(value)
+	_apply_audio()
+
+
+func _on_music_changed(value: float) -> void:
+	GameManager.music_volume = value / 100.0
+	_music_value.text = "%d%%" % int(value)
+	_apply_audio()
+
+
+func _on_sfx_changed(value: float) -> void:
+	GameManager.sfx_volume = value / 100.0
+	_sfx_value.text = "%d%%" % int(value)
+	_apply_audio()
+
+
+func _on_shake_toggled(enabled: bool) -> void:
+	GameManager.screen_shake_enabled = enabled
+	_shake_check.text = "Activado" if enabled else "Desactivado"
+	print("[Settings] Vibración al recibir daño: ", "Activado" if enabled else "Desactivado")
+
+
+func _on_smooth_changed(value: float) -> void:
+	GameManager.camera_smoothing_speed = value
+	_smooth_value.text = "%.1f" % value
+
+
+func _apply_audio() -> void:
+	var master_idx := AudioServer.get_bus_index("Master")
+	var music_idx  := AudioServer.get_bus_index("Music")
+	var sfx_idx    := AudioServer.get_bus_index("SFX")
+
+	if master_idx >= 0:
+		AudioServer.set_bus_volume_db(master_idx, linear_to_db(GameManager.master_volume))
+	if music_idx >= 0:
+		AudioServer.set_bus_volume_db(music_idx, linear_to_db(GameManager.music_volume))
+	if sfx_idx >= 0:
+		AudioServer.set_bus_volume_db(sfx_idx, linear_to_db(GameManager.sfx_volume))
+
+
+func _update_labels() -> void:
+	_master_value.text = "%d%%" % int(_master_slider.value)
+	_music_value.text  = "%d%%" % int(_music_slider.value)
+	_sfx_value.text    = "%d%%" % int(_sfx_slider.value)
+	_smooth_value.text = "%.1f" % _smooth_slider.value
+	_shake_check.text  = "Activado" if _shake_check.button_pressed else "Desactivado"
+
+
+func _on_volver() -> void:
+	print("[Settings] Descartando cambios...")
+	GameManager.load_settings()
+	_animate_out()
+
+
+func _on_guardar() -> void:
+	print("[Settings] Guardando configuración...")
+	_save_settings()
+	print("[Settings] ✓ Configuración guardada")
+	_animate_out()
 
 
 func _save_settings() -> void:
 	var config := ConfigFile.new()
-	config.set_value("audio", "master_volume", master_volume_slider.value)
-	config.set_value("audio", "music_volume",  music_volume_slider.value)
-	config.set_value("audio", "sfx_volume",    sfx_volume_slider.value)
-	config.set_value("video", "fullscreen",    fullscreen_check.button_pressed)
-	config.set_value("video", "vsync",         vsync_check.button_pressed)
-	config.set_value("video", "resolution",    resolution_option.get_item_text(resolution_option.selected))
-	config.set_value("accessibility", "screen_shake",      screen_shake_check.button_pressed)
-	config.set_value("accessibility", "camera_smoothing",  camera_smoothing_slider.value)
-	config.save("user://settings.cfg")
+	
+	config.set_value("audio", "master_volume", int(GameManager.master_volume * 100))
+	config.set_value("audio", "music_volume",  int(GameManager.music_volume * 100))
+	config.set_value("audio", "sfx_volume",    int(GameManager.sfx_volume * 100))
+	
+	config.set_value("accessibility", "screen_shake", GameManager.screen_shake_enabled)
+	config.set_value("accessibility", "camera_smoothing", GameManager.camera_smoothing_speed)
+	
+	var err := config.save("user://settings.cfg")
+	if err != OK:
+		push_error("[Settings] Error al guardar: ", err)
 
 
-func _set_default_settings() -> void:
-	master_volume_slider.value = 100
-	music_volume_slider.value  = 80
-	sfx_volume_slider.value    = 100
-	fullscreen_check.button_pressed = false
-	vsync_check.button_pressed      = true
-	screen_shake_check.button_pressed  = true
-	camera_smoothing_slider.value      = 5.0
-	_update_value_labels()
+func _animate_in() -> void:
+	_panel.modulate.a = 0.0
+	_panel.scale = Vector2(0.9, 0.9)
+	
+	var tw := create_tween().set_parallel(true)
+	tw.tween_property(_panel, "modulate:a", 1.0, 0.2)
+	tw.tween_property(_panel, "scale", Vector2(1.0, 1.0), 0.25) \
+		.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
 
 
-func _update_value_labels() -> void:
-	master_value_label.text  = "%d%%" % int(master_volume_slider.value)
-	music_value_label.text   = "%d%%" % int(music_volume_slider.value)
-	sfx_value_label.text     = "%d%%" % int(sfx_volume_slider.value)
-	smoothing_value_label.text = "%d" % int(camera_smoothing_slider.value)
-
-
-# ══════════════════════════════════════════════════════════════════
-# CALLBACKS - AUDIO
-# ══════════════════════════════════════════════════════════════════
-
-func _on_master_volume_changed(value: float) -> void:
-	master_value_label.text = "%d%%" % int(value)
-	var db := linear_to_db(value / 100.0)
-	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), db)
-	_save_settings()
-
-
-func _on_music_volume_changed(value: float) -> void:
-	music_value_label.text = "%d%%" % int(value)
-	var db := linear_to_db(value / 100.0)
-	if AudioServer.get_bus_index("Music") != -1:
-		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), db)
-	_save_settings()
-
-
-func _on_sfx_volume_changed(value: float) -> void:
-	sfx_value_label.text = "%d%%" % int(value)
-	var db := linear_to_db(value / 100.0)
-	if AudioServer.get_bus_index("SFX") != -1:
-		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), db)
-	_save_settings()
-
-
-# ══════════════════════════════════════════════════════════════════
-# CALLBACKS - VIDEO
-# ══════════════════════════════════════════════════════════════════
-
-func _on_fullscreen_toggled(toggled_on: bool) -> void:
-	if toggled_on:
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
-	else:
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
-	_save_settings()
-
-
-func _on_vsync_toggled(toggled_on: bool) -> void:
-	DisplayServer.window_set_vsync_mode(
-		DisplayServer.VSYNC_ENABLED if toggled_on else DisplayServer.VSYNC_DISABLED
-	)
-	_save_settings()
-
-
-func _on_resolution_selected(index: int) -> void:
-	var res_name   : String    = resolution_option.get_item_text(index)
-	var resolution : Vector2i  = RESOLUTIONS[res_name]
-	DisplayServer.window_set_size(resolution)
-	_save_settings()
-
-
-# ══════════════════════════════════════════════════════════════════
-# CALLBACKS - ACCESIBILIDAD
-# ══════════════════════════════════════════════════════════════════
-
-func _on_screen_shake_toggled(toggled_on: bool) -> void:
-	if has_node("/root/GameManager"):
-		get_node("/root/GameManager").screen_shake_enabled = toggled_on
-	_save_settings()
-
-
-func _on_camera_smoothing_changed(value: float) -> void:
-	smoothing_value_label.text = "%d" % int(value)
-	if has_node("/root/GameManager"):
-		get_node("/root/GameManager").camera_smoothing_speed = value
-	_save_settings()
-
-
-# ══════════════════════════════════════════════════════════════════
-# BOTONES
-# ══════════════════════════════════════════════════════════════════
-
-func _on_back_button_pressed() -> void:
-	var tween := create_tween()
-	tween.tween_property(self, "modulate:a", 0.0, 0.2)
-	await tween.finished
-	back_pressed.emit()
+func _animate_out() -> void:
+	var tw := create_tween().set_parallel(true)
+	tw.tween_property(_panel, "modulate:a", 0.0, 0.15)
+	tw.tween_property(_panel, "scale", Vector2(0.95, 0.95), 0.15) \
+		.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_SINE)
+	
+	await tw.finished
 	queue_free()
-
-
-func _on_reset_button_pressed() -> void:
-	_set_default_settings()
-	_save_settings()
-
-
-# ══════════════════════════════════════════════════════════════════
-# INPUT
-# ══════════════════════════════════════════════════════════════════
-
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_cancel"):
-		_on_back_button_pressed()

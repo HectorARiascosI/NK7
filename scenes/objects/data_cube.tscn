@@ -1,0 +1,90 @@
+[gd_scene load_steps=11 format=3 uid="uid://data_cube_nk7"]
+
+[ext_resource type="Script" path="res://scripts/objects/collectible.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/objects/collectibles_sheet.png" id="2"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cube_0"]
+atlas = ExtResource("2")
+region = Rect2(0, 0, 313, 313)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cube_1"]
+atlas = ExtResource("2")
+region = Rect2(313, 0, 313, 313)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cube_2"]
+atlas = ExtResource("2")
+region = Rect2(626, 0, 313, 313)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cube_3"]
+atlas = ExtResource("2")
+region = Rect2(939, 0, 313, 313)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_cube"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cube_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cube_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cube_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cube_3")
+}],
+"loop": true,
+"name": &"cube",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_cube"]
+radius = 22.0
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_cube"]
+particle_flag_disable_z = true
+emission_shape = 0
+direction = Vector3(0, -1, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 50.0
+initial_velocity_max = 100.0
+scale_min = 0.5
+scale_max = 1.2
+color = Color(0.3, 0.7, 1.0, 1.0)
+
+[node name="DataCube" type="Area2D" groups=["collectibles"]]
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1")
+collectible_type = 0
+value = 1
+float_amplitude = 10.0
+float_speed = 1.5
+rotation_speed = 30.0
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.12, 0.12)
+sprite_frames = SubResource("SpriteFrames_cube")
+animation = &"cube"
+autoplay = "cube"
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_cube")
+
+[node name="CollectParticles" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 20
+process_material = SubResource("ParticleProcessMaterial_cube")
+lifetime = 0.8
+one_shot = true
+explosiveness = 0.9
+
+[node name="Light" type="PointLight2D" parent="."]
+color = Color(0.3, 0.7, 1.0, 1.0)
+energy = 1.2
+texture_scale = 0.7
+
+[node name="CollectSound" type="AudioStreamPlayer2D" parent="."]
+max_distance = 500.0

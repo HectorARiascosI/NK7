@@ -1,0 +1,462 @@
+════════════════════════════════════════════════════════════════════════════════
+SISTEMA DE PUERTAS ELECTRIFICADAS NK-7 - DOCUMENTO DE DISEÑO TÉCNICO
+════════════════════════════════════════════════════════════════════════════════
+
+AUTOR: Sistema de IA - Kiro
+FECHA: 2026-05-05
+VERSIÓN: 1.0
+PROYECTO: Juego de Plataformas 2D - Sector NK-7
+
+════════════════════════════════════════════════════════════════════════════════
+1. VISIÓN GENERAL
+════════════════════════════════════════════════════════════════════════════════
+
+El sistema de puertas electrificadas es un componente central del gameplay que
+combina exploración, resolución de puzzles y gestión de recursos. Las puertas
+actúan como obstáculos dinámicos que requieren múltiples pasos para superarse.
+
+FILOSOFÍA DE DISEÑO:
+- Interacción multi-paso que recompensa la paciencia
+- Feedback visual claro en cada estado
+- Consecuencias por errores (daño, consumo de recursos)
+- Integración profunda con las mecánicas del personaje
+
+════════════════════════════════════════════════════════════════════════════════
+2. ESTADOS DE LA PUERTA
+════════════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ LOCKED_DAMAGED (Estado Inicial)                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ Visual:      Puerta cerrada, luz roja parpadeante, chispas ocasionales     │
+│ Colisión:    Bloqueada (StaticBody2D activo)                               │
+│ Interacción: [ESPACIO] Reparar (X/Y pasos)                                 │
+│ Peligro:     Puede estar electrificada (daña al contacto)                  │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ REPAIRING (En Proceso)                                                      │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ Visual:      Animación de herramienta, partículas de soldadura             │
+│ Colisión:    Bloqueada                                                      │
+│ Interacción: Mantener [ESPACIO] - Barra de progreso visible                │
+│ Mecánica:    Consume durabilidad de herramienta (10 puntos/paso)           │
+│ Cancelable:  Soltar [ESPACIO] cancela y pierde progreso del paso actual    │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ LOCKED_FIXED (Reparada, Sin Energía)                                       │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ Visual:      Puerta cerrada, luz amarilla estable, panel activo            │
+│ Colisión:    Bloqueada                                                      │
+│ Interacción: [E] Hackear sistema eléctrico                                 │
+│ Peligro:     Ya no electrificada                                            │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ UNLOCKING (Restaurando Energía)                                            │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ Visual:      Chispas eléctricas, luz cyan parpadeante, efectos de energía  │
+│ Colisión:    Bloqueada                                                      │
+│ Interacción: Mantener [E] - Barra de progreso visible                      │
+│ Mecánica:    Proceso de hackeo (3 segundos por defecto)                    │
+│ Cancelable:  Soltar [E] cancela y debe reiniciar                           │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ OPENING (Abriéndose)                                                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ Visual:      Animación de apertura, luz verde, sonido mecánico             │
+│ Colisión:    Se desactiva gradualmente                                     │
+│ Interacción: No interactuable (animación en curso)                         │
+│ Duración:    0.6 segundos (ajustable por peso de puerta)                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ OPEN (Abierta)                                                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ Visual:      Puerta completamente abierta, luz verde estable               │
+│ Colisión:    Desactivada (jugador puede pasar)                             │
+│ Interacción: Ninguna (o [E] para cerrar manualmente si está configurado)   │
+│ Auto-cierre: Opcional después de X segundos                                │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ CLOSING (Cerrándose)                                                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ Visual:      Animación de cierre, luz amarilla                             │
+│ Colisión:    Se activa gradualmente                                        │
+│ Interacción: No interactuable                                              │
+│ Seguridad:   Detecta jugador en el área y espera                           │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ ELECTRIFIED (Electrificada - Estado Especial)                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ Visual:      Rayos eléctricos constantes, luz roja intensa                 │
+│ Colisión:    Bloqueada + Área de daño activa                               │
+│ Interacción: No interactuable hasta desactivar electricidad                │
+│ Peligro:     25 puntos de daño al contacto + empuje hacia atrás            │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+════════════════════════════════════════════════════════════════════════════════
+3. FLUJO DE INTERACCIÓN COMPLETO
+════════════════════════════════════════════════════════════════════════════════
+
+ESCENARIO 1: Puerta Dañada (Nivel Medio - 2 pasos)
+───────────────────────────────────────────────────
+
+1. Jugador se acerca → Hint aparece: "[ESPACIO] Reparar (0/2)"
+
+2. Jugador presiona y mantiene [ESPACIO]
+   - Animación "use_tool" en Kai
+   - Partículas de soldadura
+   - Barra de progreso: 0% → 100% (2 segundos)
+   - Consume 10 puntos de durabilidad de herramienta
+
+3. Primer paso completado
+   - Sonido de éxito
+   - Hint actualizado: "[ESPACIO] Reparar (1/2)"
+   - Jugador debe repetir el proceso
+
+4. Segundo paso completado
+   - Puerta cambia a LOCKED_FIXED
+   - Luz cambia de roja a amarilla
+   - Hint: "[E] Hackear sistema eléctrico"
+
+5. Jugador presiona y mantiene [E]
+   - Animación "hack" en Kai
+   - Partículas eléctricas
+   - Barra de progreso: 0% → 100% (3 segundos)
+
+6. Hackeo completado
+   - Energía restaurada
+   - Puerta inicia apertura automática
+   - Luz cambia a verde
+
+7. Puerta abierta
+   - Jugador puede pasar
+   - Si auto_close = true, cierra después de 4 segundos
+
+
+ESCENARIO 2: Puerta Electrificada
+──────────────────────────────────
+
+1. Jugador se acerca a puerta electrificada
+   - Hint: "⚠ PELIGRO - ELECTRIFICADA"
+   - Rayos eléctricos visibles
+
+2. Si jugador toca la puerta:
+   - 25 puntos de daño
+   - Empuje hacia atrás (300 px/s)
+   - Sonido de descarga eléctrica
+   - Efecto de flash en pantalla
+
+3. Jugador debe encontrar interruptor externo
+   - Interruptor desactiva electricidad
+   - Puerta cambia a LOCKED_DAMAGED
+   - Ahora puede repararse normalmente
+
+
+ESCENARIO 3: Bypass con Interruptor
+────────────────────────────────────
+
+1. Jugador activa interruptor conectado a la puerta
+   - Interruptor llama a door.activate()
+   - Si puerta no tiene energía, se la proporciona
+   - Puerta se abre automáticamente
+
+2. Útil para puzzles donde:
+   - Jugador debe encontrar ruta alternativa
+   - Activar múltiples interruptores en secuencia
+   - Resolver acertijos para desbloquear
+
+════════════════════════════════════════════════════════════════════════════════
+4. SISTEMA DE RECURSOS
+════════════════════════════════════════════════════════════════════════════════
+
+DURABILIDAD DE HERRAMIENTA
+───────────────────────────
+- Máximo: 100 puntos
+- Consumo por paso de reparación: 10 puntos
+- Visualización: Barra amarilla en HUD
+- Recarga: Encontrar kits de reparación en el nivel
+
+ENERGÍA DEL JUGADOR
+────────────────────
+- Máximo: 100 puntos
+- Consumo por hackeo: 20 puntos (configurable)
+- Visualización: Barra azul en HUD
+- Recarga: Zonas de energía, baterías
+
+SALUD
+─────
+- Máximo: 100 puntos
+- Daño por electrocución: 25 puntos
+- Visualización: Barra roja en HUD
+- Recarga: Botiquines médicos
+
+════════════════════════════════════════════════════════════════════════════════
+5. CONFIGURACIÓN AVANZADA (Parámetros Exportados)
+════════════════════════════════════════════════════════════════════════════════
+
+ESTADO INICIAL
+──────────────
+- initial_state: DoorState (LOCKED_DAMAGED por defecto)
+- damage_level: NONE, LIGHT (1 paso), MEDIUM (2 pasos), HEAVY (3 pasos)
+- starts_electrified: bool (false por defecto)
+
+COMPORTAMIENTO
+──────────────
+- auto_close: bool (false por defecto)
+- auto_close_delay: float (4.0 segundos)
+- requires_energy: bool (true por defecto)
+- can_be_forced: bool (false por defecto) - Permite bypass forzado
+
+REPARACIÓN
+──────────
+- repair_time_per_step: float (2.0 segundos)
+- requires_tool: bool (true por defecto)
+- tool_durability_cost: int (10 puntos)
+
+ENERGÍA
+───────
+- energy_required: int (50 puntos)
+- hack_time: float (3.0 segundos)
+
+FÍSICA
+──────
+- door_weight: float (100.0) - Afecta velocidad de apertura
+- opening_speed: float (1.0) - Multiplicador de velocidad
+- electrified_damage: int (25 puntos)
+
+AUDIO
+─────
+- play_sounds: bool (true por defecto)
+- sound_volume: float (0.8)
+
+════════════════════════════════════════════════════════════════════════════════
+6. INTEGRACIÓN CON KAI
+════════════════════════════════════════════════════════════════════════════════
+
+NUEVAS CAPACIDADES AÑADIDAS
+────────────────────────────
+
+1. Sistema de Recursos:
+   - health: int (0-100)
+   - energy: int (0-100)
+   - tool_durability: int (0-100)
+
+2. Métodos de Gestión:
+   - take_damage(amount: int)
+   - heal(amount: int)
+   - consume_energy(amount: int) -> bool
+   - restore_energy(amount: int)
+   - use_tool(durability_cost: int) -> bool
+   - repair_tool(amount: int)
+
+3. Métodos de Consulta:
+   - get_health_percent() -> float
+   - get_energy_percent() -> float
+   - get_tool_durability_percent() -> float
+
+ANIMACIONES UTILIZADAS
+───────────────────────
+- "use_tool": Reparación de puertas (ya existe)
+- "hack": Hackeo de sistemas (ya existe)
+- "hurt": Recibir daño eléctrico (ya existe)
+- "dead": Muerte por electrocución (ya existe)
+
+════════════════════════════════════════════════════════════════════════════════
+7. SEÑALES Y EVENTOS
+════════════════════════════════════════════════════════════════════════════════
+
+SEÑALES DE LA PUERTA
+─────────────────────
+- door_state_changed(new_state: DoorState)
+  Emitida cuando cambia el estado de la puerta
+
+- repair_progress_updated(current: int, total: int)
+  Emitida al completar cada paso de reparación
+
+- door_opened()
+  Emitida cuando la puerta se abre completamente
+
+- door_closed()
+  Emitida cuando la puerta se cierra completamente
+
+- player_damaged()
+  Emitida cuando el jugador recibe daño eléctrico
+
+- energy_restored()
+  Emitida cuando se restaura la energía de la puerta
+
+EJEMPLO DE USO:
+```gdscript
+func _ready():
+    var door = $ElectricDoor
+    door.door_opened.connect(_on_door_opened)
+    door.player_damaged.connect(_on_player_electrocuted)
+
+func _on_door_opened():
+    print("¡Puerta abierta! Activar siguiente sección")
+    $NextArea.activate()
+
+func _on_player_electrocuted():
+    print("¡Jugador electrocutado! Mostrar advertencia")
+    $WarningSystem.show_danger_alert()
+```
+
+════════════════════════════════════════════════════════════════════════════════
+8. EFECTOS VISUALES Y PARTÍCULAS
+════════════════════════════════════════════════════════════════════════════════
+
+SISTEMA DE PARTÍCULAS
+──────────────────────
+
+1. Partículas de Reparación (repair_sparks.tres)
+   - Color: Naranja/Amarillo (soldadura)
+   - Emisión: Durante reparación
+   - Dirección: Hacia abajo con gravedad
+   - Cantidad: 16 partículas
+   - Vida: 0.5 segundos
+
+2. Partículas Eléctricas (electric_sparks.tres)
+   - Color: Cyan/Azul (electricidad)
+   - Emisión: Durante hackeo y electrificación
+   - Dirección: Aleatoria con órbita
+   - Cantidad: 32 partículas
+   - Vida: 0.8 segundos
+
+SISTEMA DE LUCES
+────────────────
+
+StatusLight (PointLight2D):
+- Posición: Arriba de la puerta (-120px Y)
+- Colores según estado:
+  * Rojo parpadeante: LOCKED_DAMAGED, ELECTRIFIED
+  * Amarillo estable: LOCKED_FIXED
+  * Cyan parpadeante: UNLOCKING
+  * Verde estable: OPEN
+
+════════════════════════════════════════════════════════════════════════════════
+9. DISEÑO DE NIVELES - PATRONES RECOMENDADOS
+════════════════════════════════════════════════════════════════════════════════
+
+PATRÓN 1: Tutorial Básico
+──────────────────────────
+- Puerta con damage_level = LIGHT (1 paso)
+- Sin electrificación
+- Kit de reparación cercano
+- Objetivo: Enseñar mecánica básica
+
+PATRÓN 2: Gestión de Recursos
+──────────────────────────────
+- Múltiples puertas en secuencia
+- damage_level = MEDIUM (2 pasos cada una)
+- Durabilidad limitada de herramienta
+- Objetivo: Decisión estratégica sobre qué puertas reparar
+
+PATRÓN 3: Puzzle de Interruptores
+──────────────────────────────────
+- Puerta electrificada
+- Interruptor en ubicación remota
+- Requiere exploración y plataformeo
+- Objetivo: Exploración y resolución de puzzles
+
+PATRÓN 4: Contrarreloj
+──────────────────────
+- Puerta con auto_close = true
+- auto_close_delay = 3.0 (corto)
+- Requiere velocidad para pasar
+- Objetivo: Desafío de timing
+
+PATRÓN 5: Secuencia Compleja
+────────────────────────────
+- Puerta HEAVY (3 pasos de reparación)
+- Electrificada inicialmente
+- Requiere múltiples recursos
+- Objetivo: Desafío final de sección
+
+════════════════════════════════════════════════════════════════════════════════
+10. IMPLEMENTACIÓN EN NIVEL
+════════════════════════════════════════════════════════════════════════════════
+
+EJEMPLO DE CONFIGURACIÓN EN ESCENA:
+
+```gdscript
+# Puerta básica dañada
+var door1 = preload("res://scenes/objects/electric_door.tscn").instantiate()
+door1.position = Vector2(500, 200)
+door1.damage_level = ElectricDoor.DamageLevel.MEDIUM
+door1.initial_state = ElectricDoor.DoorState.LOCKED_DAMAGED
+add_child(door1)
+
+# Puerta electrificada con interruptor
+var door2 = preload("res://scenes/objects/electric_door.tscn").instantiate()
+door2.position = Vector2(1000, 200)
+door2.starts_electrified = true
+door2.damage_level = ElectricDoor.DamageLevel.LIGHT
+add_child(door2)
+
+var switch = preload("res://scenes/objects/switch.tscn").instantiate()
+switch.position = Vector2(800, 300)
+switch.targets = [door2.get_path()]
+add_child(switch)
+
+# Puerta con auto-cierre
+var door3 = preload("res://scenes/objects/electric_door.tscn").instantiate()
+door3.position = Vector2(1500, 200)
+door3.auto_close = true
+door3.auto_close_delay = 3.0
+door3.damage_level = ElectricDoor.DamageLevel.NONE
+add_child(door3)
+```
+
+════════════════════════════════════════════════════════════════════════════════
+11. OPTIMIZACIÓN Y RENDIMIENTO
+════════════════════════════════════════════════════════════════════════════════
+
+CONSIDERACIONES:
+- Las partículas se desactivan cuando no son visibles
+- Las luces usan texture_scale reducido (0.5)
+- Las animaciones se pausan cuando están fuera de pantalla
+- Los cálculos de física solo se ejecutan cuando hay cambios de estado
+
+LÍMITES RECOMENDADOS:
+- Máximo 10 puertas activas simultáneamente en pantalla
+- Máximo 5 puertas con partículas activas
+- Distancia de culling: 1000 píxeles
+
+════════════════════════════════════════════════════════════════════════════════
+12. PRÓXIMAS MEJORAS SUGERIDAS
+════════════════════════════════════════════════════════════════════════════════
+
+1. Sistema de Sonido Completo
+   - Sonidos específicos para cada estado
+   - Efectos ambientales (zumbido eléctrico)
+   - Música adaptativa según peligro
+
+2. Variantes de Puertas
+   - Puertas verticales (compuertas)
+   - Puertas dobles
+   - Puertas con temporizador visible
+
+3. Efectos Visuales Avanzados
+   - Shaders para distorsión eléctrica
+   - Reflejos en superficies metálicas
+   - Humo y vapor al reparar
+
+4. Mecánicas Adicionales
+   - Puertas que requieren múltiples jugadores (co-op)
+   - Puertas con códigos de acceso
+   - Puertas que se degradan con el tiempo
+
+5. Sistema de Logros
+   - "Electricista Experto": Reparar 10 puertas
+   - "Velocista": Pasar puerta con auto-cierre en <1s
+   - "Eficiente": Completar nivel sin desperdiciar durabilidad
+
+════════════════════════════════════════════════════════════════════════════════
+FIN DEL DOCUMENTO
+════════════════════════════════════════════════════════════════════════════════

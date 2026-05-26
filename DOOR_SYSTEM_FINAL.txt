@@ -1,0 +1,425 @@
+════════════════════════════════════════════════════════════════════════════════
+SISTEMA DE PUERTAS NK-7 - IMPLEMENTACIÓN FINAL
+════════════════════════════════════════════════════════════════════════════════
+
+VERSIÓN: 2.0 FINAL
+FECHA: 2026-05-05
+ESTADO: ✅ LISTO PARA USAR EN GODOT
+
+════════════════════════════════════════════════════════════════════════════════
+📋 RESUMEN EJECUTIVO
+════════════════════════════════════════════════════════════════════════════════
+
+Se han implementado DOS tipos de puertas completamente diferentes, cada una
+correspondiente a una fila del spritesheet que proporcionaste:
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ TIPO 1: PUERTAS DAÑADAS (Fila Superior)                                     │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ • Archivo: scenes/objects/damaged_door.tscn                                 │
+│ • Script: scripts/objects/damaged_door.gd                                   │
+│ • Interacción: [F] - use_tool (mantener presionado)                         │
+│ • Mecánica: Reparación multi-paso con herramienta                           │
+│ • Consumo: Durabilidad de herramienta (5-15 puntos por paso)                │
+│ • Frames: 5 frames de la fila superior (Y=0)                                │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ TIPO 2: PUERTAS BLOQUEADAS (Fila Inferior)                                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ • Archivo: scenes/objects/locked_door.tscn                                  │
+│ • Script: scripts/objects/locked_door.gd                                    │
+│ • Interacción: [Q] - hack (mantener presionado)                             │
+│ • Mecánica: Hackeo de sistema de seguridad                                  │
+│ • Consumo: Energía del jugador (15-30 puntos)                               │
+│ • Frames: 4 frames de la fila inferior (Y=312)                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+════════════════════════════════════════════════════════════════════════════════
+🎨 MAPEO DEL SPRITESHEET
+════════════════════════════════════════════════════════════════════════════════
+
+ARCHIVO: assets/objects/doors.png
+DIMENSIONES: Cada frame es 192x312 píxeles
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ FILA SUPERIOR (Y=0) - PUERTAS DAÑADAS                                       │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ Frame 0 (X=0):     Cerrada, luz roja - Estado LOCKED_DAMAGED               │
+│ Frame 1 (X=192):   Reparando, luz amarilla - Estado REPAIRING              │
+│ Frame 2 (X=384):   Desbloqueando, chispas - Estado UNLOCKING               │
+│ Frame 3 (X=576):   Abriendo - Estado OPENING (transición)                  │
+│ Frame 4 (X=768):   Abierta, luz verde - Estado OPEN                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ FILA INFERIOR (Y=312) - PUERTAS BLOQUEADAS                                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ Frame 0 (X=0):     Panel apagado - Estado LOCKED                            │
+│ Frame 1 (X=192):   Hackeando, panel activo - Estado HACKING                │
+│ Frame 2 (X=384):   Desbloqueada, efectos - Estado UNLOCKED                 │
+│ Frame 3 (X=576):   Abierta completamente - Estado OPEN                     │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+════════════════════════════════════════════════════════════════════════════════
+🎮 CONTROLES Y TECLAS
+════════════════════════════════════════════════════════════════════════════════
+
+TECLAS UTILIZADAS:
+┌──────────┬─────────────────────────────────────────────────────────────────┐
+│ [F]      │ use_tool - Reparar puertas dañadas (mantener presionado)       │
+│ [Q]      │ hack - Hackear puertas bloqueadas (mantener presionado)        │
+│ [E]      │ interact - Comunicar (NO usado en puertas)                     │
+│ [ESPACIO]│ jump - Saltar (NO usado en puertas, evita conflictos)          │
+└──────────┴─────────────────────────────────────────────────────────────────┘
+
+RAZÓN DEL CAMBIO:
+- Se evitó usar [ESPACIO] para prevenir conflictos con el salto
+- [F] es ergonómica (dedo índice izquierdo) y ya está asignada a use_tool
+- [Q] es ergonómica (dedo meñique izquierdo) y ya está asignada a hack
+- Ambas teclas están cerca de WASD para fácil acceso
+
+════════════════════════════════════════════════════════════════════════════════
+🔧 TIPO 1: PUERTAS DAÑADAS - GUÍA COMPLETA
+════════════════════════════════════════════════════════════════════════════════
+
+CONCEPTO:
+Puertas que han sufrido daños físicos y requieren reparación manual con
+herramienta. El jugador debe mantener presionada [F] para completar cada
+paso de reparación.
+
+SECUENCIA DE INTERACCIÓN:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 1. Jugador se acerca                                                         │
+│    → Hint aparece: "[F] Reparar (0/2)"                                      │
+│    → Luz roja parpadeante                                                   │
+│                                                                              │
+│ 2. Jugador mantiene [F]                                                     │
+│    → Animación "use_tool" en Kai                                            │
+│    → Partículas de soldadura (naranjas)                                     │
+│    → Barra de progreso: 0% → 100%                                           │
+│    → Consume durabilidad de herramienta                                     │
+│                                                                              │
+│ 3. Completa primer paso                                                     │
+│    → Sonido de éxito                                                        │
+│    → Hint: "[F] Reparar (1/2)"                                              │
+│    → Debe repetir para siguiente paso                                       │
+│                                                                              │
+│ 4. Completa todos los pasos                                                 │
+│    → Puerta cambia a estado UNLOCKING                                       │
+│    → Chispas eléctricas, luz cyan                                           │
+│    → Espera 1 segundo                                                       │
+│                                                                              │
+│ 5. Apertura automática                                                      │
+│    → Animación de apertura                                                  │
+│    → Luz cambia a verde                                                     │
+│    → Colisión se desactiva                                                  │
+│    → Jugador puede pasar                                                    │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+PARÁMETROS CONFIGURABLES:
+```gdscript
+@export var repair_steps : int = 2              # 1-3 pasos
+@export var repair_time_per_step : float = 2.0  # Segundos por paso
+@export var tool_cost_per_step : int = 10       # Durabilidad consumida
+@export var auto_close : bool = false           # Auto-cierre
+@export var auto_close_delay : float = 4.0      # Tiempo antes de cerrar
+@export var opening_duration : float = 0.8      # Duración de apertura
+```
+
+EJEMPLOS DE CONFIGURACIÓN:
+```gdscript
+# Puerta fácil (tutorial)
+door.repair_steps = 1
+door.repair_time_per_step = 1.5
+door.tool_cost_per_step = 5
+
+# Puerta media (normal)
+door.repair_steps = 2
+door.repair_time_per_step = 2.0
+door.tool_cost_per_step = 10
+
+# Puerta difícil (desafío)
+door.repair_steps = 3
+door.repair_time_per_step = 2.5
+door.tool_cost_per_step = 15
+```
+
+SEÑALES DISPONIBLES:
+```gdscript
+signal repair_started                           # Inicia reparación
+signal repair_progress(current, total)          # Progreso de reparación
+signal repair_completed                         # Reparación completa
+signal door_opened                              # Puerta abierta
+signal door_closed                              # Puerta cerrada
+```
+
+════════════════════════════════════════════════════════════════════════════════
+🔐 TIPO 2: PUERTAS BLOQUEADAS - GUÍA COMPLETA
+════════════════════════════════════════════════════════════════════════════════
+
+CONCEPTO:
+Puertas con sistemas de seguridad electrónicos que requieren hackeo. El
+jugador debe mantener presionada [Q] para completar el hackeo.
+
+SECUENCIA DE INTERACCIÓN:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 1. Jugador se acerca                                                         │
+│    → Hint aparece: "[Q] Hackear sistema"                                    │
+│    → Panel apagado, luz roja                                                │
+│                                                                              │
+│ 2. Jugador mantiene [Q]                                                     │
+│    → Animación "hack" en Kai                                                │
+│    → Partículas eléctricas (azules/cyan)                                    │
+│    → Panel se ilumina en cyan parpadeante                                   │
+│    → Barra de progreso: 0% → 100%                                           │
+│    → Consume energía del jugador                                            │
+│                                                                              │
+│ 3. Completa hackeo                                                          │
+│    → Sistema desbloqueado                                                   │
+│    → Panel se ilumina en verde                                              │
+│    → Efectos de éxito                                                       │
+│    → Espera 0.8 segundos                                                    │
+│                                                                              │
+│ 4. Apertura automática                                                      │
+│    → Animación de apertura                                                  │
+│    → Luz cambia a verde brillante                                           │
+│    → Colisión se desactiva                                                  │
+│    → Jugador puede pasar                                                    │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+PARÁMETROS CONFIGURABLES:
+```gdscript
+@export var hack_time : float = 3.0             # Tiempo total de hackeo
+@export var energy_cost : int = 20              # Energía consumida
+@export var hack_difficulty : int = 1           # 1=Fácil, 2=Medio, 3=Difícil
+@export var auto_close : bool = false           # Auto-cierre
+@export var auto_close_delay : float = 5.0      # Tiempo antes de cerrar
+@export var opening_duration : float = 1.0      # Duración de apertura
+@export var requires_keycard : bool = false     # Requiere tarjeta
+@export var keycard_id : String = ""            # ID de tarjeta
+```
+
+EJEMPLOS DE CONFIGURACIÓN:
+```gdscript
+# Puerta fácil (tutorial)
+door.hack_time = 2.0
+door.energy_cost = 15
+door.hack_difficulty = 1
+
+# Puerta media (normal)
+door.hack_time = 3.0
+door.energy_cost = 20
+door.hack_difficulty = 2
+
+# Puerta difícil (desafío)
+door.hack_time = 4.0
+door.energy_cost = 30
+door.hack_difficulty = 3
+
+# Puerta con tarjeta de acceso
+door.requires_keycard = true
+door.keycard_id = "security_level_3"
+```
+
+SEÑALES DISPONIBLES:
+```gdscript
+signal hack_started                             # Inicia hackeo
+signal hack_progress(current, total)            # Progreso de hackeo
+signal hack_completed                           # Hackeo completo
+signal door_opened                              # Puerta abierta
+signal door_closed                              # Puerta cerrada
+```
+
+════════════════════════════════════════════════════════════════════════════════
+📦 ARCHIVOS CREADOS
+════════════════════════════════════════════════════════════════════════════════
+
+SCRIPTS:
+├── scripts/objects/damaged_door.gd             [NUEVO - Puertas dañadas]
+├── scripts/objects/locked_door.gd              [NUEVO - Puertas bloqueadas]
+├── scripts/characters/kai.gd                   [ACTUALIZADO - Recursos]
+├── scripts/ui/player_hud.gd                    [NUEVO - HUD]
+└── scripts/levels/test_doors_setup.gd          [EJEMPLO]
+
+ESCENAS:
+├── scenes/objects/damaged_door.tscn            [COMPLETA - Lista para usar]
+├── scenes/objects/locked_door.tscn             [COMPLETA - Lista para usar]
+├── scenes/ui/player_hud.tscn                   [HUD del jugador]
+└── scenes/levels/test_doors_level.tscn         [Nivel de prueba]
+
+DOCUMENTACIÓN:
+├── DOOR_SYSTEM_FINAL.txt                       [Este archivo]
+├── DOOR_SYSTEM_DESIGN.txt                      [Diseño técnico]
+├── DOOR_SYSTEM_README.txt                      [Guía de uso]
+└── DOOR_LEVEL_PATTERNS.txt                     [Patrones de diseño]
+
+════════════════════════════════════════════════════════════════════════════════
+✅ CARACTERÍSTICAS IMPLEMENTADAS
+════════════════════════════════════════════════════════════════════════════════
+
+AMBOS TIPOS DE PUERTAS:
+✓ Nodos completamente configurados (Sprite, Collision, Areas, Lights, etc.)
+✓ Animaciones configuradas con frames del spritesheet
+✓ Sistema de partículas (reparación y hackeo)
+✓ Luces dinámicas con colores según estado
+✓ Hints interactivos que aparecen cerca del jugador
+✓ Barras de progreso visuales
+✓ Detección automática de jugador
+✓ Cancelación al soltar la tecla
+✓ Apertura automática tras completar
+✓ Auto-cierre opcional configurable
+✓ Señales para eventos importantes
+✓ API pública para interruptores
+✓ Mensajes de error (sin recursos)
+
+SISTEMA DE RECURSOS:
+✓ Salud (0-100)
+✓ Energía (0-100)
+✓ Durabilidad de herramienta (0-100)
+✓ Métodos de gestión completos
+✓ HUD visual con barras de progreso
+✓ Advertencias cuando recursos están bajos
+
+════════════════════════════════════════════════════════════════════════════════
+🚀 CÓMO USAR EN TU PROYECTO
+════════════════════════════════════════════════════════════════════════════════
+
+PASO 1: PROBAR EL SISTEMA
+──────────────────────────
+1. Abre Godot
+2. Carga el proyecto
+3. Abre: scenes/levels/test_doors_level.tscn
+4. Presiona F5 para ejecutar
+5. Prueba ambos tipos de puertas
+
+PASO 2: AÑADIR A TU NIVEL
+──────────────────────────
+```gdscript
+# Método 1: Arrastrar y soltar en el editor
+# - Arrastra damaged_door.tscn o locked_door.tscn a tu escena
+# - Configura parámetros en el Inspector
+
+# Método 2: Por código
+func _ready():
+    # Puerta dañada
+    var damaged = preload("res://scenes/objects/damaged_door.tscn").instantiate()
+    damaged.position = Vector2(500, 300)
+    damaged.repair_steps = 2
+    add_child(damaged)
+    
+    # Puerta bloqueada
+    var locked = preload("res://scenes/objects/locked_door.tscn").instantiate()
+    locked.position = Vector2(800, 300)
+    locked.hack_time = 3.0
+    add_child(locked)
+```
+
+PASO 3: AÑADIR HUD
+──────────────────
+```gdscript
+# En tu escena de nivel, añade:
+var hud = preload("res://scenes/ui/player_hud.tscn").instantiate()
+add_child(hud)
+```
+
+PASO 4: CONECTAR SEÑALES (Opcional)
+────────────────────────────────────
+```gdscript
+func _ready():
+    var door = $DamagedDoor
+    door.door_opened.connect(_on_door_opened)
+    door.repair_completed.connect(_on_repair_done)
+
+func _on_door_opened():
+    print("¡Puerta abierta! Activar siguiente área")
+
+func _on_repair_done():
+    print("Reparación completada")
+```
+
+════════════════════════════════════════════════════════════════════════════════
+🎯 DIFERENCIAS CLAVE ENTRE AMBOS TIPOS
+════════════════════════════════════════════════════════════════════════════════
+
+┌──────────────────┬─────────────────────────┬─────────────────────────┐
+│ CARACTERÍSTICA   │ PUERTAS DAÑADAS         │ PUERTAS BLOQUEADAS      │
+├──────────────────┼─────────────────────────┼─────────────────────────┤
+│ Tecla            │ [F] use_tool            │ [Q] hack                │
+│ Animación Kai    │ "use_tool"              │ "hack"                  │
+│ Recurso          │ Durabilidad herramienta │ Energía jugador         │
+│ Pasos            │ 1-3 pasos repetibles    │ 1 hackeo continuo       │
+│ Partículas       │ Naranjas (soldadura)    │ Azules (electricidad)   │
+│ Color luz        │ Rojo → Naranja → Verde  │ Rojo → Cyan → Verde     │
+│ Frames           │ Fila superior (Y=0)     │ Fila inferior (Y=312)   │
+│ Concepto         │ Daño físico             │ Bloqueo electrónico     │
+│ Dificultad       │ Más pasos = más difícil │ Más tiempo = más difícil│
+└──────────────────┴─────────────────────────┴─────────────────────────┘
+
+════════════════════════════════════════════════════════════════════════════════
+💡 CONSEJOS DE DISEÑO DE NIVELES
+════════════════════════════════════════════════════════════════════════════════
+
+1. VARIEDAD
+   - Alterna entre puertas dañadas y bloqueadas
+   - Varía la dificultad progresivamente
+   - Combina con otros obstáculos
+
+2. GESTIÓN DE RECURSOS
+   - Coloca kits de reparación cerca de puertas dañadas
+   - Coloca baterías cerca de puertas bloqueadas
+   - Fuerza decisiones estratégicas
+
+3. PUZZLES
+   - Usa puertas bloqueadas para áreas secretas
+   - Usa puertas dañadas para rutas principales
+   - Combina con interruptores para puzzles complejos
+
+4. DIFICULTAD
+   - Tutorial: 1 paso / 2s hackeo
+   - Normal: 2 pasos / 3s hackeo
+   - Difícil: 3 pasos / 4s hackeo
+
+5. FEEDBACK
+   - Las luces indican el estado claramente
+   - Las partículas muestran la acción
+   - Los hints guían al jugador
+
+════════════════════════════════════════════════════════════════════════════════
+🔍 TROUBLESHOOTING
+════════════════════════════════════════════════════════════════════════════════
+
+PROBLEMA: Las puertas no aparecen
+SOLUCIÓN: Verifica que doors.png esté en assets/objects/
+
+PROBLEMA: Las animaciones no funcionan
+SOLUCIÓN: Los frames ya están configurados en las escenas .tscn
+
+PROBLEMA: El jugador no puede reparar
+SOLUCIÓN: Verifica que tool_durability > 0 en kai.gd
+
+PROBLEMA: El jugador no puede hackear
+SOLUCIÓN: Verifica que energy > 0 en kai.gd
+
+PROBLEMA: Los hints no aparecen
+SOLUCIÓN: Verifica que el jugador esté en el grupo "player"
+
+PROBLEMA: Las teclas no responden
+SOLUCIÓN: Verifica que las acciones "use_tool" y "hack" estén en project.godot
+
+════════════════════════════════════════════════════════════════════════════════
+✨ SISTEMA COMPLETO Y LISTO
+════════════════════════════════════════════════════════════════════════════════
+
+Este sistema está 100% implementado y listo para usar. Solo necesitas:
+
+1. ✅ Abrir Godot
+2. ✅ Ejecutar el nivel de prueba
+3. ✅ Arrastrar las puertas a tus niveles
+4. ✅ Configurar parámetros según tu diseño
+
+¡No necesitas programar nada más! Todo está completo, documentado y optimizado.
+
+════════════════════════════════════════════════════════════════════════════════
+FIN DEL DOCUMENTO
+════════════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,54 @@
+[gd_scene load_steps=10 format=3 uid="uid://laser_r_nk7"]
+
+[ext_resource type="Script"    path="res://scripts/objects/laser.gd"          id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/objects/laser_r_frame0.png" id="2_r0"]
+[ext_resource type="Texture2D" path="res://assets/objects/laser_r_frame1.png" id="3_r1"]
+[ext_resource type="Texture2D" path="res://assets/objects/laser_r_frame2.png" id="4_r2"]
+[ext_resource type="Texture2D" path="res://assets/objects/laser_r_frame3.png" id="5_r3"]
+[ext_resource type="Texture2D" path="res://assets/objects/laser_r_frame4.png" id="6_r4"]
+[ext_resource type="Texture2D" path="res://assets/objects/laser_r_frame5.png" id="7_r5"]
+
+[sub_resource type="RectangleShape2D" id="BeamShape"]
+size = Vector2(300, 14)
+
+[sub_resource type="SpriteFrames" id="Frames"]
+animations = [{
+"frames": [{"duration": 1.0, "texture": ExtResource("2_r0")}],
+"loop": true, "name": &"off", "speed": 5.0
+}, {
+"frames": [
+{"duration": 1.0, "texture": ExtResource("2_r0")},
+{"duration": 1.0, "texture": ExtResource("3_r1")},
+{"duration": 1.0, "texture": ExtResource("4_r2")},
+{"duration": 1.0, "texture": ExtResource("5_r3")},
+{"duration": 1.0, "texture": ExtResource("6_r4")},
+{"duration": 1.0, "texture": ExtResource("7_r5")}
+],
+"loop": true, "name": &"on", "speed": 10.0
+}, {
+"frames": [
+{"duration": 0.4, "texture": ExtResource("2_r0")},
+{"duration": 0.4, "texture": ExtResource("5_r3")}
+],
+"loop": true, "name": &"warn", "speed": 8.0
+}]
+
+[node name="LaserR" type="Node2D"]
+script = ExtResource("1_script")
+mode = 0
+blink_on_time = 3.0
+blink_off_time = 1.0
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+scale = Vector2(1.0, 1.0)
+sprite_frames = SubResource("Frames")
+animation = &"on"
+autoplay = "on"
+
+[node name="BeamArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask  = 1
+
+[node name="BeamShape" type="CollisionShape2D" parent="BeamArea"]
+position = Vector2(75, 0)
+shape    = SubResource("BeamShape")

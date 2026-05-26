@@ -1,0 +1,91 @@
+[gd_scene load_steps=11 format=3 uid="uid://keycard_nk7"]
+
+[ext_resource type="Script" path="res://scripts/objects/collectible.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/objects/collectibles_sheet.png" id="2"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_card_0"]
+atlas = ExtResource("2")
+region = Rect2(0, 313, 313, 313)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_card_1"]
+atlas = ExtResource("2")
+region = Rect2(313, 313, 313, 313)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_card_2"]
+atlas = ExtResource("2")
+region = Rect2(626, 313, 313, 313)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_card_3"]
+atlas = ExtResource("2")
+region = Rect2(939, 313, 313, 313)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_card"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_card_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_card_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_card_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_card_3")
+}],
+"loop": true,
+"name": &"card",
+"speed": 4.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_card"]
+size = Vector2(36, 24)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_card"]
+particle_flag_disable_z = true
+emission_shape = 0
+direction = Vector3(0, -1, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 40.0
+initial_velocity_max = 80.0
+scale_min = 0.4
+scale_max = 1.0
+color = Color(1.0, 0.85, 0.3, 1.0)
+
+[node name="Keycard" type="Area2D" groups=["collectibles", "keycards"]]
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1")
+collectible_type = 1
+value = 1
+keycard_id = "card_default"
+float_amplitude = 7.0
+float_speed = 2.0
+rotation_speed = 0.0
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.12, 0.12)
+sprite_frames = SubResource("SpriteFrames_card")
+animation = &"card"
+autoplay = "card"
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_card")
+
+[node name="CollectParticles" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 14
+process_material = SubResource("ParticleProcessMaterial_card")
+lifetime = 0.7
+one_shot = true
+explosiveness = 0.8
+
+[node name="Light" type="PointLight2D" parent="."]
+color = Color(1.0, 0.85, 0.3, 1.0)
+energy = 1.1
+texture_scale = 0.6
+
+[node name="CollectSound" type="AudioStreamPlayer2D" parent="."]
+max_distance = 400.0

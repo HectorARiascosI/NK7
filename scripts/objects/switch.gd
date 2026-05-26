@@ -62,7 +62,7 @@ func _process(_delta: float) -> void:
 	if not _player_near:
 		return
 
-	var action := "hack" if requires_hack else "communicate"
+	var action : String = "hack" if requires_hack else "communicate"
 	if Input.is_action_just_pressed(action) or Input.is_action_just_pressed("use_tool"):
 		_interact()
 

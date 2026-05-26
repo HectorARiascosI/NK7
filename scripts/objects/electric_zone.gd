@@ -49,7 +49,7 @@ func _process(delta: float) -> void:
 		return
 
 	_blink_timer += delta
-	var threshold := blink_on_time if _blink_on else blink_off_time
+	var threshold : float = blink_on_time if _blink_on else blink_off_time
 	if _blink_timer >= threshold:
 		_blink_timer = 0.0
 		_blink_on = not _blink_on

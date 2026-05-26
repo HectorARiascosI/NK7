@@ -1,0 +1,42 @@
+[gd_scene load_steps=5 format=3 uid="uid://laser_h_nk7"]
+
+[ext_resource type="Script"    path="res://scripts/objects/laser.gd"               id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/objects/laser_h_emitter_off.png" id="2_off"]
+[ext_resource type="Texture2D" path="res://assets/objects/laser_h_emitter_on.png"  id="3_on"]
+[ext_resource type="Texture2D" path="res://assets/objects/laser_h_beam_full.png"   id="4_beam"]
+
+[sub_resource type="RectangleShape2D" id="BeamShape"]
+size = Vector2(172, 8)
+
+;; ══════════════════════════════════════════════════════════════════
+;; LASER HORIZONTAL
+;; Emisor = Sprite2D estático (no AnimatedSprite2D) → no voltea
+;; BeamSprite = Sprite2D del rayo, se oculta cuando se apaga
+;; ══════════════════════════════════════════════════════════════════
+
+[node name="LaserH" type="Node2D"]
+script = ExtResource("1_script")
+mode = 2
+blink_on_time = 2.5
+blink_off_time = 1.2
+
+;; Emisor — Sprite2D estático, no se anima → no voltea
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("3_on")
+centered = true
+
+;; Rayo — se oculta/muestra desde el script via BeamSprite
+[node name="BeamSprite" type="Sprite2D" parent="."]
+position = Vector2(18, 0)
+texture = ExtResource("4_beam")
+centered = false
+region_enabled = true
+region_rect = Rect2(18, 0, 172, 98)
+
+[node name="BeamArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask  = 1
+
+[node name="BeamShape" type="CollisionShape2D" parent="BeamArea"]
+position = Vector2(104, 0)
+shape    = SubResource("BeamShape")

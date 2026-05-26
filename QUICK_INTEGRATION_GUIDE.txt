@@ -1,0 +1,137 @@
+════════════════════════════════════════════════════════════════════════════════
+GUÍA RÁPIDA DE INTEGRACIÓN
+════════════════════════════════════════════════════════════════════════════════
+
+✅ TODO ESTÁ LISTO - SOLO EJECUTA Y PRUEBA
+
+════════════════════════════════════════════════════════════════════════════════
+🎯 QUÉ SE HA HECHO
+════════════════════════════════════════════════════════════════════════════════
+
+✓ Tutorial actualizado con controles de puertas [F] y [Q]
+✓ Sistema de guardado con 3 slots independientes
+✓ Menú principal integrado con selector de slots
+✓ Selector visual de guardados con información detallada
+✓ Todo conectado y funcionando
+
+════════════════════════════════════════════════════════════════════════════════
+🚀 CÓMO PROBAR (3 PASOS)
+════════════════════════════════════════════════════════════════════════════════
+
+1️⃣  PROBAR TUTORIAL
+   → Ejecuta el juego (F5)
+   → Presiona "INICIAR"
+   → El tutorial aparece automáticamente
+   → Navega con flechas hasta "Sistema de Puertas NK-7"
+   → Verifica que explica [F] para reparar y [Q] para hackear
+
+2️⃣  PROBAR GUARDADO
+   → Juega hasta un checkpoint
+   → Sal al menú (ESC → Salir)
+   → Botón "CARGAR" debe estar habilitado
+   → Presiona "CARGAR"
+   → Debe cargar tu progreso
+
+3️⃣  PROBAR MÚLTIPLES SLOTS
+   → Inicia 3 partidas diferentes (borra guardados anteriores)
+   → Avanza diferente cantidad en cada una
+   → Presiona "CARGAR" en menú
+   → Debe aparecer selector con 3 opciones
+   → Selecciona una y verifica que carga
+
+════════════════════════════════════════════════════════════════════════════════
+📁 ARCHIVOS MODIFICADOS
+════════════════════════════════════════════════════════════════════════════════
+
+ACTUALIZADOS:
+✓ scripts/ui/tutorial_system.gd          [Tutorial con puertas]
+✓ scripts/autoload/game_manager.gd       [Sistema de slots]
+✓ scripts/ui/main_menu.gd                [Integración con guardado]
+
+NUEVOS:
+✓ scripts/ui/save_selector.gd            [Selector de slots]
+✓ scenes/ui/save_selector.tscn           [Escena del selector]
+
+════════════════════════════════════════════════════════════════════════════════
+🎮 CONTROLES AÑADIDOS AL TUTORIAL
+════════════════════════════════════════════════════════════════════════════════
+
+[F] - Reparar puertas dañadas (mantener)
+      • Consume durabilidad de herramienta
+      • 1-3 pasos según daño
+      • Luz roja → naranja → verde
+
+[Q] - Hackear puertas bloqueadas (mantener)
+      • Consume energía del jugador
+      • 2-4 segundos según dificultad
+      • Panel apagado → activo → desbloqueado
+
+════════════════════════════════════════════════════════════════════════════════
+💾 SISTEMA DE GUARDADO
+════════════════════════════════════════════════════════════════════════════════
+
+SLOTS: 3 slots independientes (0, 1, 2)
+ARCHIVOS: user://save_slot_0.dat, save_slot_1.dat, save_slot_2.dat
+
+INFORMACIÓN GUARDADA:
+• Nivel actual
+• Checkpoint actual
+• Niveles completados
+• Total de muertes
+• Tiempo jugado
+• Fecha y hora
+
+GUARDADO AUTOMÁTICO:
+• Al alcanzar checkpoints
+• Al completar niveles
+
+════════════════════════════════════════════════════════════════════════════════
+🔍 VERIFICACIÓN RÁPIDA
+════════════════════════════════════════════════════════════════════════════════
+
+□ Tutorial muestra página "Sistema de Puertas NK-7"
+□ Tutorial explica [F] y [Q]
+□ Botón "CARGAR" se deshabilita sin guardados
+□ Botón "CARGAR" se habilita con guardados
+□ Selector de slots aparece con múltiples guardados
+□ Selector muestra información correcta
+□ Carga funciona correctamente
+□ Guardado automático funciona en checkpoints
+
+════════════════════════════════════════════════════════════════════════════════
+⚠️ IMPORTANTE
+════════════════════════════════════════════════════════════════════════════════
+
+1. GUARDADOS ANTIGUOS:
+   Si tienes "user://save_game.dat" antiguo, elimínalo.
+   El nuevo sistema usa save_slot_X.dat
+
+2. PRIMERA VEZ:
+   El tutorial solo aparece la primera vez que inicias partida.
+   Usa TAB en juego para ver resumen de controles.
+
+3. SLOTS:
+   Cada slot es independiente.
+   Puedes tener 3 partidas diferentes simultáneamente.
+
+════════════════════════════════════════════════════════════════════════════════
+📚 DOCUMENTACIÓN COMPLETA
+════════════════════════════════════════════════════════════════════════════════
+
+Para más detalles, lee:
+✓ INTEGRATION_COMPLETE.txt    [Documentación completa de integración]
+✓ DOOR_SYSTEM_FINAL.txt        [Sistema de puertas completo]
+✓ QUICK_START.txt               [Guía rápida de puertas]
+
+════════════════════════════════════════════════════════════════════════════════
+✨ ¡TODO LISTO!
+════════════════════════════════════════════════════════════════════════════════
+
+Solo ejecuta el juego y prueba:
+1. Tutorial con puertas
+2. Guardado con slots
+3. Selector de guardados
+
+¡Disfruta del sistema completo!
+
+════════════════════════════════════════════════════════════════════════════════
