@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=3 uid="uid://do3fis6yo7d63"]
+
+[ext_resource type="Script" path="res://scripts/ui/splash_screen.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/splash_screen.png" id="2_splash"]
+
+[node name="SplashScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_splash")
+expand_mode = 1
+stretch_mode = 6
