@@ -1,43 +1,37 @@
-[gd_scene load_steps=5 format=3 uid="uid://projectile_nk7"]
+[gd_scene format=3 uid="uid://do3fis6yo7d63"]
 
-[ext_resource type="Script" path="res://scripts/enemies/projectile.gd" id="1"]
-[ext_resource type="Texture2D" path="res://assets/characters/ukibuki/projectile_ball.png" id="2"]
+[ext_resource type="Script" uid="uid://d4btqej6aimkg" path="res://scripts/enemies/projectile.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://beu4movpsg8y2" path="res://assets/characters/ukibuki/projectile_ball.png" id="2"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_proj"]
 radius = 5.0
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_trail"]
 particle_flag_disable_z = true
-emission_shape = 0
 direction = Vector3(0, 0, 0)
 spread = 25.0
-gravity = Vector3(0, 0, 0)
 initial_velocity_min = 15.0
 initial_velocity_max = 40.0
+gravity = Vector3(0, 0, 0)
 scale_min = 0.2
 scale_max = 0.6
-color = Color(1.0, 0.4, 0.1, 0.8)
+color = Color(1, 0.4, 0.1, 0.8)
 
-[node name="Projectile" type="Area2D" groups=["enemy_projectiles"]]
+[node name="Projectile" type="Area2D" unique_id=862403624 groups=["enemy_projectiles"]]
 collision_layer = 4
-collision_mask = 1
 script = ExtResource("1")
 damage = 20
-lifetime = 4.0
 
-[node name="Sprite" type="Sprite2D" parent="."]
+[node name="Sprite" type="Sprite2D" parent="." unique_id=1164343454]
+scale = Vector2(2, 2)
 texture = ExtResource("2")
-scale = Vector2(2.0, 2.0)
 
-[node name="Collision" type="CollisionShape2D" parent="."]
+[node name="Collision" type="CollisionShape2D" parent="." unique_id=400946025]
 shape = SubResource("CircleShape2D_proj")
 
-[node name="Trail" type="GPUParticles2D" parent="."]
-emitting = true
+[node name="Trail" type="GPUParticles2D" parent="." unique_id=465035995]
 amount = 10
-process_material = SubResource("ParticleProcessMaterial_trail")
 lifetime = 0.25
-one_shot = false
-explosiveness = 0.0
 trail_enabled = true
 trail_lifetime = 0.15
+process_material = SubResource("ParticleProcessMaterial_trail")
