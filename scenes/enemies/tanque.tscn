@@ -1,0 +1,111 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="Script"      path="res://scripts/enemies/guardia.gd"                       id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/projectile.tscn"                   id="2_proj"]
+[ext_resource type="Texture2D"   path="res://assets/characters/tanque/tanque_spritesheet.png"  id="3_sheet"]
+
+;; Tanque spritesheet: 8 frames de 218x358 (mismo layout que guardia)
+
+[sub_resource type="AtlasTexture" id="AT_0"]
+atlas = ExtResource("3_sheet")
+region = Rect2(0, 0, 218, 358)
+
+[sub_resource type="AtlasTexture" id="AT_1"]
+atlas = ExtResource("3_sheet")
+region = Rect2(218, 0, 218, 358)
+
+[sub_resource type="AtlasTexture" id="AT_2"]
+atlas = ExtResource("3_sheet")
+region = Rect2(436, 0, 218, 358)
+
+[sub_resource type="AtlasTexture" id="AT_3"]
+atlas = ExtResource("3_sheet")
+region = Rect2(654, 0, 218, 358)
+
+[sub_resource type="AtlasTexture" id="AT_4"]
+atlas = ExtResource("3_sheet")
+region = Rect2(872, 0, 218, 358)
+
+[sub_resource type="AtlasTexture" id="AT_5"]
+atlas = ExtResource("3_sheet")
+region = Rect2(1090, 0, 218, 358)
+
+[sub_resource type="AtlasTexture" id="AT_6"]
+atlas = ExtResource("3_sheet")
+region = Rect2(1308, 0, 218, 358)
+
+[sub_resource type="AtlasTexture" id="AT_7"]
+atlas = ExtResource("3_sheet")
+region = Rect2(1526, 0, 218, 358)
+
+[sub_resource type="SpriteFrames" id="SF_tanque"]
+animations = [{
+"frames": [
+{"duration":1.0,"texture":SubResource("AT_0")},
+{"duration":1.0,"texture":SubResource("AT_1")},
+{"duration":1.0,"texture":SubResource("AT_2")},
+{"duration":1.0,"texture":SubResource("AT_3")}
+],
+"loop": true, "name": &"idle", "speed": 4.0
+},{
+"frames": [
+{"duration":1.0,"texture":SubResource("AT_0")},
+{"duration":1.0,"texture":SubResource("AT_1")},
+{"duration":1.0,"texture":SubResource("AT_2")},
+{"duration":1.0,"texture":SubResource("AT_3")},
+{"duration":1.0,"texture":SubResource("AT_4")},
+{"duration":1.0,"texture":SubResource("AT_5")},
+{"duration":1.0,"texture":SubResource("AT_6")},
+{"duration":1.0,"texture":SubResource("AT_7")}
+],
+"loop": true, "name": &"walk", "speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="Shape_body"]
+radius = 22.0
+height = 48.0
+
+[sub_resource type="CircleShape2D" id="Shape_detect"]
+radius = 300.0
+
+[node name="Tanque" type="CharacterBody2D" groups=["enemies"]]
+collision_layer = 2
+collision_mask  = 1
+script = ExtResource("1_script")
+max_health       = 160
+damage           = 28
+speed            = 38.0
+patrol_distance  = 120.0
+detection_range  = 300.0
+attack_range     = 260.0
+attack_cooldown  = 1.8
+burst_count      = 3
+burst_delay      = 0.18
+chase_speed_mult = 1.1
+projectile_speed = 160.0
+projectile_scene = ExtResource("2_proj")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.23, 0.23)
+sprite_frames = SubResource("SF_tanque")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+shape = SubResource("Shape_body")
+
+[node name="DetectionArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask  = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+shape = SubResource("Shape_detect")
+
+[node name="Light" type="PointLight2D" parent="."]
+color = Color(0.8, 0.3, 1.0, 1.0)
+energy = 1.2
+texture_scale = 0.5
+
+[node name="AttackTimer" type="Timer" parent="."]
+wait_time = 1.8
+autostart = true
