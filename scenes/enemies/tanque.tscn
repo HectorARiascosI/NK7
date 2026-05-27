@@ -86,7 +86,8 @@ projectile_speed = 160.0
 projectile_scene = ExtResource("2_proj")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
-scale = Vector2(0.20, 0.09)
+position = Vector2(0, -20)
+scale = Vector2(0.22, 0.10)
 sprite_frames = SubResource("SF_tanque")
 animation = &"idle"
 autoplay = "idle"
