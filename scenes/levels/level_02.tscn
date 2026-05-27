@@ -7,19 +7,25 @@
 [ext_resource type="Script" uid="uid://douo1mundbl1d" path="res://scripts/levels/safe_zone.gd" id="5_safe"]
 [ext_resource type="Script" uid="uid://de4o5h2ojrruv" path="res://scripts/levels/smart_checkpoint_system.gd" id="6_checkpoint"]
 [ext_resource type="Script" uid="uid://cucoeogfthwdw" path="res://scripts/levels/level_02_setup.gd" id="7_setup"]
+[ext_resource type="Texture2D" uid="uid://dr8tg8kcetypf" path="res://assets/objects/door_frames/door_closed.png" id="8_4hx2o"]
 [ext_resource type="PackedScene" uid="uid://cnc1ao3mcg26o" path="res://scenes/characters/kai.tscn" id="8_kai"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/ukibuki.tscn" id="14_ukibuki"]
 [ext_resource type="PackedScene" uid="uid://cg4lv665lj8ey" path="res://scenes/ui/player_hud.tscn" id="15_hud"]
 [ext_resource type="PackedScene" uid="uid://bnjpl3vgodi8r" path="res://scenes/objects/level_door.tscn" id="16_level_door"]
+[ext_resource type="PackedScene" uid="uid://laser_v_nk7" path="res://scenes/objects/laser_v.tscn" id="17_laser_v"]
+[ext_resource type="PackedScene" uid="uid://switch_nk7" path="res://scenes/objects/switch.tscn" id="18_switch"]
+[ext_resource type="PackedScene" uid="uid://keycard_nk7" path="res://scenes/objects/keycard.tscn" id="19_keycard"]
+[ext_resource type="PackedScene" uid="uid://cuvnfx6am47jn" path="res://scenes/objects/coin.tscn" id="20_coin"]
+[ext_resource type="PackedScene" path="res://scenes/objects/energy_tube.tscn" id="21_energy"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor_l3"]
+size = Vector2(1482.0142, 40)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor_l1"]
 size = Vector2(1529.2563, 43.5632)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor_l2"]
 size = Vector2(1531.1748, 40)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor_l3"]
-size = Vector2(1357.314, 40)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ladder1"]
 size = Vector2(40, 633.6207)
@@ -71,6 +77,11 @@ position = Vector2(4.7961807, 21.582712)
 scale = Vector2(0.92079437, 0.9174381)
 texture = ExtResource("1_bg")
 
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Background/Sprite2D" unique_id=601565741]
+position = Vector2(-4.796163, -188.50575)
+scale = Vector2(1.0000002, 1)
+shape = SubResource("RectangleShape2D_floor_l3")
+
 [node name="Environment" type="Node2D" parent="World" unique_id=429569073]
 position = Vector2(0, 22)
 scale = Vector2(1.39, 1.16)
@@ -94,7 +105,7 @@ shape = SubResource("RectangleShape2D_floor_l2")
 [node name="Floor_L3" type="StaticBody2D" parent="World/Environment/Floors" unique_id=1384417718]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Floors/Floor_L3" unique_id=1563357654]
-position = Vector2(-4.796163, -188.50575)
+position = Vector2(20.383686, -478.73566)
 scale = Vector2(1.0000002, 1)
 shape = SubResource("RectangleShape2D_floor_l3")
 
@@ -121,6 +132,30 @@ shape = SubResource("RectangleShape2D_ladder2")
 [node name="DeathZone_Pit" type="Area2D" parent="World/Environment/Hazards" unique_id=1973965177]
 script = ExtResource("3_death")
 
+;; ── LASER PISO 1 — bloquea el centro, blink 2s/1s ───────────────
+;; Misma escala que los láseres de level_01 que funcionan bien
+[node name="LaserV_P1" parent="World/Environment/Hazards" instance=ExtResource("17_laser_v")]
+position = Vector2(-50, 310)
+scale = Vector2(0.6, 0.76)
+mode = 1
+blink_on_time = 2.0
+blink_off_time = 1.0
+
+;; ── LASER PISO 2 — bloquea acceso a escalera derecha, blink 1.8s/0.8s ──
+[node name="LaserV_P2" parent="World/Environment/Hazards" instance=ExtResource("17_laser_v")]
+position = Vector2(450, 100)
+scale = Vector2(0.6, 0.76)
+mode = 1
+blink_on_time = 1.8
+blink_off_time = 0.8
+
+;; ── LASER PISO 3 — always_on, guarda la keycard y la salida ─────
+;; El switch del piso 3 izquierda lo apaga permanentemente
+[node name="LaserV_P3" parent="World/Environment/Hazards" instance=ExtResource("17_laser_v")]
+position = Vector2(200, -268)
+scale = Vector2(0.6, 0.76)
+mode = 0
+
 [node name="SafeZones" type="Node2D" parent="World/Environment" unique_id=407238050]
 
 [node name="SafeZone1_Spawn" type="Area2D" parent="World/Environment/SafeZones" unique_id=628482866 groups=["safe_zones"]]
@@ -137,6 +172,7 @@ script = ExtResource("5_safe")
 zone_id = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/SafeZones/SafeZone2_MidLeft" unique_id=50364417]
+position = Vector2(-261.15106, -70.17241)
 shape = SubResource("RectangleShape2D_safe2")
 
 [node name="SafeZone3_MidRight" type="Area2D" parent="World/Environment/SafeZones" unique_id=53107636 groups=["safe_zones"]]
@@ -145,6 +181,7 @@ script = ExtResource("5_safe")
 zone_id = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/SafeZones/SafeZone3_MidRight" unique_id=1636275960]
+position = Vector2(83.69303, -51.494247)
 shape = SubResource("RectangleShape2D_safe3")
 
 [node name="SafeZone4_Exit" type="Area2D" parent="World/Environment/SafeZones" unique_id=1821822459 groups=["safe_zones"]]
@@ -161,6 +198,73 @@ shape = SubResource("RectangleShape2D_safe4")
 position = Vector2(-660.67145, 333.046)
 next_level = 1
 label_text = "[E] Volver al Sector B"
+
+;; ── SWITCH PISO 1 — apaga LaserV_P1 ─────────────────────────────
+;; Está a la izquierda del láser, el jugador lo encuentra explorando
+[node name="Switch_P1" parent="World/Environment/Interactables" instance=ExtResource("18_switch")]
+position = Vector2(-300, 390)
+one_shot = true
+targets = [NodePath("../../Hazards/LaserV_P1")]
+
+;; ── SWITCH PISO 2 — apaga LaserV_P2 ─────────────────────────────
+;; Centro del piso 2, el jugador debe llegar hasta aquí
+[node name="Switch_P2" parent="World/Environment/Interactables" instance=ExtResource("18_switch")]
+position = Vector2(100, 110)
+one_shot = true
+targets = [NodePath("../../Hazards/LaserV_P2")]
+
+;; ── SWITCH PISO 3 — apaga LaserV_P3 (always_on) ─────────────────
+;; Izquierda del piso 3, el jugador debe subir por la escalera izquierda
+[node name="Switch_P3" parent="World/Environment/Interactables" instance=ExtResource("18_switch")]
+position = Vector2(-400, -260)
+one_shot = true
+targets = [NodePath("../../Hazards/LaserV_P3")]
+
+;; ── KEYCARD — detrás del LaserV_P3, piso 3 derecha ──────────────
+[node name="Keycard_Exit" parent="World/Environment/Interactables" instance=ExtResource("19_keycard")]
+position = Vector2(450, -260)
+keycard_id = "card_sector_7f"
+
+;; ── ENERGY TUBES — recargar energía antes de hackear ─────────────
+[node name="EnergyTube_P1" parent="World/Environment/Interactables" instance=ExtResource("21_energy")]
+position = Vector2(400, 390)
+
+[node name="EnergyTube_P2" parent="World/Environment/Interactables" instance=ExtResource("21_energy")]
+position = Vector2(-200, 110)
+
+;; ── MONEDAS — guían al jugador por el camino correcto ────────────
+;; Piso 1: guían hacia el switch
+[node name="Coin1" parent="World/Environment/Interactables" instance=ExtResource("20_coin")]
+position = Vector2(-500, 390)
+
+[node name="Coin2" parent="World/Environment/Interactables" instance=ExtResource("20_coin")]
+position = Vector2(-400, 390)
+
+[node name="Coin3" parent="World/Environment/Interactables" instance=ExtResource("20_coin")]
+position = Vector2(-200, 390)
+
+;; Piso 2: guían hacia el switch
+[node name="Coin4" parent="World/Environment/Interactables" instance=ExtResource("20_coin")]
+position = Vector2(-400, 110)
+
+[node name="Coin5" parent="World/Environment/Interactables" instance=ExtResource("20_coin")]
+position = Vector2(200, 110)
+
+;; Piso 3: guían hacia el switch y la keycard
+[node name="Coin6" parent="World/Environment/Interactables" instance=ExtResource("20_coin")]
+position = Vector2(-600, -260)
+
+[node name="Coin7" parent="World/Environment/Interactables" instance=ExtResource("20_coin")]
+position = Vector2(-200, -260)
+
+[node name="DoorSprite" parent="World/Environment/Interactables/EntryDoor_FromLevel1" index="2" unique_id=143866173]
+position = Vector2(8.992841, -7.1839237)
+scale = Vector2(0.5474864, 0.60344833)
+
+[node name="DoorClosed" type="Sprite2D" parent="World/Environment/Interactables/EntryDoor_FromLevel1" unique_id=1349307270]
+position = Vector2(344.1246, -291.86423)
+scale = Vector2(0.5520111, 0.53771555)
+texture = ExtResource("8_4hx2o")
 
 [node name="Walls_left" type="StaticBody2D" parent="World/Environment" unique_id=197871000]
 
@@ -193,9 +297,10 @@ shape = SubResource("RectangleShape2D_4dr30")
 [node name="Characters" type="Node2D" parent="." unique_id=675454117]
 
 [node name="kai" parent="Characters" unique_id=1827044748 instance=ExtResource("8_kai")]
-position = Vector2(-557, 270)
+position = Vector2(-472, 265)
 
 [node name="Enemies" type="Node2D" parent="." unique_id=355323483]
+visible = false
 
 [node name="Ukibuki_Security1" parent="Enemies" unique_id=698554851 instance=ExtResource("14_ukibuki")]
 position = Vector2(100, 50)
