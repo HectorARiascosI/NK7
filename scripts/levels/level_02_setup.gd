@@ -1,31 +1,49 @@
 extends Node
 
 ## ════════════════════════════════════════════════════════════════
-## LEVEL 02 — Sector 7-F Security (Láseres Activos)
+## LEVEL 02 — Sector 7-F Security
 ## ════════════════════════════════════════════════════════════════
-## Acto II: KAI alcanza la zona de seguridad principal.
-## Los láseres de detección fueron reconfigurados en modo letal.
-## El jugador aprende que observar antes de actuar es fundamental.
+## Kai llega al sector de seguridad principal.
+## Los sistemas de control están más activos que en el Sector B.
 ##
-## Mecánicas introducidas:
-##   - Láseres horizontales y verticales con patrones
-##   - Primera exposición al sistema de daño
-##   - Puertas bloqueadas que requieren hackeo [Q]
-##   - Zona "Restricted Area" con mayor densidad de peligros
+## Mecánicas introducidas en este nivel:
+##   - Láser V con timing (blink) — esperar el momento correcto
+##   - Láser H con patrol — más peligroso, necesita switch previo
+##   - Puerta bloqueada [Q] — requiere energía para hackear
+##   - Keycard — coleccionable necesario para la salida
+##   - Ukibuki más agresivo en piso 3 (mayor rango y velocidad)
+##
+## Flujo esperado del jugador:
+##   1. Entrar por la izquierda del piso 1
+##   2. Esperar timing del láser V o encontrar el switch
+##   3. Subir al piso 2, recargar energía en EnergyTube
+##   4. Apagar el switch del láser H (piso 2 izquierda)
+##   5. Hackear la puerta bloqueada [Q] (piso 2 derecha)
+##   6. Subir al piso 3, derrotar/esquivar Ukibuki3
+##   7. Recoger la keycard
+##   8. Usar la puerta de salida
 ## ════════════════════════════════════════════════════════════════
-
 
 func _ready() -> void:
-	# Mostrar recordatorio de controles al iniciar (no tutorial completo)
 	await get_tree().process_frame
-	_show_level_intro()
+	_check_persistent_state()
+	await get_tree().create_timer(1.2).timeout
+	_show_level_hint()
 
 
-func _show_level_intro() -> void:
-	## Buscar el sistema de tutorial para mostrar recordatorio de controles
+func _check_persistent_state() -> void:
+	## Restaurar estado de objetos que ya fueron interactuados
+	## (LevelStateManager lo maneja automáticamente para puertas)
+	## Aquí podemos hacer ajustes adicionales si es necesario
+	pass
+
+
+func _show_level_hint() -> void:
+	## Mostrar un recordatorio breve de los controles clave para este nivel
 	var tutorial := _search_node(get_tree().root, "TutorialSystem")
-	if tutorial and tutorial.has_method("show_controls_reminder"):
-		await get_tree().create_timer(1.5).timeout
+	if tutorial and tutorial.has_method("show_hint"):
+		tutorial.show_hint("Sector 7-F — Sistema de seguridad activo\n[Q] Hackear · [E] Interactuar · Busca la tarjeta de acceso")
+	elif tutorial and tutorial.has_method("show_controls_reminder"):
 		tutorial.show_controls_reminder()
 
 
