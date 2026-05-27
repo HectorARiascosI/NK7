@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="NK7GDT"
-run/main_scene="uid://b4ptokpwkelwu"
+run/main_scene="uid://do3fis6yo7d63"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
