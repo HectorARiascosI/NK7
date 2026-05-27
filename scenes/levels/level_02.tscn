@@ -8,40 +8,9 @@
 [ext_resource type="Script" uid="uid://de4o5h2ojrruv" path="res://scripts/levels/smart_checkpoint_system.gd" id="6_checkpoint"]
 [ext_resource type="Script" uid="uid://cucoeogfthwdw" path="res://scripts/levels/level_02_setup.gd" id="7_setup"]
 [ext_resource type="PackedScene" uid="uid://cnc1ao3mcg26o" path="res://scenes/characters/kai.tscn" id="8_kai"]
-[ext_resource type="PackedScene" uid="uid://cuvnfx6am47jn" path="res://scenes/objects/coin.tscn" id="9_coin"]
-[ext_resource type="PackedScene" path="res://scenes/objects/energy_tube.tscn" id="10_energy"]
-[ext_resource type="PackedScene" path="res://scenes/objects/data_cube.tscn" id="11_cube"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/ukibuki.tscn" id="14_ukibuki"]
 [ext_resource type="PackedScene" uid="uid://cg4lv665lj8ey" path="res://scenes/ui/player_hud.tscn" id="15_hud"]
 [ext_resource type="PackedScene" uid="uid://bnjpl3vgodi8r" path="res://scenes/objects/level_door.tscn" id="16_level_door"]
-[ext_resource type="PackedScene" uid="uid://laser_v_nk7" path="res://scenes/objects/laser_v.tscn" id="17_laser_v"]
-[ext_resource type="PackedScene" uid="uid://locked_door_nk7" path="res://scenes/objects/locked_door.tscn" id="19_locked_door"]
-[ext_resource type="PackedScene" uid="uid://keycard_nk7" path="res://scenes/objects/keycard.tscn" id="20_keycard"]
-[ext_resource type="PackedScene" uid="uid://switch_nk7" path="res://scenes/objects/switch.tscn" id="21_switch"]
-
-;; ══════════════════════════════════════════════════════════════════
-;; LEVEL 02 — Sector 7-F Security
-;; ══════════════════════════════════════════════════════════════════
-;;
-;; SISTEMA DE COORDENADAS:
-;;   - Objetos en World/Environment: coordenadas locales de Environment
-;;     (paredes X: -748 izq, +752 der)
-;;     (pisos superficie: L1=430, L2=152, L3=-209)
-;;   - Kai y Enemies: coordenadas ROOT (sin escala World/Environment)
-;;     (equivalencia aprox: root_y = env_y * 0.6 * 1.16 + offset)
-;;     (kai spawn root(-557,270) ≈ env(-660,430) piso1 izquierda)
-;;
-;; LAYOUT:
-;;   PISO 3 (env y≈-209): [Ukibuki3] [Keycard] [LaserV bloqueando] [Salida]
-;;   PISO 2 (env y≈152):  [Ukibuki2] [EnergyTube] [LockedDoor→hackear Q]
-;;   PISO 1 (env y≈430):  [Entrada] [Ukibuki1] [Switch apaga LaserV piso3]
-;;
-;; REFERENCIA level_01 (funciona bien):
-;;   Laser_Vertical1: env pos (133, -14), scale (0.6, 0.76) → piso 2
-;;   Laser_Vertical2: env pos (138, -268), scale (0.6, 0.76) → piso 3
-;;   Ukibuki1 root: (200, 60) → piso 2
-;;   Ukibuki2 root: (-100, -200) → piso 3
-;; ══════════════════════════════════════════════════════════════════
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor_l1"]
 size = Vector2(1529.2563, 43.5632)
@@ -85,9 +54,6 @@ size = Vector2(31.71875, 377.5)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4dr30"]
 size = Vector2(30, 686.7816)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_death"]
-size = Vector2(1600, 40)
-
 [node name="Level02" type="Node2D" unique_id=130278471]
 script = ExtResource("2_base")
 
@@ -108,8 +74,6 @@ texture = ExtResource("1_bg")
 [node name="Environment" type="Node2D" parent="World" unique_id=429569073]
 position = Vector2(0, 22)
 scale = Vector2(1.39, 1.16)
-
-;; ── PISOS ─────────────────────────────────────────────────────────
 
 [node name="Floors" type="Node2D" parent="World/Environment" unique_id=1613236091]
 
@@ -134,8 +98,6 @@ position = Vector2(-4.796163, -188.50575)
 scale = Vector2(1.0000002, 1)
 shape = SubResource("RectangleShape2D_floor_l3")
 
-;; ── ESCALERAS ─────────────────────────────────────────────────────
-
 [node name="Ladders" type="Node2D" parent="World/Environment" unique_id=1715844190]
 
 [node name="Ladder_Left" type="Area2D" parent="World/Environment/Ladders" unique_id=1058563540 groups=["ladders"]]
@@ -154,144 +116,51 @@ position = Vector2(706.235, -29.022984)
 scale = Vector2(1.0000002, 1)
 shape = SubResource("RectangleShape2D_ladder2")
 
-;; ── HAZARDS ───────────────────────────────────────────────────────
-
 [node name="Hazards" type="Node2D" parent="World/Environment" unique_id=414831258]
 
 [node name="DeathZone_Pit" type="Area2D" parent="World/Environment/Hazards" unique_id=1973965177]
 script = ExtResource("3_death")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Hazards/DeathZone_Pit" unique_id=1973965178]
-position = Vector2(0, 560)
-shape = SubResource("RectangleShape2D_death")
-
-;; LaserV piso 3 — misma escala y modo que los láseres del nivel 1
-;; Posición: centro del piso 3 (x=0), justo encima de la superficie (y=-268)
-;; Bloquea el paso a la keycard y la salida — el switch en piso 2 lo apaga
-[node name="LaserV_Floor3" parent="World/Environment/Hazards" instance=ExtResource("17_laser_v")]
-position = Vector2(200, -268)
-scale = Vector2(0.6, 0.76)
-mode = 1
-blink_on_time = 2.5
-blink_off_time = 0.8
-
-;; ── ZONAS SEGURAS ─────────────────────────────────────────────────
-
 [node name="SafeZones" type="Node2D" parent="World/Environment" unique_id=407238050]
 
-;; Piso 1 izquierda — zona de spawn (junto a la puerta de entrada)
 [node name="SafeZone1_Spawn" type="Area2D" parent="World/Environment/SafeZones" unique_id=628482866 groups=["safe_zones"]]
-position = Vector2(-500, 380)
+position = Vector2(-500, 360)
 script = ExtResource("5_safe")
 zone_id = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/SafeZones/SafeZone1_Spawn" unique_id=1093440156]
 shape = SubResource("RectangleShape2D_safe1")
 
-;; Piso 1 derecha — después de pasar el switch
-[node name="SafeZone2_Floor1Right" type="Area2D" parent="World/Environment/SafeZones" unique_id=1255926420 groups=["safe_zones"]]
-position = Vector2(400, 380)
+[node name="SafeZone2_MidLeft" type="Area2D" parent="World/Environment/SafeZones" unique_id=1255926420 groups=["safe_zones"]]
+position = Vector2(-300, 90)
 script = ExtResource("5_safe")
 zone_id = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/SafeZones/SafeZone2_Floor1Right" unique_id=50364417]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/SafeZones/SafeZone2_MidLeft" unique_id=50364417]
 shape = SubResource("RectangleShape2D_safe2")
 
-;; Piso 2 izquierda — al subir la escalera izquierda
-[node name="SafeZone3_Floor2Left" type="Area2D" parent="World/Environment/SafeZones" unique_id=53107636 groups=["safe_zones"]]
-position = Vector2(-400, 110)
+[node name="SafeZone3_MidRight" type="Area2D" parent="World/Environment/SafeZones" unique_id=53107636 groups=["safe_zones"]]
+position = Vector2(300, 90)
 script = ExtResource("5_safe")
 zone_id = 3
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/SafeZones/SafeZone3_Floor2Left" unique_id=1636275960]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/SafeZones/SafeZone3_MidRight" unique_id=1636275960]
 shape = SubResource("RectangleShape2D_safe3")
 
-;; Piso 3 izquierda — al subir la escalera izquierda al piso 3
-[node name="SafeZone4_Floor3Left" type="Area2D" parent="World/Environment/SafeZones" unique_id=1821822459 groups=["safe_zones"]]
-position = Vector2(-500, -260)
+[node name="SafeZone4_Exit" type="Area2D" parent="World/Environment/SafeZones" unique_id=1821822459 groups=["safe_zones"]]
+position = Vector2(480, -180)
 script = ExtResource("5_safe")
 zone_id = 4
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/SafeZones/SafeZone4_Floor3Left" unique_id=1377799253]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/SafeZones/SafeZone4_Exit" unique_id=1377799253]
 shape = SubResource("RectangleShape2D_safe4")
-
-;; ── INTERACTABLES ─────────────────────────────────────────────────
 
 [node name="Interactables" type="Node2D" parent="World/Environment" unique_id=1482222406]
 
-;; Puerta de entrada — piso 1 izquierda, misma posición que en el nivel original
 [node name="EntryDoor_FromLevel1" parent="World/Environment/Interactables" unique_id=60453642 instance=ExtResource("16_level_door")]
 position = Vector2(-660.67145, 333.046)
 next_level = 1
 label_text = "[E] Volver al Sector B"
-
-;; Switch piso 1 — apaga LaserV_Floor3
-;; Posición: piso 1 derecha, el jugador lo encuentra explorando
-[node name="Switch_LaserV" parent="World/Environment/Interactables" instance=ExtResource("21_switch")]
-position = Vector2(350, 390)
-one_shot = true
-targets = [NodePath("../../Hazards/LaserV_Floor3")]
-
-;; EnergyTube piso 1 — recompensa por explorar el lado derecho
-[node name="EnergyTube_Floor1" parent="World/Environment/Interactables" instance=ExtResource("10_energy")]
-position = Vector2(550, 380)
-
-;; Puerta bloqueada piso 2 — bloquea la escalera derecha (hacia piso 3)
-;; El jugador necesita hackearla [Q] con 20 pts de energía
-;; Posición: junto a la escalera derecha (x≈706), piso 2 (y≈110)
-[node name="LockedDoor_ToFloor3" parent="World/Environment/Interactables" instance=ExtResource("19_locked_door")]
-position = Vector2(600, 110)
-unique_id = "locked_door_l02_floor3"
-hack_time = 3.0
-energy_cost = 20
-hack_difficulty = 1
-
-;; EnergyTube piso 2 — antes de la puerta bloqueada, para que el jugador recargue
-[node name="EnergyTube_Floor2" parent="World/Environment/Interactables" instance=ExtResource("10_energy")]
-position = Vector2(300, 110)
-
-;; Keycard piso 3 — detrás del láser V, requiere apagarlo primero
-[node name="Keycard_Exit" parent="World/Environment/Interactables" instance=ExtResource("20_keycard")]
-position = Vector2(450, -260)
-keycard_id = "card_sector_7f"
-
-;; Puerta de salida piso 3 — requiere keycard
-[node name="ExitDoor_ToLevel3" parent="World/Environment/Interactables" instance=ExtResource("16_level_door")]
-position = Vector2(620, -260)
-next_level = 3
-label_text = "[E] Sector siguiente"
-required_keycard = "card_sector_7f"
-
-;; ── Coleccionables — guían al jugador por el nivel ────────────────
-
-;; Piso 1: monedas guían hacia el switch (de izquierda a derecha)
-[node name="Coin1" parent="World/Environment/Interactables" instance=ExtResource("9_coin")]
-position = Vector2(-300, 390)
-
-[node name="Coin2" parent="World/Environment/Interactables" instance=ExtResource("9_coin")]
-position = Vector2(0, 390)
-
-[node name="Coin3" parent="World/Environment/Interactables" instance=ExtResource("9_coin")]
-position = Vector2(200, 390)
-
-;; Piso 2: monedas guían hacia la puerta bloqueada
-[node name="Coin4" parent="World/Environment/Interactables" instance=ExtResource("9_coin")]
-position = Vector2(-200, 110)
-
-[node name="Coin5" parent="World/Environment/Interactables" instance=ExtResource("9_coin")]
-position = Vector2(100, 110)
-
-[node name="Coin6" parent="World/Environment/Interactables" instance=ExtResource("9_coin")]
-position = Vector2(400, 110)
-
-;; Piso 3: data cubes como recompensa por llegar arriba
-[node name="DataCube1" parent="World/Environment/Interactables" instance=ExtResource("11_cube")]
-position = Vector2(-300, -260)
-
-[node name="DataCube2" parent="World/Environment/Interactables" instance=ExtResource("11_cube")]
-position = Vector2(-100, -260)
-
-;; ── PAREDES ───────────────────────────────────────────────────────
 
 [node name="Walls_left" type="StaticBody2D" parent="World/Environment" unique_id=197871000]
 
@@ -321,49 +190,32 @@ position = Vector2(753, -162.64368)
 scale = Vector2(1.0000002, 1)
 shape = SubResource("RectangleShape2D_4dr30")
 
-;; ── PERSONAJES ────────────────────────────────────────────────────
-
 [node name="Characters" type="Node2D" parent="." unique_id=675454117]
 
-;; Kai — root space, piso 1 izquierda junto a la puerta de entrada
-;; Misma posición que en level_01 donde funciona correctamente
 [node name="kai" parent="Characters" unique_id=1827044748 instance=ExtResource("8_kai")]
 position = Vector2(-557, 270)
 
-;; ── ENEMIGOS — root space (igual que level_01) ────────────────────
-
 [node name="Enemies" type="Node2D" parent="." unique_id=355323483]
 
-;; Ukibuki 1 — piso 1, patrulla entre la entrada y el switch
-;; root pos (200, 60) en level_01 = piso 2. Aquí usamos piso 1: y≈270
-[node name="Ukibuki_Floor1" parent="Enemies" unique_id=698554851 instance=ExtResource("14_ukibuki")]
-position = Vector2(-200, 270)
+[node name="Ukibuki_Security1" parent="Enemies" unique_id=698554851 instance=ExtResource("14_ukibuki")]
+position = Vector2(100, 50)
 unique_id = "ukibuki_l02_01"
-patrol_distance = 180.0
 
-;; Ukibuki 2 — piso 2, patrulla cerca de la puerta bloqueada
-;; root pos piso 2: y≈60 (igual que Ukibuki1 de level_01)
-[node name="Ukibuki_Floor2" parent="Enemies" unique_id=1893299445 instance=ExtResource("14_ukibuki")]
-position = Vector2(200, 60)
+[node name="Ukibuki_Security2" parent="Enemies" unique_id=1893299445 instance=ExtResource("14_ukibuki")]
+position = Vector2(-100, -220)
 unique_id = "ukibuki_l02_02"
-patrol_distance = 200.0
+patrol_distance = 150.0
 
-;; Ukibuki 3 — piso 3, más agresivo, guarda la keycard
-;; root pos piso 3: y≈-200 (igual que Ukibuki2 de level_01)
-[node name="Ukibuki_Floor3" parent="Enemies" unique_id=1893299446 instance=ExtResource("14_ukibuki")]
-position = Vector2(100, -200)
+[node name="Ukibuki_Security3" parent="Enemies" unique_id=1893299446 instance=ExtResource("14_ukibuki")]
+position = Vector2(300, 50)
 unique_id = "ukibuki_l02_03"
 patrol_distance = 220.0
 detection_range = 360.0
 chase_speed_mult = 1.5
 
-;; ── UI ────────────────────────────────────────────────────────────
-
 [node name="UI" type="CanvasLayer" parent="." unique_id=401408083]
 
 [node name="PlayerHUD" parent="UI" unique_id=454267488 instance=ExtResource("15_hud")]
-
-;; ── SISTEMAS ──────────────────────────────────────────────────────
 
 [node name="SmartCheckpointSystem" type="Node" parent="." unique_id=262369281]
 script = ExtResource("6_checkpoint")
