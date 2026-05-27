@@ -17,7 +17,7 @@
 [ext_resource type="PackedScene" path="res://scenes/enemies/ukibuki.tscn" id="13_ukibuki"]
 [ext_resource type="PackedScene" path="res://scenes/objects/laser_v.tscn" id="15_laser_v"]
 [ext_resource type="Script" uid="uid://0b2orn32hm8c" path="res://scripts/objects/laser_switch.gd" id="17_switch_script"]
-[ext_resource type="PackedScene" path="res://scenes/objects/exit_door.tscn" id="18_exit_door"]
+[ext_resource type="PackedScene" path="res://scenes/objects/level_door.tscn" id="19_level_door"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m802k"]
 size = Vector2(381.5, 44.540253)
@@ -351,11 +351,28 @@ position = Vector2(300, 40)
 position = Vector2(-400, -200)
 
 [node name="Keycard1" parent="World/Environment/Interactables" unique_id=2092422594 instance=ExtResource("7_keycard")]
-position = Vector2(650, 80)
+position = Vector2(604.3164, 81.10661)
 keycard_id = "card_control_room"
 
-[node name="ExitDoor" parent="World/Environment/Interactables" unique_id=854606622 instance=ExtResource("18_exit_door")]
-position = Vector2(680, -200)
+[node name="ExitDoor_ToLevel2" parent="World/Environment/Interactables" unique_id=131519759 instance=ExtResource("19_level_door")]
+position = Vector2(712.2301, 62.428448)
+label_text = "[E] Siguiente nivel"
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" parent="World/Environment/Interactables/ExitDoor_ToLevel2/StaticBody" index="0"]
+position = Vector2(-8.992798, -38.793087)
+scale = Vector2(0.9999995, 1)
+
+[node name="DetectionArea" parent="World/Environment/Interactables/ExitDoor_ToLevel2" index="1"]
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" parent="World/Environment/Interactables/ExitDoor_ToLevel2/DetectionArea" index="0"]
+position = Vector2(-8.3932495, -44.54022)
+scale = Vector2(0.9999993, 1)
+
+[node name="DoorSprite" parent="World/Environment/Interactables/ExitDoor_ToLevel2" index="2"]
+position = Vector2(-3.5971828, -44.563213)
+scale = Vector2(0.39817193, 0.51708823)
 
 [node name="SafeZones" type="Node2D" parent="World/Environment" unique_id=1359102393]
 
@@ -446,7 +463,6 @@ shape = SubResource("RectangleShape2D_safe9")
 position = Vector2(-562, 233)
 
 [node name="Enemies" type="Node2D" parent="." unique_id=897160402]
-visible = false
 
 [node name="Ukibuki1" parent="Enemies" unique_id=2111849881 instance=ExtResource("13_ukibuki")]
 position = Vector2(200, 60)
@@ -471,4 +487,5 @@ script = ExtResource("11_smart_checkpoint")
 
 [editable path="World/Environment/Hazards/Laser_Vertical1"]
 [editable path="World/Environment/Hazards/Laser_Vertical2"]
+[editable path="World/Environment/Interactables/ExitDoor_ToLevel2"]
 [editable path="Characters/kai"]
