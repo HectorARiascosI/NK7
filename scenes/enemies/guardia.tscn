@@ -10,35 +10,35 @@
 
 [sub_resource type="AtlasTexture" id="AT_0"]
 atlas = ExtResource("3_sheet")
-region = Rect2(0, 0, 192, 1024)
+region = Rect2(0, 0, 192, 356)
 
 [sub_resource type="AtlasTexture" id="AT_1"]
 atlas = ExtResource("3_sheet")
-region = Rect2(192, 0, 192, 1024)
+region = Rect2(192, 0, 192, 356)
 
 [sub_resource type="AtlasTexture" id="AT_2"]
 atlas = ExtResource("3_sheet")
-region = Rect2(384, 0, 192, 1024)
+region = Rect2(384, 0, 192, 356)
 
 [sub_resource type="AtlasTexture" id="AT_3"]
 atlas = ExtResource("3_sheet")
-region = Rect2(576, 0, 192, 1024)
+region = Rect2(576, 0, 192, 356)
 
 [sub_resource type="AtlasTexture" id="AT_4"]
 atlas = ExtResource("3_sheet")
-region = Rect2(768, 0, 192, 1024)
+region = Rect2(768, 0, 192, 356)
 
 [sub_resource type="AtlasTexture" id="AT_5"]
 atlas = ExtResource("3_sheet")
-region = Rect2(960, 0, 192, 1024)
+region = Rect2(960, 0, 192, 356)
 
 [sub_resource type="AtlasTexture" id="AT_6"]
 atlas = ExtResource("3_sheet")
-region = Rect2(1152, 0, 192, 1024)
+region = Rect2(1152, 0, 192, 356)
 
 [sub_resource type="AtlasTexture" id="AT_7"]
 atlas = ExtResource("3_sheet")
-region = Rect2(1344, 0, 192, 1024)
+region = Rect2(1344, 0, 192, 356)
 
 [sub_resource type="SpriteFrames" id="SF_guardia"]
 animations = [{
@@ -86,7 +86,7 @@ projectile_speed = 180.0
 projectile_scene = ExtResource("2_proj")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
-scale = Vector2(0.055, 0.055)
+scale = Vector2(0.22, 0.22)
 sprite_frames = SubResource("SF_guardia")
 animation = &"idle"
 autoplay = "idle"
