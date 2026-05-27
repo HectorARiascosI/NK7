@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/objects/door_frames/door_locked.png" id="1_tex"]
+
+;; Sprite visual de puerta bloqueada — sin lógica, solo visual
+;; Úsalo para decorar el nivel y mostrar que hay una puerta bloqueada
+;; Escala sugerida: (0.22, 0.22) para que coincida con las otras puertas
+
+[node name="DoorLockedSprite" type="Sprite2D"]
+scale = Vector2(0.22, 0.22)
+texture = ExtResource("1_tex")

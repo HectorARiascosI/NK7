@@ -101,36 +101,24 @@ func _enter() -> void:
 	_used          = true
 	_label.visible = false
 
-	# Freeze al jugador
-	if _player and _player.has_method("set_physics_process"):
-		_player.set_physics_process(false)
-
-	# Animación de apertura
+	# Animación de apertura (sin congelar a Kai — causa bugs al cambiar escena)
 	if _sprite:
 		var tw := create_tween().set_trans(Tween.TRANS_SINE)
-		tw.tween_property(_sprite, "modulate", Color(1.5, 1.3, 0.8), 0.1)
+		tw.tween_property(_sprite, "modulate", Color(1.5, 1.3, 0.8), 0.15)
 		tw.tween_callback(func(): _sprite.texture = _tex_opening)
-		tw.tween_property(_sprite, "modulate", Color.WHITE, 0.2)
+		tw.tween_property(_sprite, "modulate", Color.WHITE, 0.15)
 		await tw.finished
-
-	await get_tree().create_timer(0.25).timeout
-
-	if _sprite:
-		_sprite.texture = _tex_open
-	if _col:
-		_col.disabled = true
-
-	# Mover jugador hacia la puerta
-	if _player:
-		var tw_walk := create_tween().set_trans(Tween.TRANS_SINE)
-		tw_walk.tween_property(_player, "position:x", global_position.x, 0.3)
-		await tw_walk.finished
 
 	await get_tree().create_timer(0.2).timeout
 
+	if _sprite:
+		_sprite.texture = _tex_open
+
+	await get_tree().create_timer(0.15).timeout
+
 	door_entered.emit()
 
-	# Transición
+	# Transición — GameManager maneja el fade y el cambio de escena
 	if has_node("/root/GameManager"):
 		if spawn_position != Vector2.ZERO:
 			GameManager.set_meta("next_spawn", spawn_position)

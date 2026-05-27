@@ -125,6 +125,9 @@ var _parry_flash_timer   : float = 0.0
 func _ready() -> void:
 	# El jugador es PAUSABLE — se congela con el árbol (tutorial, pausa)
 	process_mode = Node.PROCESS_MODE_PAUSABLE
+	# Siempre reactivar física al entrar a una escena nueva
+	set_physics_process(true)
+	velocity = Vector2.ZERO
 	await get_tree().process_frame
 	_tutorial_system = _search_node(get_tree().root, "TutorialSystem")
 	add_to_group("player")
