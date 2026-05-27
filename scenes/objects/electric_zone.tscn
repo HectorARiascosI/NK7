@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://eleczone_nk7"]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scripts/objects/electric_zone.gd" id="1_ez"]
 [ext_resource type="Texture2D" path="res://assets/objects/electric_zones.png" id="2_tex"]

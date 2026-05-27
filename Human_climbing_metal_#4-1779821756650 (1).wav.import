@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cwt3bin8a5f20"
+path="res://.godot/imported/Human_climbing_metal_#4-1779821756650 (1).wav-2e7343b9606429c7d75be5999af9d180.sample"
+
+[deps]
+
+source_file="res://Human_climbing_metal_#4-1779821756650 (1).wav"
+dest_files=["res://.godot/imported/Human_climbing_metal_#4-1779821756650 (1).wav-2e7343b9606429c7d75be5999af9d180.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

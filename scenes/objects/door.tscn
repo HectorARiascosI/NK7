@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://door_nk7"]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/objects/door.gd" id="1_door"]
 [ext_resource type="Texture2D" path="res://assets/objects/doors.png" id="2_tex"]

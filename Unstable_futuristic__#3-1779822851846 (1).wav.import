@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://b12p3r356n3hl"
+path="res://.godot/imported/Unstable_futuristic__#3-1779822851846 (1).wav-e7c2b18c05f7bebcde43cde9964753a0.sample"
+
+[deps]
+
+source_file="res://Unstable_futuristic__#3-1779822851846 (1).wav"
+dest_files=["res://.godot/imported/Unstable_futuristic__#3-1779822851846 (1).wav-e7c2b18c05f7bebcde43cde9964753a0.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

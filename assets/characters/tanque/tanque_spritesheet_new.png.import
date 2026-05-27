@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bb8j2227drdjl"
-path="res://.godot/imported/tanque_spritesheet.png-b6d4a70cf74f245f4c8f92df33f05c42.ctex"
+uid="uid://b2ttxht8roscc"
+path="res://.godot/imported/tanque_spritesheet_new.png-db03a68e1918c4f522b89ead72e224a0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/characters/tanque/tanque_spritesheet.png"
-dest_files=["res://.godot/imported/tanque_spritesheet.png-b6d4a70cf74f245f4c8f92df33f05c42.ctex"]
+source_file="res://assets/characters/tanque/tanque_spritesheet_new.png"
+dest_files=["res://.godot/imported/tanque_spritesheet_new.png-db03a68e1918c4f522b89ead72e224a0.ctex"]
 
 [params]
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://electric_door_nk7"]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource type="Script" path="res://scripts/objects/electric_door.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://di6iucnxr6o6l" path="res://assets/objects/doors.png" id="2"]
