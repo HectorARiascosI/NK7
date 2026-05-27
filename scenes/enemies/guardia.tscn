@@ -86,7 +86,7 @@ projectile_speed = 180.0
 projectile_scene = ExtResource("2_proj")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
-scale = Vector2(0.22, 0.22)
+scale = Vector2(0.23, 0.23)
 sprite_frames = SubResource("SF_guardia")
 animation = &"idle"
 autoplay = "idle"
