@@ -187,7 +187,7 @@ func _do_chase(delta: float) -> void:
 	else:
 		_lost_sight += delta
 		if _lost_sight >= LOST_TIMEOUT: _set_state(State.PATROL); return
-	var dir := sign(_last_known_pos.x - global_position.x)
+	var dir : float = sign(_last_known_pos.x - global_position.x)
 	velocity.x = move_toward(velocity.x, dir * speed * chase_speed_mult, speed * 3.0 * delta)
 	if sprite: sprite.flip_h = dir < 0
 	if _can_atk(): _set_state(State.ATTACK)
@@ -206,7 +206,7 @@ func _do_attack(delta: float) -> void:
 
 func _face_player() -> void:
 	if not player_reference: return
-	var dir := sign(player_reference.global_position.x - global_position.x)
+	var dir : float = sign(player_reference.global_position.x - global_position.x)
 	if sprite and dir != 0: sprite.flip_h = dir < 0
 
 # ── Cambio de estado ──────────────────────────────────────────────
