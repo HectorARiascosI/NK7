@@ -104,6 +104,9 @@ func _apply_state() -> void:
 	_set_beam_visible(on)
 	if beam_area:
 		beam_area.monitoring = on
+		# Deshabilitar la colisión física también, no solo el monitoring
+		if beam_shape:
+			beam_shape.set_deferred("disabled", not on)
 
 func _set_beam_visible(on: bool) -> void:
 	if sprite:
@@ -114,6 +117,7 @@ func _set_beam_visible(on: bool) -> void:
 # ── Colisión ──────────────────────────────────────────────────────
 func _on_body_entered(body: Node2D) -> void:
 	if not is_active or not _beam_on: return
+	if beam_shape and beam_shape.disabled: return
 	if body.is_in_group("player") or body.name == "kai":
 		player_hit.emit()
 		if kill_on_touch and body.has_method("take_damage"):
@@ -131,7 +135,6 @@ func deactivate() -> void:
 	_beam_on  = false
 	_apply_state()
 	deactivated.emit()
-
 func toggle() -> void:
 	if is_active: deactivate()
 	else: activate()

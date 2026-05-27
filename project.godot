@@ -23,6 +23,7 @@ GameState="*res://scripts/autoload/game_state.gd"
 LevelStateManager="*res://scripts/autoload/level_state_manager.gd"
 AudioManager="*res://scripts/autoload/audio_manager.gd"
 AchievementManager="*res://scripts/autoload/achievement_manager.gd"
+CombatManager="*res://scripts/autoload/combat_manager.gd"
 
 [display]
 

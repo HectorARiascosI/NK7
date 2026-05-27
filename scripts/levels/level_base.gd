@@ -15,9 +15,26 @@ var _achievement_toast : CanvasLayer = null
 # ══════════════════════════════════════════════════════════════════
 
 func _ready() -> void:
+	_sync_current_level()
 	_setup_pause_menu()
 	_setup_achievement_toast()
 	_on_level_ready()   # hook para subclases
+
+
+func _sync_current_level() -> void:
+	## Detectar el número de nivel desde el nombre del archivo de escena
+	## y sincronizarlo con GameManager. Esto garantiza que current_level
+	## sea correcto aunque el nivel se cargue directamente desde el editor.
+	var scene_path : String = get_tree().current_scene.scene_file_path
+	# Buscar patrón "level_XX" en la ruta
+	var regex := RegEx.new()
+	regex.compile("level_(\\d+)")
+	var result := regex.search(scene_path)
+	if result:
+		var level_num : int = int(result.get_string(1))
+		if level_num > 0:
+			GameManager.current_level = level_num
+			GameManager.is_playing    = true
 
 
 ## Sobrescribir en subclases para inicialización específica del nivel

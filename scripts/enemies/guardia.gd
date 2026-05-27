@@ -4,13 +4,6 @@ class_name Guardia
 ## ════════════════════════════════════════════════════════════════
 ## GUARDIA DE SEGURIDAD — Enemigo terrestre NK-7
 ## ════════════════════════════════════════════════════════════════
-## Diferencias vs Ukibuki (robot flotante):
-##   - Camina por el suelo (tiene gravedad)
-##   - Más lento pero más resistente
-##   - Dispara en ráfaga corta (2 disparos seguidos)
-##   - No flota — animación de caminar normal
-##   - Rango de detección menor (visión más limitada)
-## ════════════════════════════════════════════════════════════════
 
 signal player_detected
 signal player_lost
@@ -18,20 +11,19 @@ signal attacked
 signal damaged(amount: int)
 signal destroyed
 
-# ── Configuración ─────────────────────────────────────────────────
 @export_group("Estadísticas")
-@export var max_health      : int   = 80     ## Más resistente que Ukibuki (60)
+@export var max_health      : int   = 80
 @export var damage          : int   = 18
-@export var speed           : float = 65.0   ## Más lento — es terrestre
+@export var speed           : float = 65.0
 
 @export_group("Identificación")
 @export var unique_id       : String = ""
 
 @export_group("Comportamiento")
 @export var patrol_distance : float = 180.0
-@export var detection_range : float = 260.0  ## Menor que Ukibuki — visión más corta
+@export var detection_range : float = 260.0
 @export var attack_range    : float = 220.0
-@export var attack_cooldown : float = 2.8    ## Más lento para disparar
+@export var attack_cooldown : float = 2.8
 @export var chase_speed_mult: float = 1.3
 
 @export_group("Proyectil")
@@ -39,16 +31,16 @@ signal destroyed
 @export var projectile_scene : PackedScene
 
 # ── Física ────────────────────────────────────────────────────────
-const GRAVITY       : float = 980.0
-const FALL_MULT     : float = 1.2
-const LOS_MASK      : int   = 1
+const GRAVITY    : float = 980.0
+const FALL_MULT  : float = 1.2
+const LOS_MASK   : int   = 1
 
 # ── Nodos ─────────────────────────────────────────────────────────
-@onready var sprite         : AnimatedSprite2D    = $Sprite
-@onready var collision      : CollisionShape2D    = $Collision
-@onready var detection_area : Area2D              = $DetectionArea
-@onready var attack_timer   : Timer               = $AttackTimer
-@onready var light          : PointLight2D        = $Light
+@onready var sprite         : AnimatedSprite2D = $Sprite
+@onready var collision      : CollisionShape2D = $Collision
+@onready var detection_area : Area2D           = $DetectionArea
+@onready var attack_timer   : Timer            = $AttackTimer
+@onready var light          : PointLight2D     = $Light
 
 # ── Estado ────────────────────────────────────────────────────────
 enum State { IDLE, PATROL, ALERT, CHASE, ATTACK, DAMAGED, DESTROYED }
@@ -60,11 +52,11 @@ var patrol_origin    : Vector2
 var patrol_direction : int   = 1
 var can_attack       : bool  = true
 
-var _patrol_pause    : float = 0.0
-const PATROL_PAUSE   : float = 0.4
-var _lost_sight      : float = 0.0
-const LOST_TIMEOUT   : float = 2.0
-var _last_known_pos  : Vector2 = Vector2.ZERO
+var _patrol_pause : float = 0.0
+const PATROL_PAUSE: float = 0.4
+var _lost_sight   : float = 0.0
+const LOST_TIMEOUT: float = 2.0
+var _last_known_pos : Vector2 = Vector2.ZERO
 
 # ══════════════════════════════════════════════════════════════════
 
@@ -93,16 +85,20 @@ func _ready() -> void:
 		attack_timer.start()
 
 	if light:
-		light.color  = Color(1.0, 0.4, 0.1)  # Naranja — guardia terrestre
+		light.color  = Color(1.0, 0.4, 0.1)
 		light.energy = 0.9
+
+# ══════════════════════════════════════════════════════════════════
+# PROCESO PRINCIPAL
+# ══════════════════════════════════════════════════════════════════
 
 func _physics_process(delta: float) -> void:
 	if current_state == State.DESTROYED:
 		return
 
-	# Gravedad — el guardia camina por el suelo
+	# Gravedad
 	if not is_on_floor():
-		var grav := GRAVITY * (FALL_MULT if velocity.y > 0 else 1.0)
+		var grav : float = GRAVITY * (FALL_MULT if velocity.y > 0 else 1.0)
 		velocity.y += grav * delta
 	else:
 		velocity.y = 0.0
@@ -128,8 +124,7 @@ func _physics_process(delta: float) -> void:
 # ── LOS ───────────────────────────────────────────────────────────
 
 func _has_los() -> bool:
-	if not player_reference or not is_instance_valid(player_reference):
-		return false
+	if not player_reference or not is_instance_valid(player_reference): return false
 	var space  := get_world_2d().direct_space_state
 	var query  := PhysicsRayQueryParameters2D.create(
 		global_position, player_reference.global_position, LOS_MASK)
@@ -143,10 +138,12 @@ func _in_range(r: float) -> bool:
 	if not player_reference or not is_instance_valid(player_reference): return false
 	return global_position.distance_to(player_reference.global_position) <= r
 
-func _can_see() -> bool:  return _in_range(detection_range) and _has_los()
-func _can_atk() -> bool:  return _in_range(attack_range)    and _has_los()
+func _can_see() -> bool: return _in_range(detection_range) and _has_los()
+func _can_atk() -> bool: return _in_range(attack_range)    and _has_los()
 
-# ── Estados ───────────────────────────────────────────────────────
+# ══════════════════════════════════════════════════════════════════
+# ESTADOS
+# ══════════════════════════════════════════════════════════════════
 
 func _do_idle(_d: float) -> void:
 	velocity.x = move_toward(velocity.x, 0.0, speed * 2.0)
@@ -154,7 +151,7 @@ func _do_idle(_d: float) -> void:
 
 func _do_patrol(delta: float) -> void:
 	velocity.x = move_toward(velocity.x, patrol_direction * speed, speed * 3.0 * delta)
-	var dist := global_position.x - patrol_origin.x
+	var dist : float = global_position.x - patrol_origin.x
 	if patrol_direction > 0 and dist >= patrol_distance:   _flip()
 	elif patrol_direction < 0 and dist <= -patrol_distance: _flip()
 	if _can_see(): _set_state(State.ALERT)
@@ -209,16 +206,20 @@ func _face_player() -> void:
 	var dir : float = sign(player_reference.global_position.x - global_position.x)
 	if sprite and dir != 0: sprite.flip_h = dir < 0
 
-# ── Cambio de estado ──────────────────────────────────────────────
+# ══════════════════════════════════════════════════════════════════
+# CAMBIO DE ESTADO
+# ══════════════════════════════════════════════════════════════════
 
 func _set_state(s: State) -> void:
-	var old := current_state
+	var old : State = current_state
 	current_state = s
 	_lost_sight   = 0.0
 	match s:
 		State.ALERT:
 			if old not in [State.ATTACK, State.CHASE, State.ALERT]:
 				player_detected.emit()
+				if has_node("/root/AudioManager"):
+					AudioManager.play_sfx_at("ukibuki_alert", global_position)
 			if light: light.color = Color(1.0, 0.6, 0.0)
 		State.CHASE:
 			if light: light.color = Color(1.0, 0.7, 0.0)
@@ -229,7 +230,9 @@ func _set_state(s: State) -> void:
 			if old in [State.ALERT, State.ATTACK, State.CHASE]: player_lost.emit()
 			if light: light.color = Color(1.0, 0.4, 0.1)
 
-# ── Combate ───────────────────────────────────────────────────────
+# ══════════════════════════════════════════════════════════════════
+# COMBATE
+# ══════════════════════════════════════════════════════════════════
 
 func _shoot() -> void:
 	if not player_reference: return
@@ -239,11 +242,13 @@ func _shoot() -> void:
 		get_parent().add_child(p)
 		p.global_position = global_position
 		if p.has_method("set_owner_node"): p.set_owner_node(self)
-		var dir := (player_reference.global_position - global_position).normalized()
+		var dir : Vector2 = (player_reference.global_position - global_position).normalized()
 		if p.has_method("set_direction"): p.set_direction(dir, projectile_speed)
 	else:
 		if player_reference.has_method("take_damage"):
 			player_reference.take_damage(damage)
+	if has_node("/root/AudioManager"):
+		AudioManager.play_sfx_at("ukibuki_shoot", global_position, randf_range(-0.1, 0.1))
 
 func take_damage(amount: int) -> void:
 	if current_state == State.DESTROYED: return
@@ -252,7 +257,8 @@ func take_damage(amount: int) -> void:
 	if sprite:
 		sprite.modulate = Color(1.6, 0.4, 0.4)
 		create_tween().tween_property(sprite, "modulate", Color.WHITE, 0.25)
-	if current_health <= 0: _destroy()
+	if current_health <= 0:
+		_destroy()
 	else:
 		current_state = State.DAMAGED
 		get_tree().create_timer(0.4).timeout.connect(func():
@@ -269,7 +275,7 @@ func _destroy() -> void:
 	velocity = Vector2.ZERO
 	if sprite:
 		var tw := create_tween().set_parallel(true)
-		tw.tween_property(sprite, "scale", Vector2(2.0, 2.0), 0.3)
+		tw.tween_property(sprite, "scale",    Vector2(2.0, 2.0),         0.3)
 		tw.tween_property(sprite, "modulate", Color(2.0, 0.8, 0.0, 0.0), 0.4)
 	if light:
 		var tw2 := create_tween()
@@ -278,6 +284,8 @@ func _destroy() -> void:
 	if has_node("/root/GameManager"):
 		GameManager.add_score(400)
 		GameManager.shake_camera(6.0, 0.25)
+	if has_node("/root/AudioManager"):
+		AudioManager.play_sfx_at("ukibuki_destroy", global_position)
 	await get_tree().create_timer(1.0).timeout
 	queue_free()
 

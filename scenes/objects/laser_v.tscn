@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://laser_v_nk7"]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script"    path="res://scripts/objects/laser.gd"          id="1_script"]
 [ext_resource type="Texture2D" path="res://assets/objects/laser_v_frame0.png" id="2_off"]

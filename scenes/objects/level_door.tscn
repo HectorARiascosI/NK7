@@ -11,8 +11,11 @@ script = ExtResource("1_script")
 next_level = 2
 
 [node name="StaticBody" type="StaticBody2D" parent="."]
+collision_layer = 0
+collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody"]
+disabled = true
 shape = SubResource("Shape_body")
 
 [node name="DoorSprite" type="Sprite2D" parent="."]

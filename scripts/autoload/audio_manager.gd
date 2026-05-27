@@ -60,6 +60,18 @@ const SFX_CATALOG := {
 	"ukibuki_destroy": { "type": "noise", "freq": 120.0, "dur": 0.55,   "vol": 0.80, "env": "exp" },
 	# ── Proyectil ────────────────────────────────────────────────
 	"projectile_hit":  { "type": "noise", "freq": 200.0, "dur": 0.08, "vol": 0.50, "env": "exp" },
+	# ── Dash / Dodge ─────────────────────────────────────────────
+	"dash":            { "type": "tone",  "freq": 600.0, "freq2": 900.0, "dur": 0.10, "vol": 0.50, "env": "exp" },
+	"dodge":           { "type": "noise", "freq": 150.0, "dur": 0.08,   "vol": 0.35, "env": "exp" },
+	# ── Combo ────────────────────────────────────────────────────
+	"combo_hit_1":     { "type": "noise", "freq": 280.0, "dur": 0.08, "vol": 0.50, "env": "exp" },
+	"combo_hit_2":     { "type": "noise", "freq": 320.0, "dur": 0.09, "vol": 0.55, "env": "exp" },
+	"combo_finisher":  { "type": "tone",  "freq": 200.0, "freq2": 80.0, "dur": 0.20, "vol": 0.75, "env": "exp" },
+	"combo_break":     { "type": "tone",  "freq": 300.0, "freq2": 150.0, "dur": 0.15, "vol": 0.40, "env": "exp" },
+	# ── Guardia ──────────────────────────────────────────────────
+	"guardia_shield":  { "type": "beep",  "freq": 500.0, "freq2": 800.0, "dur": 0.20, "vol": 0.60, "env": "lin" },
+	"guardia_rush":    { "type": "noise", "freq": 200.0, "dur": 0.12,   "vol": 0.55, "env": "exp" },
+	"berserk":         { "type": "tone",  "freq": 180.0, "freq2": 90.0,  "dur": 0.40, "vol": 0.80, "env": "exp" },
 	# ── UI ───────────────────────────────────────────────────────
 	"ui_confirm":  { "type": "beep",  "freq": 880.0,  "freq2": 1320.0, "dur": 0.12, "vol": 0.45, "env": "lin" },
 	"ui_cancel":   { "type": "tone",  "freq": 330.0,  "freq2": 220.0,  "dur": 0.12, "vol": 0.40, "env": "exp" },

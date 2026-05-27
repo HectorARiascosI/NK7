@@ -17,16 +17,17 @@
 [ext_resource type="PackedScene" uid="uid://cuvnfx6am47jn" path="res://scenes/objects/coin.tscn" id="20_coin"]
 [ext_resource type="PackedScene" path="res://scenes/objects/energy_tube.tscn" id="21_energy"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/guardia.tscn" id="22_guardia"]
-[ext_resource type="Script" path="res://scripts/levels/floor_clear_trigger.gd" id="23_trigger"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor_l3"]
-size = Vector2(1482.0142, 40)
+[ext_resource type="Script" uid="uid://17sxut0wuf7k" path="res://scripts/levels/floor_clear_trigger.gd" id="23_trigger"]
+[ext_resource type="Script" uid="uid://cnh33vcv5nmbf" path="res://scripts/objects/warp_door.gd" id="24_warp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor_l1"]
 size = Vector2(1529.2563, 43.5632)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor_l2"]
 size = Vector2(1531.1748, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor_l3"]
+size = Vector2(1455.6353, 40)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ladder1"]
 size = Vector2(40, 633.6207)
@@ -78,11 +79,6 @@ position = Vector2(4.7961807, 21.582712)
 scale = Vector2(0.92079437, 0.9174381)
 texture = ExtResource("1_bg")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Background/Sprite2D" unique_id=601565741]
-position = Vector2(-4.796163, -188.50575)
-scale = Vector2(1.0000002, 1)
-shape = SubResource("RectangleShape2D_floor_l3")
-
 [node name="Environment" type="Node2D" parent="World" unique_id=429569073]
 position = Vector2(0, 22)
 scale = Vector2(1.39, 1.16)
@@ -106,7 +102,7 @@ shape = SubResource("RectangleShape2D_floor_l2")
 [node name="Floor_L3" type="StaticBody2D" parent="World/Environment/Floors" unique_id=1384417718]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Floors/Floor_L3" unique_id=1563357654]
-position = Vector2(20.383686, -478.73566)
+position = Vector2(51.55875, -185.63219)
 scale = Vector2(1.0000002, 1)
 shape = SubResource("RectangleShape2D_floor_l3")
 
@@ -136,8 +132,8 @@ script = ExtResource("3_death")
 [node name="LaserV_P1" parent="World/Environment/Hazards" unique_id=2138817000 instance=ExtResource("17_laser_v")]
 position = Vector2(-79.13668, -108.045975)
 scale = Vector2(0.6, 0.76)
-blink_on_time = 2.0
-blink_off_time = 1.0
+blink_on_time = 2.5
+blink_off_time = 2.0
 
 [node name="Sprite" parent="World/Environment/Hazards/LaserV_P1" index="0"]
 position = Vector2(0, 125.71839)
@@ -146,7 +142,8 @@ scale = Vector2(1, 1.4339522)
 [node name="LaserV_P2" parent="World/Environment/Hazards" unique_id=1913447743 instance=ExtResource("17_laser_v")]
 position = Vector2(333.3333, 196.55173)
 scale = Vector2(0.6, 0.76)
-blink_off_time = 0.8
+blink_on_time = 2.5
+blink_off_time = 2.0
 
 [node name="Sprite" parent="World/Environment/Hazards/LaserV_P2" index="0"]
 position = Vector2(0, 172.0357)
@@ -155,7 +152,8 @@ scale = Vector2(1, 1.170311)
 [node name="LaserV_P3" parent="World/Environment/Hazards" unique_id=1926359454 instance=ExtResource("17_laser_v")]
 position = Vector2(106.71463, -442.81604)
 scale = Vector2(0.6, 0.76)
-mode = 0
+blink_on_time = 2.5
+blink_off_time = 2.0
 
 [node name="Sprite" parent="World/Environment/Hazards/LaserV_P3" index="0"]
 position = Vector2(0, 128.55405)
@@ -208,7 +206,7 @@ position = Vector2(-660.67145, 333.046)
 next_level = 1
 label_text = "[E] Volver al Sector B"
 
-[node name="DoorSprite" parent="World/Environment/Interactables/EntryDoor_FromLevel1" index="2" unique_id=143866173]
+[node name="DoorSprite" parent="World/Environment/Interactables/EntryDoor_FromLevel1" index="1"]
 position = Vector2(8.992841, -7.1839237)
 scale = Vector2(0.5474864, 0.60344833)
 
@@ -216,6 +214,26 @@ scale = Vector2(0.5474864, 0.60344833)
 position = Vector2(344.1246, -291.86423)
 scale = Vector2(0.5520111, 0.53771555)
 texture = ExtResource("8_4hx2o")
+
+[node name="WarpDoor_P1toP2" type="Node2D" parent="World/Environment/Interactables" unique_id=1893400001]
+position = Vector2(660, 333)
+script = ExtResource("24_warp")
+warp_marker = NodePath("../WarpTarget_P2")
+label_text = "[E] Subir al Piso 2"
+interact_radius = 90.0
+
+[node name="WarpTarget_P2" type="Marker2D" parent="World/Environment/Interactables" unique_id=1893400003]
+position = Vector2(-443.64514, 29.885057)
+
+[node name="ExitDoor_ToLevel3" parent="World/Environment/Interactables" unique_id=1893400002 instance=ExtResource("16_level_door")]
+position = Vector2(408.8728, -293.3908)
+next_level = 3
+label_text = "[E] Ir al Sector E7"
+metadata/_edit_group_ = true
+
+[node name="DoorSprite" parent="World/Environment/Interactables/ExitDoor_ToLevel3" index="1"]
+position = Vector2(14.988112, -10.057478)
+scale = Vector2(0.683227, 0.63218385)
 
 [node name="Keycard_Exit" parent="World/Environment/Interactables" unique_id=1334970590 instance=ExtResource("19_keycard")]
 position = Vector2(450, -260)
@@ -279,27 +297,20 @@ shape = SubResource("RectangleShape2D_4dr30")
 [node name="Characters" type="Node2D" parent="." unique_id=675454117]
 
 [node name="kai" parent="Characters" unique_id=1827044748 instance=ExtResource("8_kai")]
-position = Vector2(-472, 265)
+position = Vector2(-534, 263)
 
 [node name="Enemies" type="Node2D" parent="." unique_id=355323483]
 
-;; ── PISO 1 — Ukibuki + Guardia ───────────────────────────────────
-;; Al morir ambos → LaserV_P1 se desactiva (FloorClearTrigger_P1)
-;; Posiciones root space: piso 1 ≈ y=270
-
 [node name="Ukibuki_P1" parent="Enemies" unique_id=698554851 instance=ExtResource("14_ukibuki")]
-position = Vector2(-300, 270)
+position = Vector2(-104, 265)
 unique_id = "ukibuki_l02_p1"
 patrol_distance = 150.0
+metadata/_edit_group_ = true
 
 [node name="Guardia_P1" parent="Enemies" unique_id=1893299440 instance=ExtResource("22_guardia")]
 position = Vector2(200, 270)
 unique_id = "guardia_l02_p1"
 patrol_distance = 160.0
-
-;; ── PISO 2 — Ukibuki + Guardia ───────────────────────────────────
-;; Al morir ambos → LaserV_P2 se desactiva (FloorClearTrigger_P2)
-;; Posiciones root space: piso 2 ≈ y=60
 
 [node name="Ukibuki_P2" parent="Enemies" unique_id=1893299445 instance=ExtResource("14_ukibuki")]
 position = Vector2(-200, 60)
@@ -309,11 +320,6 @@ patrol_distance = 150.0
 [node name="Guardia_P2" parent="Enemies" unique_id=1893299441 instance=ExtResource("22_guardia")]
 position = Vector2(300, 60)
 unique_id = "guardia_l02_p2"
-patrol_distance = 180.0
-
-;; ── PISO 3 — Solo Ukibuki agresivo ───────────────────────────────
-;; LaserV_P3 es always_on — se desactiva con el switch del nivel
-;; Posiciones root space: piso 3 ≈ y=-200
 
 [node name="Ukibuki_P3" parent="Enemies" unique_id=1893299446 instance=ExtResource("14_ukibuki")]
 position = Vector2(100, -200)
@@ -329,19 +335,15 @@ chase_speed_mult = 1.5
 [node name="SmartCheckpointSystem" type="Node" parent="." unique_id=262369281]
 script = ExtResource("6_checkpoint")
 
-;; ── FLOOR CLEAR TRIGGERS ─────────────────────────────────────────
-;; Escuchan la señal destroyed de los enemigos de cada piso
-;; y desactivan el láser correspondiente cuando todos mueren
-
-[node name="FloorClearTrigger_P1" type="Node" parent="."]
+[node name="FloorClearTrigger_P1" type="Node" parent="." unique_id=1712052103]
 script = ExtResource("23_trigger")
-enemy_ids = ["ukibuki_l02_p1", "guardia_l02_p1"]
+enemy_ids = Array[String](["ukibuki_l02_p1", "guardia_l02_p1"])
 laser_path = NodePath("World/Environment/Hazards/LaserV_P1")
 clear_message = "Piso 1 despejado"
 
-[node name="FloorClearTrigger_P2" type="Node" parent="."]
+[node name="FloorClearTrigger_P2" type="Node" parent="." unique_id=2135648484]
 script = ExtResource("23_trigger")
-enemy_ids = ["ukibuki_l02_p2", "guardia_l02_p2"]
+enemy_ids = Array[String](["ukibuki_l02_p2", "guardia_l02_p2"])
 laser_path = NodePath("World/Environment/Hazards/LaserV_P2")
 clear_message = "Piso 2 despejado"
 
@@ -349,4 +351,6 @@ clear_message = "Piso 2 despejado"
 [editable path="World/Environment/Hazards/LaserV_P2"]
 [editable path="World/Environment/Hazards/LaserV_P3"]
 [editable path="World/Environment/Interactables/EntryDoor_FromLevel1"]
+[editable path="World/Environment/Interactables/ExitDoor_ToLevel3"]
 [editable path="Characters/kai"]
+[editable path="Enemies/Ukibuki_P1"]

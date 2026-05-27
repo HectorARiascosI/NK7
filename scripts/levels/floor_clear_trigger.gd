@@ -56,19 +56,12 @@ func _on_enemy_destroyed() -> void:
 func _clear_floor() -> void:
 	_triggered = true
 	if not _laser or not is_instance_valid(_laser): return
-
-	# Efecto visual antes de apagar: parpadeo rápido 3 veces
-	var tw := create_tween()
-	for i in range(3):
-		tw.tween_callback(func(): if _laser.has_method("deactivate"): pass)
-		tw.tween_property(_laser, "modulate", Color(2.0, 0.5, 0.5), 0.1)
-		tw.tween_property(_laser, "modulate", Color.WHITE, 0.1)
-	tw.tween_callback(_deactivate_laser)
+	# Desactivar directamente — el láser maneja su propio estado visual
+	_deactivate_laser()
 
 func _deactivate_laser() -> void:
 	if _laser and is_instance_valid(_laser) and _laser.has_method("deactivate"):
 		_laser.deactivate()
-	# Mostrar mensaje de zona despejada
 	if clear_message != "":
 		_show_clear_message()
 
