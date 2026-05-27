@@ -3,28 +3,42 @@ extends Node
 ## ════════════════════════════════════════════════════════════════
 ## AUDIO MANAGER — NK-7
 ## ════════════════════════════════════════════════════════════════
-## Genera sonidos procedurales con AudioStreamGenerator.
-## No requiere archivos .ogg/.wav externos.
-## Todos los sonidos se sintetizan en tiempo real.
-##
-## USO:
-##   AudioManager.play_sfx("jump")
-##   AudioManager.play_sfx("coin")
-##   AudioManager.play_music("level_01")
+## Híbrido: usa archivos WAV reales cuando existen,
+## síntesis procedural como fallback.
 ## ════════════════════════════════════════════════════════════════
 
-# ── Buses ─────────────────────────────────────────────────────────
 const BUS_MUSIC := "Music"
 const BUS_SFX   := "SFX"
 
-# ── Pool de reproductores SFX ─────────────────────────────────────
 const SFX_POOL_SIZE := 8
 var _sfx_pool : Array[AudioStreamPlayer] = []
 var _sfx_pool_idx : int = 0
 
-# ── Reproductor de música ─────────────────────────────────────────
 var _music_player : AudioStreamPlayer = null
 var _current_track : String = ""
+
+## Mapeo de nombre de SFX → archivo WAV real
+## Si el archivo existe, se usa en vez de la síntesis
+const WAV_SFX := {
+	"jump":            "res://assets/audio/sfx/player_jump.wav",
+	"land":            "res://assets/audio/sfx/player_land.wav",
+	"run_step":        "res://assets/audio/sfx/player_run.wav",
+	"walk_step":       "res://assets/audio/sfx/player_walk.wav",
+	"die":             "res://assets/audio/sfx/player_death.wav",
+	"climb":           "res://assets/audio/sfx/player_climb.wav",
+	"ukibuki_shoot":   "res://assets/audio/sfx/enemy_shoot.wav",
+}
+
+## Mapeo de pista de música → archivo WAV real
+const WAV_MUSIC := {
+	"level_02":  "res://assets/audio/music/music_level_02_03.wav",
+	"level_03":  "res://assets/audio/music/music_level_02_03.wav",
+	"level_04":  "res://assets/audio/music/music_level_04.wav",
+	"level_05":  "res://assets/audio/music/music_level_05_a.wav",
+}
+
+## Cache de streams cargados
+var _wav_cache : Dictionary = {}
 
 # ── Catálogo de sonidos (parámetros de síntesis) ──────────────────
 # Cada entrada: { "type": "...", ...parámetros }
@@ -121,20 +135,40 @@ func _build_music_player() -> void:
 # ══════════════════════════════════════════════════════════════════
 
 func play_sfx(sfx_name: String, pitch_variation: float = 0.0) -> void:
-	"""Reproducir efecto de sonido por nombre"""
+	"""Reproducir efecto de sonido — WAV real si existe, síntesis si no"""
+	# Intentar WAV real primero
+	if WAV_SFX.has(sfx_name):
+		var stream := _load_wav(WAV_SFX[sfx_name])
+		if stream:
+			var player := _get_sfx_player()
+			player.stream = stream
+			player.pitch_scale = 1.0 + pitch_variation
+			player.play()
+			return
+
+	# Fallback: síntesis procedural
 	if not SFX_CATALOG.has(sfx_name):
 		push_warning("[AudioManager] SFX desconocido: %s" % sfx_name)
 		return
-	
 	var params : Dictionary = SFX_CATALOG[sfx_name]
 	var stream := _synthesize(params)
 	if not stream:
 		return
-	
 	var player := _get_sfx_player()
 	player.stream = stream
 	player.pitch_scale = 1.0 + pitch_variation
 	player.play()
+
+func _load_wav(path: String) -> AudioStream:
+	"""Cargar WAV con cache"""
+	if _wav_cache.has(path):
+		return _wav_cache[path]
+	if ResourceLoader.exists(path):
+		var s := load(path) as AudioStream
+		if s:
+			_wav_cache[path] = s
+			return s
+	return null
 
 func play_sfx_at(sfx_name: String, position: Vector2, pitch_variation: float = 0.0) -> void:
 	"""Reproducir SFX posicional (usa AudioStreamPlayer2D temporal)"""
@@ -161,14 +195,32 @@ func play_sfx_at(sfx_name: String, position: Vector2, pitch_variation: float = 0
 # ══════════════════════════════════════════════════════════════════
 
 func play_music(track_name: String, fade_in: float = 1.5) -> void:
-	"""Reproducir pista de música con fade in"""
+	"""Reproducir música — WAV real si existe, síntesis si no"""
 	if _current_track == track_name:
 		return
-	
+
 	if _music_player.playing:
-		_fade_out_music(func(): _start_music(track_name, fade_in))
+		_fade_out_music(func(): _start_music_real(track_name, fade_in))
 	else:
-		_start_music(track_name, fade_in)
+		_start_music_real(track_name, fade_in)
+
+func _start_music_real(track_name: String, fade_in: float) -> void:
+	_current_track = track_name
+
+	# Intentar WAV real
+	if WAV_MUSIC.has(track_name):
+		var stream := _load_wav(WAV_MUSIC[track_name])
+		if stream:
+			_music_player.stream = stream
+			_music_player.volume_db = -80.0
+			_music_player.play()
+			if _music_tween: _music_tween.kill()
+			_music_tween = create_tween()
+			_music_tween.tween_property(_music_player, "volume_db", -6.0, fade_in)
+			return
+
+	# Fallback: síntesis
+	_start_music(track_name, fade_in)
 
 func stop_music(_fade_out: float = 1.0) -> void:
 	"""Detener música con fade out"""

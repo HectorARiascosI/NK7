@@ -1,28 +1,25 @@
 [gd_scene format=3 uid="uid://level_05_nk7"]
 
 [ext_resource type="Texture2D" path="res://assets/backgrounds/level_05_background_reactor_core.png" id="1_bg"]
-[ext_resource type="Script" path="res://scripts/levels/level_base.gd" id="2_base"]
-[ext_resource type="Script" path="res://scripts/levels/death_zone.gd" id="3_death"]
-[ext_resource type="Script" path="res://scripts/levels/ladder.gd" id="4_ladder"]
-[ext_resource type="Script" path="res://scripts/levels/safe_zone.gd" id="5_safe"]
-[ext_resource type="Script" path="res://scripts/levels/smart_checkpoint_system.gd" id="6_checkpoint"]
-[ext_resource type="Script" path="res://scripts/levels/level_05_setup.gd" id="7_setup"]
-[ext_resource type="PackedScene" path="res://scenes/characters/kai.tscn" id="8_kai"]
-[ext_resource type="PackedScene" path="res://scenes/objects/coin.tscn" id="9_coin"]
+[ext_resource type="Script" uid="uid://bukfxbx5rxa2i" path="res://scripts/levels/level_base.gd" id="2_base"]
+[ext_resource type="Script" uid="uid://44au5iw2tkex" path="res://scripts/levels/death_zone.gd" id="3_death"]
+[ext_resource type="Script" uid="uid://b8te30shvveuk" path="res://scripts/levels/ladder.gd" id="4_ladder"]
+[ext_resource type="Script" uid="uid://douo1mundbl1d" path="res://scripts/levels/safe_zone.gd" id="5_safe"]
+[ext_resource type="Script" uid="uid://de4o5h2ojrruv" path="res://scripts/levels/smart_checkpoint_system.gd" id="6_checkpoint"]
+[ext_resource type="Script" uid="uid://c5qt5m22e4wxe" path="res://scripts/levels/level_05_setup.gd" id="7_setup"]
+[ext_resource type="PackedScene" uid="uid://cnc1ao3mcg26o" path="res://scenes/characters/kai.tscn" id="8_kai"]
+[ext_resource type="PackedScene" uid="uid://cuvnfx6am47jn" path="res://scenes/objects/coin.tscn" id="9_coin"]
 [ext_resource type="PackedScene" path="res://scenes/objects/energy_tube.tscn" id="10_energy"]
 [ext_resource type="PackedScene" path="res://scenes/objects/data_cube.tscn" id="11_cube"]
-[ext_resource type="PackedScene" path="res://scenes/objects/electric_door.tscn" id="12_electric_door"]
-[ext_resource type="PackedScene" path="res://scenes/objects/electric_zone.tscn" id="13_electric_zone"]
-[ext_resource type="PackedScene" path="res://scenes/objects/laser.tscn" id="14_laser"]
-[ext_resource type="PackedScene" path="res://scenes/objects/switch.tscn" id="15_switch"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/ukibuki.tscn" id="16_ukibuki"]
-[ext_resource type="PackedScene" path="res://scenes/ui/player_hud.tscn" id="17_hud"]
+[ext_resource type="PackedScene" uid="uid://cg4lv665lj8ey" path="res://scenes/ui/player_hud.tscn" id="17_hud"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/guardia.tscn" id="18_guardia"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/drone.tscn" id="19_drone"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/tanque.tscn" id="20_tanque"]
+[ext_resource type="PackedScene" path="res://scenes/objects/laser_v.tscn" id="21_laser_v"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor_top_left"]
-size = Vector2(380, 40)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor_top_right"]
-size = Vector2(380, 40)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor_bot"]
+size = Vector2(1200, 40)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor_mid_left"]
 size = Vector2(350, 40)
@@ -30,8 +27,11 @@ size = Vector2(350, 40)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor_mid_right"]
 size = Vector2(350, 40)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor_bot"]
-size = Vector2(1200, 40)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor_top_left"]
+size = Vector2(380, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor_top_right"]
+size = Vector2(380, 40)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_reactor_base"]
 size = Vector2(200, 40)
@@ -125,7 +125,6 @@ position = Vector2(0, 280)
 shape = SubResource("RectangleShape2D_reactor_base")
 
 [node name="Walls" type="Node2D" parent="World/Environment"]
-visible = false
 
 [node name="Wall_Left" type="StaticBody2D" parent="World/Environment/Walls"]
 
@@ -177,7 +176,46 @@ script = ExtResource("3_death")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Hazards/DeathZone_Pit"]
 position = Vector2(0, 520)
 shape = SubResource("RectangleShape2D_death")
-debug_color = Color(1, 0, 0, 0.42)
+
+[node name="LaserV_1" parent="World/Environment/Hazards" unique_id=1895100001 instance=ExtResource("21_laser_v")]
+position = Vector2(-300.0, 380.0)
+scale = Vector2(0.6, 0.76)
+blink_on_time = 1.8
+blink_off_time = 1.5
+
+[node name="Sprite" parent="World/Environment/Hazards/LaserV_1" index="0"]
+position = Vector2(0, 125.0)
+scale = Vector2(1, 1.4)
+
+[node name="LaserV_2" parent="World/Environment/Hazards" unique_id=1895100002 instance=ExtResource("21_laser_v")]
+position = Vector2(300.0, 380.0)
+scale = Vector2(0.6, 0.76)
+blink_on_time = 1.8
+blink_off_time = 1.4
+
+[node name="Sprite" parent="World/Environment/Hazards/LaserV_2" index="0"]
+position = Vector2(0, 125.0)
+scale = Vector2(1, 1.4)
+
+[node name="LaserV_3" parent="World/Environment/Hazards" unique_id=1895100003 instance=ExtResource("21_laser_v")]
+position = Vector2(-200.0, 100.0)
+scale = Vector2(0.6, 0.76)
+blink_on_time = 1.6
+blink_off_time = 1.4
+
+[node name="Sprite" parent="World/Environment/Hazards/LaserV_3" index="0"]
+position = Vector2(0, 125.0)
+scale = Vector2(1, 1.4)
+
+[node name="LaserV_4" parent="World/Environment/Hazards" unique_id=1895100004 instance=ExtResource("21_laser_v")]
+position = Vector2(200.0, 100.0)
+scale = Vector2(0.6, 0.76)
+blink_on_time = 1.6
+blink_off_time = 1.3
+
+[node name="Sprite" parent="World/Environment/Hazards/LaserV_4" index="0"]
+position = Vector2(0, 125.0)
+scale = Vector2(1, 1.4)
 
 [node name="SafeZones" type="Node2D" parent="World/Environment"]
 
@@ -189,20 +227,20 @@ zone_id = 1
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/SafeZones/SafeZone1_Spawn"]
 shape = SubResource("RectangleShape2D_safe1")
 
-[node name="SafeZone2_PanelNorth" type="Area2D" parent="World/Environment/SafeZones" groups=["safe_zones"]]
+[node name="SafeZone2_Mid" type="Area2D" parent="World/Environment/SafeZones" groups=["safe_zones"]]
 position = Vector2(-400, -190)
 script = ExtResource("5_safe")
 zone_id = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/SafeZones/SafeZone2_PanelNorth"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/SafeZones/SafeZone2_Mid"]
 shape = SubResource("RectangleShape2D_safe2")
 
-[node name="SafeZone3_PanelWest" type="Area2D" parent="World/Environment/SafeZones" groups=["safe_zones"]]
+[node name="SafeZone3_Top" type="Area2D" parent="World/Environment/SafeZones" groups=["safe_zones"]]
 position = Vector2(400, -190)
 script = ExtResource("5_safe")
 zone_id = 3
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/SafeZones/SafeZone3_PanelWest"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/SafeZones/SafeZone3_Top"]
 shape = SubResource("RectangleShape2D_safe3")
 
 [node name="Interactables" type="Node2D" parent="World/Environment"]
@@ -250,33 +288,107 @@ position = Vector2(-550, 320)
 
 [node name="Enemies" type="Node2D" parent="."]
 
-[node name="Ukibuki_Reactor1" parent="Enemies" instance=ExtResource("16_ukibuki")]
+[node name="Ukibuki_War1" parent="Enemies" unique_id=1895200001 instance=ExtResource("16_ukibuki")]
 position = Vector2(-300, 60)
 unique_id = "ukibuki_l05_01"
-patrol_distance = 180.0
-speed = 100.0
+speed = 105.0
+patrol_distance = 200.0
+detection_range = 360.0
 attack_cooldown = 1.5
+chase_speed_mult = 1.6
 
-[node name="Ukibuki_Reactor2" parent="Enemies" instance=ExtResource("16_ukibuki")]
+[node name="Ukibuki_War2" parent="Enemies" unique_id=1895200002 instance=ExtResource("16_ukibuki")]
 position = Vector2(300, 60)
 unique_id = "ukibuki_l05_02"
-patrol_distance = 180.0
-speed = 100.0
+speed = 105.0
+patrol_distance = 200.0
+detection_range = 360.0
 attack_cooldown = 1.5
+chase_speed_mult = 1.6
 
-[node name="Ukibuki_Reactor3" parent="Enemies" instance=ExtResource("16_ukibuki")]
+[node name="Ukibuki_War3" parent="Enemies" unique_id=1895200003 instance=ExtResource("16_ukibuki")]
 position = Vector2(-400, -230)
 unique_id = "ukibuki_l05_03"
-patrol_distance = 200.0
-speed = 105.0
+speed = 110.0
+patrol_distance = 220.0
+detection_range = 380.0
 attack_cooldown = 1.2
+chase_speed_mult = 1.7
 
-[node name="Ukibuki_Reactor4" parent="Enemies" instance=ExtResource("16_ukibuki")]
+[node name="Ukibuki_War4" parent="Enemies" unique_id=1895200004 instance=ExtResource("16_ukibuki")]
 position = Vector2(400, -230)
 unique_id = "ukibuki_l05_04"
-patrol_distance = 200.0
-speed = 105.0
+speed = 110.0
+patrol_distance = 220.0
+detection_range = 380.0
 attack_cooldown = 1.2
+chase_speed_mult = 1.7
+
+[node name="Guardia_War1" parent="Enemies" unique_id=1895200005 instance=ExtResource("18_guardia")]
+position = Vector2(-150, 253)
+unique_id = "guardia_l05_01"
+speed = 85.0
+patrol_distance = 200.0
+detection_range = 300.0
+attack_cooldown = 2.0
+chase_speed_mult = 1.5
+
+[node name="Guardia_War2" parent="Enemies" unique_id=1895200006 instance=ExtResource("18_guardia")]
+position = Vector2(150, 253)
+unique_id = "guardia_l05_02"
+speed = 85.0
+patrol_distance = 200.0
+detection_range = 300.0
+attack_cooldown = 2.0
+chase_speed_mult = 1.5
+
+[node name="Guardia_War3" parent="Enemies" unique_id=1895200007 instance=ExtResource("18_guardia")]
+position = Vector2(0, 60)
+unique_id = "guardia_l05_03"
+speed = 90.0
+patrol_distance = 180.0
+detection_range = 300.0
+attack_cooldown = 1.8
+chase_speed_mult = 1.5
+
+[node name="Drone_War1" parent="Enemies" unique_id=1895200008 instance=ExtResource("19_drone")]
+position = Vector2(-200, -230)
+unique_id = "drone_l05_01"
+speed = 120.0
+patrol_distance = 240.0
+detection_range = 380.0
+attack_cooldown = 1.5
+chase_speed_mult = 1.8
+
+[node name="Drone_War2" parent="Enemies" unique_id=1895200009 instance=ExtResource("19_drone")]
+position = Vector2(200, -230)
+unique_id = "drone_l05_02"
+speed = 120.0
+patrol_distance = 240.0
+detection_range = 380.0
+attack_cooldown = 1.5
+chase_speed_mult = 1.8
+
+[node name="Drone_War3" parent="Enemies" unique_id=1895200010 instance=ExtResource("19_drone")]
+position = Vector2(0, 380)
+unique_id = "drone_l05_03"
+speed = 115.0
+patrol_distance = 200.0
+detection_range = 360.0
+attack_cooldown = 1.6
+chase_speed_mult = 1.7
+
+[node name="Tanque_War1" parent="Enemies" unique_id=1895200011 instance=ExtResource("20_tanque")]
+position = Vector2(-400, 253)
+unique_id = "tanque_l05_01"
+
+[node name="Tanque_War2" parent="Enemies" unique_id=1895200012 instance=ExtResource("20_tanque")]
+position = Vector2(400, 253)
+unique_id = "tanque_l05_02"
+
+[node name="Tanque_War3" parent="Enemies" unique_id=1895200013 instance=ExtResource("20_tanque")]
+position = Vector2(0, -230)
+unique_id = "tanque_l05_03"
 
 [node name="UI" type="CanvasLayer" parent="."]
 
@@ -286,3 +398,7 @@ attack_cooldown = 1.2
 script = ExtResource("6_checkpoint")
 
 [editable path="Characters/kai"]
+[editable path="World/Environment/Hazards/LaserV_1"]
+[editable path="World/Environment/Hazards/LaserV_2"]
+[editable path="World/Environment/Hazards/LaserV_3"]
+[editable path="World/Environment/Hazards/LaserV_4"]
