@@ -116,6 +116,7 @@ var is_pushing       := false
 var facing_right     := true
 var can_climb        := false
 var current_ladder   : Area2D = null
+var _is_stair_ladder : bool   = false  ## true cuando la escalera es tipo rampa/gradas
 
 var _invincible_timer        : float = 0.0
 var _jump_horizontal_speed   : float = 0.0
@@ -345,13 +346,15 @@ func _on_ladder_entered(body: Node2D, ladder: Area2D) -> void:
 	if body == self:
 		can_climb      = true
 		current_ladder = ladder
+		_is_stair_ladder = ladder.is_in_group("stair_ladder")
 
 func _on_ladder_exited(body: Node2D, ladder: Area2D) -> void:
 	if body == self:
 		can_climb = false
 		if current_ladder == ladder:
-			current_ladder = null
-			is_climbing    = false
+			current_ladder   = null
+			is_climbing      = false
+			_is_stair_ladder = false
 
 func _handle_climbing() -> void:
 	if _just_jumped_from_ladder:
@@ -633,8 +636,13 @@ func _update_animation() -> void:
 		sprite.speed_scale = 1.0
 		sprite.play("crouch")
 	elif is_climbing:
-		sprite.play("climb")
-		sprite.speed_scale = 2.0 if is_climbing_fast else 1.0
+		if _is_stair_ladder:
+			# Escalera tipo gradas — animación de caminar
+			sprite.speed_scale = 1.0
+			sprite.play("walk")
+		else:
+			sprite.play("climb")
+			sprite.speed_scale = 2.0 if is_climbing_fast else 1.0
 	elif not is_on_floor():
 		sprite.speed_scale = 1.0
 		sprite.play("jump")
