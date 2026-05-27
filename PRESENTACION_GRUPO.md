@@ -117,7 +117,7 @@ El proyecto sigue una arquitectura de **3 capas**:
 
 ---
 
-## 🎤 INTEGRANTE 2 — Mecánicas del Jugador y Sistema de Recursos
+## 🎤 INTEGRANTE 2 — STEVEN — Mecánicas del Jugador y Sistema de Recursos
 **Tiempo estimado: 3–4 minutos**
 
 ### Qué decir:
@@ -177,7 +177,7 @@ El HUD usa un sistema de **3 corazones** en lugar de barra de vida:
 
 ---
 
-## 🎤 INTEGRANTE 3 — IA de Enemigos, Sistema de Puertas y Patrones de Diseño
+## 🎤 INTEGRANTE 3 — SEBASTIAN — IA de Enemigos, Sistema de Puertas y Patrones de Diseño
 **Tiempo estimado: 3–4 minutos**
 
 ### Qué decir:
@@ -249,14 +249,7 @@ La **puerta electrificada** tiene 7 estados internos:
 | **Template Method** | `level_base.gd` define el esqueleto de cada nivel; subclases implementan `_on_level_ready()` |
 | **Component** | Cada mecánica de Kai es independiente (stamina, energía, salud, escaleras) |
 
----
-
-## 🎤 INTEGRANTE 4 — Sistemas de Persistencia, UI, Demo en Vivo y Cierre
-**Tiempo estimado: 3–4 minutos**
-
-### Qué decir:
-
-**[Sistema de guardado — 1 min]**
+**[Sistema de guardado y persistencia — 1 min]**
 
 El juego tiene **3 slots de guardado** independientes. Cada slot guarda:
 
@@ -268,56 +261,64 @@ save_slot_0.dat
 ├── total_deaths: 7
 ├── total_time: 1847.3 (segundos)
 ├── total_score: 12500
-├── date_string: "2025-05-26"
 └── level_state: { enemigos derrotados, puertas abiertas... }
 ```
 
-El `LevelStateManager` persiste el estado de cada nivel: si un enemigo fue derrotado, sigue derrotado al volver al nivel. Si una puerta fue abierta, sigue abierta.
+El `LevelStateManager` persiste el estado de cada nivel: si un enemigo fue derrotado, sigue derrotado al volver. Si una puerta fue abierta, sigue abierta.
 
 **Sistema de checkpoints inteligente (`SmartCheckpointSystem`):**
-- No usa checkpoints fijos en posiciones predefinidas
-- Detecta todas las `SafeZone` del nivel (Area2D con grupo `"safe_zones"`)
+- No usa checkpoints fijos — detecta todas las `SafeZone` del nivel
 - Al morir, calcula la zona segura **más cercana** al punto de muerte
-- Hace un raycast hacia abajo para encontrar suelo sólido (evita spawns en el aire)
+- Raycast hacia abajo para encontrar suelo sólido (evita spawns en el aire)
 
-**[Flujo completo del juego — 1 min]**
-
+**Flujo completo del juego:**
 ```
-Splash Screen
-    ↓ (cualquier tecla)
-Menú Principal
-    ├── Iniciar Partida → nombre de partida → Nivel 1
-    ├── Cargar Partida → selector de slots → nivel guardado
-    ├── Ajustes → volumen, controles
-    ├── Créditos
-    ├── Perfil / Logros
-    └── Salir
+Splash Screen → Menú Principal → Iniciar Partida → Nivel 1
+    → [E] Puerta → Nivel 2 → ... → Nivel 5
 
-Durante el juego:
-    Nivel 1 (Demo) → [E] Puerta → Nivel 2 → ... → Nivel 5
-    
-    Si muere:
-    Animación "dead" → 1.5s → Game Over Screen
-    (cualquier tecla) → reinicia nivel actual con vida completa
-
-    Pausa (Escape):
-    Reanudar / Ajustes / Menú Principal
+Si muere: animación "dead" → 1.5s → Game Over → reinicia nivel
+Pausa (Escape): Reanudar / Ajustes / Menú Principal
 ```
 
-**[Demo en vivo — 1 min]**
+---
 
-Mostrar mientras se juega:
-1. **Splash screen** → menú principal con animaciones de botones
-2. **Iniciar partida** → nivel 1 (Sector B)
-3. Mostrar **barra de stamina** bajando al correr
-4. Mostrar **corazones** perdiendo uno al tocar un láser
-5. Acercarse a un **Ukibuki** — mostrar que se activa la IA (PATROL → ALERT → CHASE → ATTACK)
-6. Usar **[E]** en el switch para desactivar el láser del piso 3
-7. Llegar a la **puerta de salida** → animación de apertura → transición al nivel 2
+## 🎤 INTEGRANTE 4 — HECTOR (TÚ) — Demo en Vivo y Cierre
+**Tiempo estimado: 2–3 minutos** *(la parte más chill, solo juegas y cierras)*
 
-**[Cierre — 30 seg]**
+### Qué decir:
 
-> "NK-7 aplica principios de ingeniería de software como separación de responsabilidades, patrones de diseño reconocidos y arquitectura en capas. El resultado es un juego mantenible, extensible y con mecánicas coherentes con su narrativa. Cada sistema — desde la IA hasta el guardado — fue diseñado pensando en la escalabilidad del proyecto."
+**[Transición — 15 seg]**
+> "Gracias Sebastian. Ahora les voy a mostrar el juego funcionando."
+
+**[Demo en vivo — 1.5–2 min]**
+
+Abre el juego y muestra esto en orden, sin apresurarte:
+
+1. **Splash screen** aparece → presiona cualquier tecla → menú principal con animaciones de botones
+2. Click en **"Iniciar Partida"** → escribe un nombre → carga el nivel 1
+3. Camina un poco → **corre con Shift** → señala que la barra de stamina baja
+4. Toca un láser → muestra que **pierde un corazón** con la animación
+5. Acércate a un **Ukibuki** → espera que te detecte → muestra los estados: PATROL → ALERT → CHASE → ATTACK
+6. Presiona **E** en el switch rojo → el láser del piso 3 se apaga
+7. Sube al piso 3 → llega a la **puerta de salida** → presiona E → animación de apertura → transición al nivel 2
+8. Si hay tiempo: muestra la pantalla de **Game Over** (déjate matar)
+
+> *(No tienes que explicar nada técnico mientras juegas — solo muéstralo. Si el docente pregunta algo, di "eso lo explicó [nombre del compañero]")*
+
+**[Cierre — 30–45 seg]**
+
+> "Como vieron, NK-7 aplica principios de ingeniería de software de forma práctica: separación de responsabilidades, patrones de diseño reconocidos y una arquitectura que permite escalar el proyecto. Cada sistema fue diseñado pensando en mantenibilidad — si mañana queremos agregar un nuevo tipo de enemigo o una nueva mecánica de puerta, no hay que tocar el código existente, solo extenderlo."
+
+> "El repositorio está organizado con commits por integrante, documentación técnica en la carpeta `docs/`, y un README completo. Estamos abiertos a preguntas."
+
+---
+
+### Frases de apoyo si el docente pregunta algo durante la demo:
+
+- *"¿Por qué Godot?"* → "Es open source, tiene señales nativas que implementan Observer, y su sistema de escenas es ideal para 2D."
+- *"¿Cuántos scripts tiene el proyecto?"* → "53 scripts GDScript y 37 escenas."
+- *"¿Cómo funciona el guardado?"* → "Sebastian lo explicó — 3 slots con persistencia de estado de nivel."
+- *"¿Qué pasa si se cae el juego?"* → Sonríe y di "Eso es parte del proceso de desarrollo."
 
 ---
 
