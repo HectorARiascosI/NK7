@@ -1,40 +1,25 @@
-[gd_scene format=3 uid="uid://bnjpl3vgodi8r"]
+[gd_scene load_steps=3 format=3 uid="uid://bnjpl3vgodi8r"]
 
 [ext_resource type="Script" uid="uid://gjxu46avvbq2" path="res://scripts/objects/level_door.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://dr8tg8kcetypf" path="res://assets/objects/door_frames/door_closed.png" id="2_closed"]
 
 [sub_resource type="RectangleShape2D" id="Shape_body"]
-size = Vector2(75.5396, 140.80461)
+size = Vector2(122.30204, 179.59772)
 
-[sub_resource type="RectangleShape2D" id="Shape_detect"]
-size = Vector2(98.321335, 158.04597)
-
-[node name="LevelDoor" type="Node2D" unique_id=561460171]
+[node name="LevelDoor" type="Node2D"]
 script = ExtResource("1_script")
+next_level = 2
 
-[node name="StaticBody" type="StaticBody2D" parent="." unique_id=1311310226]
+[node name="StaticBody" type="StaticBody2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody" unique_id=209140241]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody"]
 shape = SubResource("Shape_body")
 
-[node name="DetectionArea" type="Area2D" parent="." unique_id=1843888310]
-collision_layer = 0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=225943627]
-shape = SubResource("Shape_detect")
-
-[node name="DoorSprite" type="Sprite2D" parent="." unique_id=143866173]
+[node name="DoorSprite" type="Sprite2D" parent="."]
 scale = Vector2(0.22, 0.22)
 texture = ExtResource("2_closed")
 
-[node name="GlowLight" type="PointLight2D" parent="." unique_id=1230830930]
-position = Vector2(0, -20)
-enabled = false
-color = Color(0.4, 0.9, 1, 1)
-energy = 0.8
-texture_scale = 1.5
-
-[node name="InteractLabel" type="Label" parent="." unique_id=657442388]
+[node name="InteractLabel" type="Label" parent="."]
 offset_left = -55.0
 offset_top = -80.0
 offset_right = 55.0
