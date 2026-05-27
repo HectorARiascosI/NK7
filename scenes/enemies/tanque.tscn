@@ -4,39 +4,39 @@
 [ext_resource type="PackedScene" uid="uid://do3fis6yo7d63" path="res://scenes/enemies/projectile.tscn" id="2_proj"]
 [ext_resource type="Texture2D" uid="uid://bb8j2227drdjl" path="res://assets/characters/tanque/tanque_spritesheet.png" id="3_sheet"]
 
-;; Tanque spritesheet: 1536x1024, 8 frames de 192x1024
+;; Tanque spritesheet: 1536x500, 8 frames de 192x500 (recortado)
 
 [sub_resource type="AtlasTexture" id="AT_0"]
 atlas = ExtResource("3_sheet")
-region = Rect2(0, 0, 192, 1024)
+region = Rect2(0, 0, 192, 500)
 
 [sub_resource type="AtlasTexture" id="AT_1"]
 atlas = ExtResource("3_sheet")
-region = Rect2(192, 0, 192, 1024)
+region = Rect2(192, 0, 192, 500)
 
 [sub_resource type="AtlasTexture" id="AT_2"]
 atlas = ExtResource("3_sheet")
-region = Rect2(384, 0, 192, 1024)
+region = Rect2(384, 0, 192, 500)
 
 [sub_resource type="AtlasTexture" id="AT_3"]
 atlas = ExtResource("3_sheet")
-region = Rect2(576, 0, 192, 1024)
+region = Rect2(576, 0, 192, 500)
 
 [sub_resource type="AtlasTexture" id="AT_4"]
 atlas = ExtResource("3_sheet")
-region = Rect2(768, 0, 192, 1024)
+region = Rect2(768, 0, 192, 500)
 
 [sub_resource type="AtlasTexture" id="AT_5"]
 atlas = ExtResource("3_sheet")
-region = Rect2(960, 0, 192, 1024)
+region = Rect2(960, 0, 192, 500)
 
 [sub_resource type="AtlasTexture" id="AT_6"]
 atlas = ExtResource("3_sheet")
-region = Rect2(1152, 0, 192, 1024)
+region = Rect2(1152, 0, 192, 500)
 
 [sub_resource type="AtlasTexture" id="AT_7"]
 atlas = ExtResource("3_sheet")
-region = Rect2(1344, 0, 192, 1024)
+region = Rect2(1344, 0, 192, 500)
 
 [sub_resource type="SpriteFrames" id="SF_tanque"]
 animations = [{
@@ -86,8 +86,8 @@ projectile_speed = 160.0
 projectile_scene = ExtResource("2_proj")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
-position = Vector2(0, -20)
-scale = Vector2(0.22, 0.10)
+position = Vector2(0, -10)
+scale = Vector2(0.50, 0.16)
 sprite_frames = SubResource("SF_tanque")
 animation = &"idle"
 autoplay = "idle"
