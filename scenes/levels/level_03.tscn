@@ -267,9 +267,14 @@ interact_radius = 90.0
 position = Vector2(-500, 130)
 
 [node name="ExitDoor_ToLevel4" parent="World/Environment/Interactables" unique_id=1893500003 instance=ExtResource("23_level_door")]
-position = Vector2(660.0, -490.0)
+position = Vector2(587.5299, -314.94257)
 next_level = 4
 label_text = "[E] Ir al Reactor Core"
+metadata/_edit_group_ = true
+
+[node name="DoorSprite" parent="World/Environment/Interactables/ExitDoor_ToLevel4" index="1"]
+position = Vector2(7.1942816, -1.4367697)
+scale = Vector2(0.47961643, 0.57471275)
 
 [node name="Characters" type="Node2D" parent="." unique_id=284157736]
 
@@ -296,7 +301,6 @@ patrol_distance = 160.0
 [node name="Guardia_Bot1" parent="Enemies" unique_id=1893600001 instance=ExtResource("19_guardia")]
 position = Vector2(-200, 253)
 unique_id = "guardia_l03_01"
-patrol_distance = 180.0
 
 [node name="Guardia_Bot2" parent="Enemies" unique_id=1893600002 instance=ExtResource("19_guardia")]
 position = Vector2(350, 253)
@@ -395,9 +399,9 @@ enemy_ids = Array[String](["ukibuki_l03_02", "ukibuki_l03_03", "drone_l03_02"])
 laser_path = NodePath("Hazards/LaserV_Top1")
 clear_message = "Piso 3 despejado"
 
+[editable path="World/Environment/Interactables/ExitDoor_ToLevel4"]
 [editable path="Characters/kai"]
 [editable path="Hazards/LaserV_Bot1"]
 [editable path="Hazards/LaserV_Bot2"]
 [editable path="Hazards/LaserV_Mid1"]
 [editable path="Hazards/LaserV_Top1"]
-[editable path="World/Environment/Interactables/ExitDoor_ToLevel4"]
