@@ -1,0 +1,56 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/enemies/ukibuki.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/characters/guardia/guardia_spritesheet.png" id="2_sheet"]
+
+[sub_resource type="AtlasTexture" id="AT_idle"]
+atlas = ExtResource("2_sheet")
+region = Rect2(0, 0, 192, 1024)
+
+[sub_resource type="SpriteFrames" id="SF_guardia"]
+animations = [{
+"frames": [
+{"duration":1.0,"texture":SubResource("AT_idle")},
+{"duration":1.0,"texture":SubResource("AT_idle")},
+{"duration":1.0,"texture":SubResource("AT_idle")},
+{"duration":1.0,"texture":SubResource("AT_idle")}
+],
+"loop": true, "name": &"idle", "speed": 6.0
+},{
+"frames": [
+{"duration":1.0,"texture":SubResource("AT_idle")},
+{"duration":1.0,"texture":SubResource("AT_idle")},
+{"duration":1.0,"texture":SubResource("AT_idle")},
+{"duration":1.0,"texture":SubResource("AT_idle")}
+],
+"loop": true, "name": &"walk", "speed": 8.0
+},{
+"frames": [{"duration":1.0,"texture":SubResource("AT_idle")}],
+"loop": false, "name": &"attack", "speed": 6.0
+},{
+"frames": [{"duration":1.0,"texture":SubResource("AT_idle")}],
+"loop": false, "name": &"hurt", "speed": 8.0
+},{
+"frames": [{"duration":1.0,"texture":SubResource("AT_idle")}],
+"loop": false, "name": &"dead", "speed": 6.0
+}]
+
+[node name="Guardia" type="CharacterBody2D" groups=["enemies"]]
+script = ExtResource("1_script")
+max_health = 80
+damage = 25
+speed = 90
+patrol_distance = 200.0
+detection_range = 300.0
+attack_range = 260.0
+attack_cooldown = 2.0
+chase_speed_mult = 1.4
+unique_id = ""
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.08, 0.08)
+sprite_frames = SubResource("SF_guardia")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
