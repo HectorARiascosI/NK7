@@ -46,7 +46,7 @@ Juntos coordinan la solución: Kai en el panel norte, Rena en el panel oeste. Ac
 
 ---
 
-## 🎤 INTEGRANTE 1 — Introducción, Historia y Arquitectura del Proyecto
+## 🎤 TATIANA — Historia del Juego y Arquitectura del Proyecto
 **Tiempo estimado: 3–4 minutos**
 
 ### Qué decir:
@@ -54,13 +54,32 @@ Juntos coordinan la solución: Kai en el panel norte, Rena en el panel oeste. Ac
 **[Apertura — 30 seg]**
 > "Buenos días. Vamos a presentar NK-7, un videojuego 2D de acción y puzzle desarrollado en Godot 4.6 con GDScript, aplicando patrones de diseño de software y buenas prácticas de ingeniería."
 
-**[Historia del juego — 1 min]**
-Contar la historia de Kai (resumida arriba). Enfatizar:
-- El protagonista usa **conocimiento técnico**, no fuerza bruta
-- La narrativa justifica cada mecánica: las puertas dañadas existen porque la instalación colapsó, los láseres están en modo letal porque el protocolo de contención los reconfiguró
-- Hay un arco narrativo completo: incidente → supervivencia → resolución → epílogo
+**[Historia completa — 2 min]**
 
-**[Arquitectura general — 2 min]**
+Tatiana presenta la historia con detalle, usando estas secciones como guía:
+
+**El mundo antes del colapso:**
+> "El Complejo NK-7 es una planta de fusión nuclear industrial. 200 trabajadores la operan en turnos de 12 horas. Entre ellos está **KAI**, 34 años, técnico de mantenimiento con 7 años en la instalación. No llegó por ambición — llegó porque era bueno en los sistemas: tuberías, circuitos, controles, conductos de ventilación. Conocía cada válvula, cada panel dañado."
+
+**El momento del colapso:**
+> "Un martes de noviembre, Kai hace mantenimiento rutinario en la Zona Central, Sector B, nivel subterráneo 2. Una instrucción errónea llevaba semanas acumulando tensión en el sistema de control. Las luces parpadean. Suena la alerta de nivel 2. El sistema anuncia: *'El Protocolo de contención ha sido activado. Falla crítica detectada en el núcleo central. La evacuación está prohibida. Bloqueando todos los accesos exteriores.'* Las puertas se cierran. Las alarmas rojas reemplazan la iluminación. Kai está solo, a 7 metros bajo tierra."
+
+**La supervivencia:**
+> "Kai no entra en pánico. Recuerda las 3 rutas de acceso secundarias del Sector B. Supera una puerta sellada usando una consola de mantenimiento que él mismo reparó 2 años antes. En el siguiente corredor, láseres reconfigurados en modo letal bloquean el paso. Kai los estudia, calcula y los atraviesa con movimientos quirúrgicos."
+
+**La señal en la oscuridad:**
+> "Tras 40 minutos, escucha una voz en un panel de comunicaciones de emergencia: **RENA**, técnica de control, 28 años, atrapada en el ala oeste, nivel 3. Ella conoce los protocolos de acceso y las rutas de emergencia que no aparecen en los mapas estándar. Kai responde: *'En camino.'*"
+
+**La resolución:**
+> "Necesitan dos activaciones simultáneas: Kai en el panel norte, Rena en el panel oeste. Al activarlos, las luces se apagan completamente. Silencio absoluto. Luego, las luces de emergencia verdes guían hacia la salida. Escapan juntos."
+
+**El epílogo — Protocolo Rojo:**
+> "Una semana después, los investigadores encuentran una Sala del Protocolo Rojo en el subsuelo más profundo — el origen real de la falla. Nadie tiene autorización para entrar. Kai reconoce el número de sector en un informe de mantenimiento de 3 años atrás. Se ofrece voluntario. Entra solo, con su kit de herramientas. No como héroe. Como técnico con trabajo pendiente."
+
+**El tema:**
+> "La instalación simboliza la tecnología fuera de control. El protagonista no es un superhéroe: es una persona ordinaria con conocimiento técnico que piensa, se adapta y actúa bajo presión. Cada mecánica del juego tiene sentido narrativo: las puertas dañadas existen porque la instalación colapsó, los láseres están en modo letal porque el protocolo los reconfiguró, la stamina representa el esfuerzo físico real de un técnico escapando."
+
+**[Arquitectura general — 1 min]**
 
 El proyecto sigue una arquitectura de **3 capas**:
 
