@@ -14,12 +14,18 @@
 [ext_resource type="Texture2D" uid="uid://dr8tg8kcetypf" path="res://assets/objects/door_frames/door_closed.png" id="14_iaubp"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/ukibuki.tscn" id="16_ukibuki"]
 [ext_resource type="PackedScene" uid="uid://cg4lv665lj8ey" path="res://scenes/ui/player_hud.tscn" id="17_hud"]
+[ext_resource type="Script" uid="uid://cnh33vcv5nmbf" path="res://scripts/objects/warp_door.gd" id="18_warp"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/guardia.tscn" id="19_guardia"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/drone.tscn" id="20_drone"]
+[ext_resource type="PackedScene" path="res://scenes/objects/laser_v.tscn" id="21_laser_v"]
+[ext_resource type="Script" uid="uid://17sxut0wuf7k" path="res://scripts/levels/floor_clear_trigger.gd" id="22_trigger"]
+[ext_resource type="PackedScene" uid="uid://bnjpl3vgodi8r" path="res://scenes/objects/level_door.tscn" id="23_level_door"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor_bot"]
 size = Vector2(1524.4603, 47.528748)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor_mid"]
-size = Vector2(1529.3763, 40)
+size = Vector2(1473.6208, 40)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor_top"]
 size = Vector2(1536.8105, 40)
@@ -36,8 +42,8 @@ size = Vector2(30, 1025.5747)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_right"]
 size = Vector2(6.6069336, 1023.8506)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ladder2"]
-size = Vector2(40, 240)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ramp1"]
+size = Vector2(140, 500)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_safe1"]
 size = Vector2(180, 80)
@@ -71,6 +77,11 @@ position = Vector2(1.1991005, 20.983171)
 scale = Vector2(0.9179259, 0.91616386)
 texture = ExtResource("1_bg")
 
+[node name="DoorClosed" type="Sprite2D" parent="World/Background" unique_id=433494066]
+position = Vector2(-393.88486, 59.952038)
+scale = Vector2(0.5927336, 0.56393677)
+texture = ExtResource("14_iaubp")
+
 [node name="Environment" type="Node2D" parent="World" unique_id=1793182075]
 position = Vector2(0, 22)
 scale = Vector2(1.39, 1.16)
@@ -85,10 +96,11 @@ scale = Vector2(1.0000002, 1)
 shape = SubResource("RectangleShape2D_floor_bot")
 
 [node name="Floor_Mid" type="StaticBody2D" parent="World/Environment/Floors" unique_id=2011096697]
+position = Vector2(47.96163, 1.1494242)
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Floors/Floor_Mid" unique_id=739020087]
-position = Vector2(1.4987187, 179.31035)
+position = Vector2(-43.764996, 179.31035)
 scale = Vector2(1.0000002, 1)
 shape = SubResource("RectangleShape2D_floor_mid")
 
@@ -105,6 +117,7 @@ shape = SubResource("RectangleShape2D_floor_top")
 position = Vector2(-430.45563, 74.42529)
 scale = Vector2(1.0000002, 1)
 shape = SubResource("RectangleShape2D_platform1")
+one_way_collision = true
 
 [node name="Platform_ControlRoom2" type="StaticBody2D" parent="World/Environment/Floors" unique_id=2086388147]
 
@@ -112,13 +125,14 @@ shape = SubResource("RectangleShape2D_platform1")
 position = Vector2(286.57074, 344.54025)
 scale = Vector2(1.0000001, 1)
 shape = SubResource("RectangleShape2D_platform2")
+one_way_collision = true
 
 [node name="Floor_Mid2" type="StaticBody2D" parent="World/Environment/Floors" unique_id=155757381]
 position = Vector2(-3.5971222, -386.78165)
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Floors/Floor_Mid2" unique_id=2080541803]
-position = Vector2(1.4987187, 179.31035)
+position = Vector2(-70.443756, 179.31033)
 scale = Vector2(1.0000002, 1)
 shape = SubResource("RectangleShape2D_floor_mid")
 
@@ -140,12 +154,12 @@ shape = SubResource("RectangleShape2D_wall_right")
 
 [node name="Ladders" type="Node2D" parent="World/Environment" unique_id=1606825628]
 
-[node name="Ladder_Center" type="Area2D" parent="World/Environment/Ladders" unique_id=1397266341 groups=["ladders"]]
+[node name="Stair_Climb" type="Area2D" parent="World/Environment/Ladders" unique_id=1397266340 groups=["ladders", "stair_ladder"]]
 script = ExtResource("4_ladder")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Ladders/Ladder_Center" unique_id=1908833057]
-position = Vector2(703.8369, -16.091955)
-shape = SubResource("RectangleShape2D_ladder2")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/Ladders/Stair_Climb" unique_id=1908833056]
+position = Vector2(688, -30)
+shape = SubResource("RectangleShape2D_ramp1")
 
 [node name="SafeZones" type="Node2D" parent="World/Environment" unique_id=2138591523]
 
@@ -164,7 +178,7 @@ script = ExtResource("5_safe")
 zone_id = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/SafeZones/SafeZone2_MidLeft" unique_id=1730376548]
-position = Vector2(57.793777, -11.2069)
+position = Vector2(206.47484, -32.758625)
 shape = SubResource("RectangleShape2D_safe2")
 
 [node name="SafeZone3_MidRight" type="Area2D" parent="World/Environment/SafeZones" unique_id=1769092932 groups=["safe_zones"]]
@@ -242,6 +256,21 @@ position = Vector2(-713.42926, -320.68967)
 position = Vector2(513.1894, -50.574707)
 keycard_id = "card_sector7_control"
 
+[node name="WarpDoor_P1toP2" type="Node2D" parent="World/Environment/Interactables" unique_id=1893500001]
+position = Vector2(684.6522, 317.2414)
+script = ExtResource("18_warp")
+warp_marker = NodePath("../WarpTarget_P2")
+label_text = "[E] Subir al Sector 7"
+interact_radius = 90.0
+
+[node name="WarpTarget_P2" type="Marker2D" parent="World/Environment/Interactables" unique_id=1893500002]
+position = Vector2(-500, 130)
+
+[node name="ExitDoor_ToLevel4" parent="World/Environment/Interactables" unique_id=1893500003 instance=ExtResource("23_level_door")]
+position = Vector2(660.0, -490.0)
+next_level = 4
+label_text = "[E] Ir al Reactor Core"
+
 [node name="Characters" type="Node2D" parent="." unique_id=284157736]
 
 [node name="kai" parent="Characters" unique_id=239424847 instance=ExtResource("8_kai")]
@@ -264,17 +293,111 @@ position = Vector2(-300, -230)
 unique_id = "ukibuki_l03_03"
 patrol_distance = 160.0
 
+[node name="Guardia_Bot1" parent="Enemies" unique_id=1893600001 instance=ExtResource("19_guardia")]
+position = Vector2(-200, 253)
+unique_id = "guardia_l03_01"
+patrol_distance = 180.0
+
+[node name="Guardia_Bot2" parent="Enemies" unique_id=1893600002 instance=ExtResource("19_guardia")]
+position = Vector2(350, 253)
+unique_id = "guardia_l03_02"
+patrol_distance = 160.0
+
+[node name="Drone_Mid1" parent="Enemies" unique_id=1893600003 instance=ExtResource("20_drone")]
+position = Vector2(-61, 5)
+unique_id = "drone_l03_01"
+patrol_distance = 200.0
+detection_range = 320.0
+
+[node name="Drone_Top1" parent="Enemies" unique_id=1893600004 instance=ExtResource("20_drone")]
+position = Vector2(160, -225)
+unique_id = "drone_l03_02"
+patrol_distance = 180.0
+
 [node name="UI" type="CanvasLayer" parent="." unique_id=1682792668]
 
 [node name="PlayerHUD" parent="UI" unique_id=1922455823 instance=ExtResource("17_hud")]
-visible = false
 
 [node name="SmartCheckpointSystem" type="Node" parent="." unique_id=596708832]
 script = ExtResource("6_checkpoint")
 
-[node name="DoorClosed" type="Sprite2D" parent="." unique_id=1862354261]
-position = Vector2(-328, 50.000004)
-scale = Vector2(0.5520111, 0.46999997)
-texture = ExtResource("14_iaubp")
+[node name="Hazards" type="Node2D" parent="." unique_id=1893700001]
+
+[node name="LaserV_Bot1" parent="Hazards" unique_id=1893700002 instance=ExtResource("21_laser_v")]
+position = Vector2(-215.00002, 48)
+scale = Vector2(0.6, 0.76)
+blink_on_time = 2.5
+blink_off_time = 2.0
+
+[node name="Sprite" parent="Hazards/LaserV_Bot1" index="0"]
+position = Vector2(0, 231.57896)
+scale = Vector2(1, 0.63551724)
+
+[node name="BeamArea" parent="Hazards/LaserV_Bot1" index="1"]
+position = Vector2(2.5431314e-05, 146.05263)
+
+[node name="LaserV_Bot2" parent="Hazards" unique_id=1893700003 instance=ExtResource("21_laser_v")]
+position = Vector2(226, 53)
+scale = Vector2(0.6, 0.76)
+blink_on_time = 2.5
+blink_off_time = 2.2
+
+[node name="Sprite" parent="Hazards/LaserV_Bot2" index="0"]
+position = Vector2(0, 232.50528)
+scale = Vector2(1, 0.66867167)
+
+[node name="BeamArea" parent="Hazards/LaserV_Bot2" index="1"]
+position = Vector2(1.6666666, 147.36842)
+
+[node name="LaserV_Mid1" parent="Hazards" unique_id=1893700004 instance=ExtResource("21_laser_v")]
+position = Vector2(104, -65)
+scale = Vector2(0.6, 0.76)
+blink_on_time = 2.5
+blink_off_time = 2.0
+metadata/_edit_group_ = true
+
+[node name="Sprite" parent="Hazards/LaserV_Mid1" index="0"]
+position = Vector2(0, 91.44737)
+scale = Vector2(1, 1.0338346)
+
+[node name="LaserV_Top1" parent="Hazards" unique_id=1893700005 instance=ExtResource("21_laser_v")]
+position = Vector2(-91, -388.99997)
+scale = Vector2(0.6, 0.76)
+blink_on_time = 2.5
+blink_off_time = 2.0
+metadata/_edit_group_ = true
+
+[node name="Sprite" parent="Hazards/LaserV_Top1" index="0"]
+position = Vector2(0, 208.16315)
+scale = Vector2(1, 0.8342642)
+
+[node name="FloorClearTrigger_Bot" type="Node" parent="." unique_id=1893800001]
+script = ExtResource("22_trigger")
+enemy_ids = Array[String](["guardia_l03_01", "guardia_l03_02"])
+laser_path = NodePath("Hazards/LaserV_Bot1")
+clear_message = "Piso 1 despejado"
+
+[node name="FloorClearTrigger_Bot2" type="Node" parent="." unique_id=1893800004]
+script = ExtResource("22_trigger")
+enemy_ids = Array[String](["guardia_l03_01", "guardia_l03_02"])
+laser_path = NodePath("Hazards/LaserV_Bot2")
+clear_message = ""
+
+[node name="FloorClearTrigger_Mid" type="Node" parent="." unique_id=1893800002]
+script = ExtResource("22_trigger")
+enemy_ids = Array[String](["ukibuki_l03_01", "drone_l03_01"])
+laser_path = NodePath("Hazards/LaserV_Mid1")
+clear_message = "Piso 2 despejado"
+
+[node name="FloorClearTrigger_Top" type="Node" parent="." unique_id=1893800003]
+script = ExtResource("22_trigger")
+enemy_ids = Array[String](["ukibuki_l03_02", "ukibuki_l03_03", "drone_l03_02"])
+laser_path = NodePath("Hazards/LaserV_Top1")
+clear_message = "Piso 3 despejado"
 
 [editable path="Characters/kai"]
+[editable path="Hazards/LaserV_Bot1"]
+[editable path="Hazards/LaserV_Bot2"]
+[editable path="Hazards/LaserV_Mid1"]
+[editable path="Hazards/LaserV_Top1"]
+[editable path="World/Environment/Interactables/ExitDoor_ToLevel4"]
