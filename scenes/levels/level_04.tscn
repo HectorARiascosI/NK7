@@ -12,6 +12,12 @@
 [ext_resource type="PackedScene" path="res://scenes/objects/data_cube.tscn" id="11_cube"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/ukibuki.tscn" id="15_ukibuki"]
 [ext_resource type="PackedScene" uid="uid://cg4lv665lj8ey" path="res://scenes/ui/player_hud.tscn" id="16_hud"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/guardia.tscn" id="17_guardia"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/drone.tscn" id="18_drone"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/tanque.tscn" id="19_tanque"]
+[ext_resource type="PackedScene" path="res://scenes/objects/laser_v.tscn" id="20_laser_v"]
+[ext_resource type="Script" uid="uid://17sxut0wuf7k" path="res://scripts/levels/floor_clear_trigger.gd" id="21_trigger"]
+[ext_resource type="PackedScene" uid="uid://bnjpl3vgodi8r" path="res://scenes/objects/level_door.tscn" id="22_level_door"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor_bot"]
 size = Vector2(1528.7769, 42.701187)
@@ -146,6 +152,46 @@ shape = SubResource("RectangleShape2D_ladder2")
 
 [node name="Hazards" type="Node2D" parent="World/Environment" unique_id=897499977]
 
+[node name="LaserV_Bot1" parent="World/Environment/Hazards" unique_id=1894100001 instance=ExtResource("20_laser_v")]
+position = Vector2(-200.0, 380.0)
+scale = Vector2(0.6, 0.76)
+blink_on_time = 2.2
+blink_off_time = 1.8
+
+[node name="Sprite" parent="World/Environment/Hazards/LaserV_Bot1" index="0"]
+position = Vector2(0, 125.0)
+scale = Vector2(1, 1.4)
+
+[node name="LaserV_Bot2" parent="World/Environment/Hazards" unique_id=1894100002 instance=ExtResource("20_laser_v")]
+position = Vector2(300.0, 380.0)
+scale = Vector2(0.6, 0.76)
+blink_on_time = 2.2
+blink_off_time = 1.6
+
+[node name="Sprite" parent="World/Environment/Hazards/LaserV_Bot2" index="0"]
+position = Vector2(0, 125.0)
+scale = Vector2(1, 1.4)
+
+[node name="LaserV_Mid1" parent="World/Environment/Hazards" unique_id=1894100003 instance=ExtResource("20_laser_v")]
+position = Vector2(100.0, 170.0)
+scale = Vector2(0.6, 0.76)
+blink_on_time = 2.0
+blink_off_time = 1.8
+
+[node name="Sprite" parent="World/Environment/Hazards/LaserV_Mid1" index="0"]
+position = Vector2(0, 125.0)
+scale = Vector2(1, 1.4)
+
+[node name="LaserV_Top1" parent="World/Environment/Hazards" unique_id=1894100004 instance=ExtResource("20_laser_v")]
+position = Vector2(-150.0, -280.0)
+scale = Vector2(0.6, 0.76)
+blink_on_time = 2.0
+blink_off_time = 1.6
+
+[node name="Sprite" parent="World/Environment/Hazards/LaserV_Top1" index="0"]
+position = Vector2(0, 125.0)
+scale = Vector2(1, 1.4)
+
 [node name="SafeZones" type="Node2D" parent="World/Environment" unique_id=1870994437]
 
 [node name="SafeZone1_Spawn" type="Area2D" parent="World/Environment/SafeZones" unique_id=718876878 groups=["safe_zones"]]
@@ -206,42 +252,114 @@ position = Vector2(0, 90)
 [node name="DataCube2" parent="World/Environment/Interactables" unique_id=1740244969 instance=ExtResource("11_cube")]
 position = Vector2(-552.7578, -115.22988)
 
+[node name="ExitDoor_ToLevel5" parent="World/Environment/Interactables" unique_id=1894200001 instance=ExtResource("22_level_door")]
+position = Vector2(660.0, -510.0)
+next_level = 5
+label_text = "[E] Ir al Reactor Core"
+
 [node name="Characters" type="Node2D" parent="." unique_id=1577482180]
 
 [node name="kai" parent="Characters" unique_id=251662614 instance=ExtResource("8_kai")]
 position = Vector2(-564, 265)
 
 [node name="Enemies" type="Node2D" parent="." unique_id=1916352095]
-visible = false
 
-[node name="Ukibuki_Industrial1" parent="Enemies" unique_id=2052704656 instance=ExtResource("15_ukibuki")]
+[node name="Ukibuki_Ind1" parent="Enemies" unique_id=2052704656 instance=ExtResource("15_ukibuki")]
 position = Vector2(-100, 60)
-speed = 90.0
 unique_id = "ukibuki_l04_01"
+speed = 95.0
+patrol_distance = 200.0
+detection_range = 340.0
+attack_cooldown = 1.9
+chase_speed_mult = 1.5
 
-[node name="Ukibuki_Industrial2" parent="Enemies" unique_id=194299974 instance=ExtResource("15_ukibuki")]
-position = Vector2(200, 60)
-speed = 90.0
+[node name="Ukibuki_Ind2" parent="Enemies" unique_id=194299974 instance=ExtResource("15_ukibuki")]
+position = Vector2(250, 60)
 unique_id = "ukibuki_l04_02"
+speed = 95.0
 patrol_distance = 180.0
+detection_range = 340.0
+attack_cooldown = 1.9
+chase_speed_mult = 1.5
 
-[node name="Ukibuki_Industrial3" parent="Enemies" unique_id=2060747702 instance=ExtResource("15_ukibuki")]
+[node name="Guardia_Ind1" parent="Enemies" unique_id=1894300001 instance=ExtResource("17_guardia")]
+position = Vector2(-300, 253)
+unique_id = "guardia_l04_01"
+speed = 80.0
+patrol_distance = 200.0
+detection_range = 280.0
+attack_cooldown = 2.2
+chase_speed_mult = 1.4
+
+[node name="Guardia_Ind2" parent="Enemies" unique_id=1894300002 instance=ExtResource("17_guardia")]
+position = Vector2(300, 253)
+unique_id = "guardia_l04_02"
+speed = 80.0
+patrol_distance = 180.0
+detection_range = 280.0
+attack_cooldown = 2.2
+chase_speed_mult = 1.4
+
+[node name="Drone_Ind1" parent="Enemies" unique_id=1894300003 instance=ExtResource("18_drone")]
+position = Vector2(100, -230)
+unique_id = "drone_l04_01"
+speed = 110.0
+patrol_distance = 220.0
+detection_range = 340.0
+attack_cooldown = 1.8
+chase_speed_mult = 1.7
+
+[node name="Drone_Ind2" parent="Enemies" unique_id=1894300004 instance=ExtResource("18_drone")]
 position = Vector2(-200, -230)
-speed = 95.0
-unique_id = "ukibuki_l04_03"
+unique_id = "drone_l04_02"
+speed = 110.0
+patrol_distance = 200.0
+detection_range = 340.0
+attack_cooldown = 1.8
+chase_speed_mult = 1.7
 
-[node name="Ukibuki_Industrial4" parent="Enemies" unique_id=1509466881 instance=ExtResource("15_ukibuki")]
-position = Vector2(300, -230)
-speed = 95.0
-unique_id = "ukibuki_l04_04"
-patrol_distance = 160.0
+[node name="Tanque_Ind1" parent="Enemies" unique_id=1894300005 instance=ExtResource("19_tanque")]
+position = Vector2(0, 253)
+unique_id = "tanque_l04_01"
+
+[node name="Tanque_Ind2" parent="Enemies" unique_id=1894300006 instance=ExtResource("19_tanque")]
+position = Vector2(-100, -230)
+unique_id = "tanque_l04_02"
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=374780103]
 
 [node name="PlayerHUD" parent="UI" unique_id=1835870550 instance=ExtResource("16_hud")]
-visible = false
 
 [node name="SmartCheckpointSystem" type="Node" parent="." unique_id=535092331]
 script = ExtResource("6_checkpoint")
 
+[node name="FloorClearTrigger_Bot" type="Node" parent="." unique_id=1894400001]
+script = ExtResource("21_trigger")
+enemy_ids = Array[String](["guardia_l04_01", "guardia_l04_02", "tanque_l04_01"])
+laser_path = NodePath("World/Environment/Hazards/LaserV_Bot1")
+clear_message = "Piso 1 despejado"
+
+[node name="FloorClearTrigger_Bot2" type="Node" parent="." unique_id=1894400002]
+script = ExtResource("21_trigger")
+enemy_ids = Array[String](["guardia_l04_01", "guardia_l04_02", "tanque_l04_01"])
+laser_path = NodePath("World/Environment/Hazards/LaserV_Bot2")
+clear_message = ""
+
+[node name="FloorClearTrigger_Mid" type="Node" parent="." unique_id=1894400003]
+script = ExtResource("21_trigger")
+enemy_ids = Array[String](["ukibuki_l04_01", "ukibuki_l04_02"])
+laser_path = NodePath("World/Environment/Hazards/LaserV_Mid1")
+clear_message = "Piso 2 despejado"
+
+[node name="FloorClearTrigger_Top" type="Node" parent="." unique_id=1894400004]
+script = ExtResource("21_trigger")
+enemy_ids = Array[String](["drone_l04_01", "drone_l04_02", "tanque_l04_02"])
+laser_path = NodePath("World/Environment/Hazards/LaserV_Top1")
+clear_message = "Piso 3 despejado"
+
 [editable path="Characters/kai"]
+[editable path="World/Environment/Hazards/LaserV_Bot1"]
+[editable path="World/Environment/Hazards/LaserV_Bot2"]
+[editable path="World/Environment/Hazards/LaserV_Mid1"]
+[editable path="World/Environment/Hazards/LaserV_Top1"]
+[editable path="World/Environment/Interactables/ExitDoor_ToLevel5"]
