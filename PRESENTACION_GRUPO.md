@@ -45,6 +45,18 @@ La historia completa está documentada en el repositorio, pero en la exposición
 
 ### Arquitectura (1.5 min)
 
+**Stack tecnológico:**
+
+| Tecnología | Versión | Por qué la usamos |
+|-----------|---------|-------------------|
+| **Godot Engine** | 4.6 stable | Open source, sistema de escenas nativo para 2D, señales que implementan Observer de forma nativa |
+| **GDScript** | 2.0 | Lenguaje propio de Godot, tipado opcional, sintaxis similar a Python, ideal para prototipar rápido |
+| **Jolt Physics** | Integrado | Motor de física de alto rendimiento, más preciso que el motor por defecto de Godot para plataformeros |
+| **Forward+ Renderer** | Godot 4.6 | Renderizado moderno con soporte de luces dinámicas (usadas en los robots y puertas) |
+| **Git + GitHub** | — | Control de versiones, ramas por integrante, commits semánticos |
+
+> "Elegimos Godot sobre Unity porque es completamente open source, no tiene restricciones de licencia, y su sistema de escenas hace que cada objeto del juego sea independiente y reutilizable. GDScript nos permitió iterar rápido sin la complejidad de C#."
+
 El proyecto tiene **3 capas**:
 
 ```
@@ -70,6 +82,14 @@ DATOS/ESTADO  →  6 Autoloads Singleton (accesibles desde cualquier script)
 **~3 min**
 
 ### Sistema de recursos (1.5 min)
+
+**GDScript y tipado estático** — el proyecto usa tipado explícito en todas las variables críticas:
+```gdscript
+var health  : float = MAX_HEALTH   # float para daño fraccionario
+var stamina : float = MAX_STAMINA  # degradación suave por delta
+var energy  : float = MAX_ENERGY   # consumo por frame al hackear
+```
+Esto mejora el rendimiento y detecta errores en tiempo de edición, no en ejecución.
 
 Kai tiene **3 recursos** que el jugador gestiona al mismo tiempo:
 
@@ -121,6 +141,12 @@ Kai tiene **3 recursos** que el jugador gestiona al mismo tiempo:
 
 ### IA de los Ukibuki (1.5 min)
 
+**Herramientas de Godot usadas:**
+- **PhysicsRayQueryParameters2D** — para el Line-of-Sight del robot
+- **CharacterBody2D** — cuerpo físico del robot con `move_and_slide()`
+- **PointLight2D** — luz de estado que cambia de color según el estado de la FSM
+- **Señales de Godot** — `player_detected`, `attacked`, `destroyed` para comunicar eventos sin acoplamiento
+
 Los **Ukibuki** son robots de seguridad con una **máquina de estados finita (FSM)**:
 
 ```
@@ -144,6 +170,13 @@ IDLE → PATROL → ALERT → CHASE → ATTACK
 Al destruir un Ukibuki: +500 puntos, camera shake, registra derrota en `LevelStateManager` (persiste entre sesiones).
 
 ### Sistema de puertas (1.5 min)
+
+**Herramientas de Godot usadas:**
+- **AnimatedSprite2D** — animaciones de apertura/cierre con frames del spritesheet `doors.png`
+- **Area2D** — zona de detección del jugador (sin colisión física, solo trigger)
+- **StaticBody2D** — colisión física de la puerta cerrada, se desactiva al abrir
+- **AtlasTexture** — recorte preciso de frames del spritesheet (265×300px por frame, 9 frames totales)
+- **Tween** — animaciones de brillo y pulso al acercarse a la puerta
 
 **6 tipos de puertas**, cada una consume un recurso distinto:
 
@@ -179,6 +212,18 @@ La **puerta electrificada** tiene 7 estados internos:
 | **Strategy** | Comportamiento de movimiento cambia según estado: correr, agacharse, escalar |
 
 > "El más importante es el Singleton — con 37 escenas que comparten estado, sin él tendríamos dependencias circulares por todos lados."
+
+**Herramientas visuales y de UI:**
+
+| Herramienta | Uso en el juego |
+|-------------|----------------|
+| **GLSL Shaders** | Efecto de distorsión de calor en el menú principal, scanlines, borde neón en botones |
+| **CanvasLayer** | HUD siempre encima del juego (layer 5), transiciones de nivel (layer 128) |
+| **Tween** | Todas las animaciones de UI: fade in/out, bounce de corazones, pulso de puertas |
+| **ParallaxBackground** | Fondo con profundidad en los niveles |
+| **ColorRect + CanvasLayer** | Fade negro entre niveles, viñeta roja en Game Over |
+
+> "Los shaders están escritos en GLSL y se integran directamente en Godot como recursos `.gdshader`. El efecto de calor del menú usa distorsión de onda sinusoidal sobre el fondo."
 
 ### Demo en vivo (1.5 min)
 
@@ -226,15 +271,19 @@ Muestra esto en orden:
 
 | | |
 |-|-|
-| Motor | Godot 4.6, GDScript |
+| Motor | Godot 4.6, Forward+ Renderer |
+| Lenguaje | GDScript 2.0 (tipado estático) |
+| Física | Jolt Physics (integrado en Godot 4.6) |
+| Shaders | GLSL — distorsión de calor, scanlines, borde neón |
+| Control de versiones | Git + GitHub, ramas por integrante |
 | Género | Plataformero 2D acción/puzzle |
 | Protagonista | Kai, técnico de mantenimiento |
-| Niveles | 5 + epílogo |
-| Recursos | Salud (3 corazones), Stamina, Energía |
+| Niveles | 5 + epílogo (2 jugables en el demo) |
+| Recursos del jugador | Salud (3 corazones), Stamina, Energía |
 | Enemigos | Ukibuki — FSM 7 estados + Line-of-Sight |
 | Patrones | Singleton, FSM, Observer, Template Method, Strategy |
 | Guardado | 3 slots, persistencia de estado de nivel |
-| Scripts | 53 `.gd` · Escenas: 37 `.tscn` |
+| Scripts | 53 `.gd` · Escenas: 37 `.tscn` · Assets: 167 `.png` |
 
 ---
 
