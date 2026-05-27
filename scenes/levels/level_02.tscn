@@ -13,7 +13,6 @@
 [ext_resource type="PackedScene" uid="uid://cg4lv665lj8ey" path="res://scenes/ui/player_hud.tscn" id="15_hud"]
 [ext_resource type="PackedScene" uid="uid://bnjpl3vgodi8r" path="res://scenes/objects/level_door.tscn" id="16_level_door"]
 [ext_resource type="PackedScene" uid="uid://laser_v_nk7" path="res://scenes/objects/laser_v.tscn" id="17_laser_v"]
-[ext_resource type="PackedScene" uid="uid://switch_nk7" path="res://scenes/objects/switch.tscn" id="18_switch"]
 [ext_resource type="PackedScene" uid="uid://keycard_nk7" path="res://scenes/objects/keycard.tscn" id="19_keycard"]
 [ext_resource type="PackedScene" uid="uid://cuvnfx6am47jn" path="res://scenes/objects/coin.tscn" id="20_coin"]
 [ext_resource type="PackedScene" path="res://scenes/objects/energy_tube.tscn" id="21_energy"]
@@ -199,41 +198,19 @@ position = Vector2(-660.67145, 333.046)
 next_level = 1
 label_text = "[E] Volver al Sector B"
 
-;; ── SWITCH PISO 1 — apaga LaserV_P1 ─────────────────────────────
-;; Está a la izquierda del láser, el jugador lo encuentra explorando
-[node name="Switch_P1" parent="World/Environment/Interactables" instance=ExtResource("18_switch")]
-position = Vector2(-300, 390)
-one_shot = true
-targets = [NodePath("../../Hazards/LaserV_P1")]
-
-;; ── SWITCH PISO 2 — apaga LaserV_P2 ─────────────────────────────
-;; Centro del piso 2, el jugador debe llegar hasta aquí
-[node name="Switch_P2" parent="World/Environment/Interactables" instance=ExtResource("18_switch")]
-position = Vector2(100, 110)
-one_shot = true
-targets = [NodePath("../../Hazards/LaserV_P2")]
-
-;; ── SWITCH PISO 3 — apaga LaserV_P3 (always_on) ─────────────────
-;; Izquierda del piso 3, el jugador debe subir por la escalera izquierda
-[node name="Switch_P3" parent="World/Environment/Interactables" instance=ExtResource("18_switch")]
-position = Vector2(-400, -260)
-one_shot = true
-targets = [NodePath("../../Hazards/LaserV_P3")]
-
 ;; ── KEYCARD — detrás del LaserV_P3, piso 3 derecha ──────────────
 [node name="Keycard_Exit" parent="World/Environment/Interactables" instance=ExtResource("19_keycard")]
 position = Vector2(450, -260)
 keycard_id = "card_sector_7f"
 
-;; ── ENERGY TUBES — recargar energía antes de hackear ─────────────
+;; ── ENERGY TUBES ─────────────────────────────────────────────────
 [node name="EnergyTube_P1" parent="World/Environment/Interactables" instance=ExtResource("21_energy")]
 position = Vector2(400, 390)
 
 [node name="EnergyTube_P2" parent="World/Environment/Interactables" instance=ExtResource("21_energy")]
 position = Vector2(-200, 110)
 
-;; ── MONEDAS — guían al jugador por el camino correcto ────────────
-;; Piso 1: guían hacia el switch
+;; ── MONEDAS ───────────────────────────────────────────────────────
 [node name="Coin1" parent="World/Environment/Interactables" instance=ExtResource("20_coin")]
 position = Vector2(-500, 390)
 
@@ -243,14 +220,12 @@ position = Vector2(-400, 390)
 [node name="Coin3" parent="World/Environment/Interactables" instance=ExtResource("20_coin")]
 position = Vector2(-200, 390)
 
-;; Piso 2: guían hacia el switch
 [node name="Coin4" parent="World/Environment/Interactables" instance=ExtResource("20_coin")]
 position = Vector2(-400, 110)
 
 [node name="Coin5" parent="World/Environment/Interactables" instance=ExtResource("20_coin")]
 position = Vector2(200, 110)
 
-;; Piso 3: guían hacia el switch y la keycard
 [node name="Coin6" parent="World/Environment/Interactables" instance=ExtResource("20_coin")]
 position = Vector2(-600, -260)
 
