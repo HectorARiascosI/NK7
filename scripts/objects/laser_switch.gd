@@ -15,8 +15,8 @@ signal switched_on
 ## Si true, solo se puede usar una vez (apagar permanentemente)
 @export var one_shot : bool = true
 
-@onready var sprite         : Sprite2D = $Sprite
-@onready var interact_label : Label    = $InteractLabel
+@onready var sprite         : Sprite2D = $Sprite if has_node("Sprite") else null
+@onready var interact_label : Label    = $InteractLabel if has_node("InteractLabel") else null
 
 var _activated  : bool = false   ## Ya fue usado
 var _player_near: bool = false
