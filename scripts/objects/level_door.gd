@@ -15,6 +15,8 @@ signal door_entered
 @export var spawn_position  : Vector2 = Vector2.ZERO
 ## Texto del label de interacción
 @export var label_text      : String  = "[E] Entrar"
+## Si no está vacío, requiere esta keycard para poder entrar
+@export var required_keycard : String = ""
 
 # ── Nodos ─────────────────────────────────────────────────────────
 @onready var _detect : Area2D           = $DetectionArea
@@ -80,6 +82,19 @@ func _on_body_exited(body: Node2D) -> void:
 # ── Entrada ───────────────────────────────────────────────────────
 
 func _enter() -> void:
+	# Verificar keycard si es necesaria
+	if required_keycard != "":
+		var player := get_tree().get_first_node_in_group("player")
+		if player and player.has_method("has_keycard"):
+			if not player.has_keycard(required_keycard):
+				# Flash rojo en el label — no tiene la keycard
+				_label.text = "⚠ Requiere tarjeta de acceso"
+				_label.add_theme_color_override("font_color", Color(1, 0.2, 0.2))
+				await get_tree().create_timer(2.0).timeout
+				_label.text = label_text
+				_label.remove_theme_color_override("font_color")
+				return
+
 	_used          = true
 	_player_near   = false
 	_label.visible = false
