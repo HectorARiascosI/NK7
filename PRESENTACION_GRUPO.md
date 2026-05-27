@@ -11,9 +11,15 @@
 
 ---
 
-## LA HISTORIA (todos deben conocerla de memoria)
+## LA HISTORIA (solo lo que se ve en el juego actual)
 
-**KAI**, técnico de mantenimiento, 7 años en el Complejo NK-7 — planta de fusión nuclear. Un martes de noviembre el sistema de control falla: protocolo de contención activado, salidas bloqueadas, láseres en modo letal. Kai queda solo a 7 metros bajo tierra. Usa su conocimiento del lugar para avanzar. Encuentra a **RENA** por radio. Juntos activan dos paneles simultáneamente y escapan. Epílogo: Kai vuelve solo a investigar la Sala del Protocolo Rojo — el origen real de la falla. No como héroe. Como técnico con trabajo pendiente.
+**KAI** es un técnico de mantenimiento atrapado en una instalación industrial tras un fallo del sistema de control. Las salidas están bloqueadas, los láseres en modo peligroso y los robots de seguridad patrullan los pasillos. El jugador debe avanzar por los sectores usando el conocimiento técnico de Kai: hackear sistemas, reparar puertas y esquivar o eliminar robots.
+
+Lo que se ve en el demo:
+- **Nivel 1 (Sector B):** Tres pisos de la instalación, láseres, robots Ukibuki, un switch que desactiva un láser, y una puerta de salida al siguiente sector
+- **Nivel 2 (Sector 7-F):** Continuación del recorrido con más enemigos
+
+La historia completa está documentada en el repositorio, pero en la exposición basta con describir lo que el docente va a ver en pantalla.
 
 ---
 
@@ -24,27 +30,20 @@
 ## 🎤 1. TATIANA — Historia + Arquitectura
 **~3 min**
 
-### Historia (2 min)
+### Historia (1.5 min)
 
-> "Buenos días, vamos a presentar NK-7, un videojuego 2D desarrollado en Godot 4.6."
+> "Buenos días, vamos a presentar NK-7, un videojuego 2D de acción y puzzle desarrollado en Godot 4.6."
 
-Cuenta la historia con estas partes:
+**El juego:**
+> "NK-7 es un plataformero 2D donde controlamos a **Kai**, un técnico de mantenimiento atrapado en una instalación industrial tras un fallo del sistema de control. Las salidas están bloqueadas, los robots de seguridad patrullan los pasillos y los láseres están en modo peligroso. El jugador avanza por los sectores usando el conocimiento técnico de Kai: hackea sistemas, repara puertas y enfrenta a los robots Ukibuki."
 
-**El mundo:** El Complejo NK-7 es una planta de fusión nuclear. Kai lleva 7 años ahí, conoce cada válvula y panel dañado. No llegó por ambición — llegó porque era bueno en los sistemas.
+**Lo que vamos a mostrar hoy:**
+> "En el demo tienen el Sector B — tres pisos de la instalación con láseres, robots, un puzzle de interruptor y una puerta que lleva al siguiente sector. La historia completa está documentada en el repositorio."
 
-**El colapso:** Un martes de noviembre, mientras hace mantenimiento en el Sector B subterráneo, el sistema anuncia: *"Protocolo de contención activado. Falla crítica en el núcleo. Evacuación prohibida."* Las puertas se cierran. Kai está solo a 7 metros bajo tierra.
+**Por qué es interesante como proyecto de software:**
+> "Cada mecánica tiene una justificación narrativa. Las puertas dañadas existen porque la instalación colapsó. Los láseres están en modo peligroso porque el protocolo de seguridad los reconfiguró. La stamina representa el esfuerzo físico de un técnico escapando. Eso hace que el diseño del juego y el diseño del software estén alineados."
 
-**La supervivencia:** Kai no entra en pánico. Recuerda rutas secundarias que él mismo reparó. Supera puertas selladas, atraviesa láseres con movimientos calculados.
-
-**Rena:** Tras 40 minutos escucha a **RENA** por radio — técnica atrapada en el ala oeste. Ella conoce rutas que no están en los mapas estándar.
-
-**La resolución:** Activación simultánea: Kai en el panel norte, Rena en el panel oeste. Luces de emergencia verdes. Escapan juntos.
-
-**Epílogo:** Kai vuelve solo a la Sala del Protocolo Rojo. No como héroe. Como técnico con trabajo pendiente.
-
-**Tema:** La tecnología fuera de control vs. el ingenio humano. Cada mecánica tiene sentido narrativo: las puertas dañadas existen porque la instalación colapsó, los láseres están en modo letal porque el protocolo los reconfiguró.
-
-### Arquitectura (1 min)
+### Arquitectura (1.5 min)
 
 El proyecto tiene **3 capas**:
 
@@ -63,7 +62,7 @@ DATOS/ESTADO  →  6 Autoloads Singleton (accesibles desde cualquier script)
 | `GameState` | Estado global de sesión |
 | `NK7Theme` | Tema visual global |
 
-> "Estos singletons reducen el acoplamiento — cualquier script puede acceder a GameManager sin referencias directas entre escenas."
+> "Estos singletons reducen el acoplamiento — cualquier script accede a GameManager sin referencias directas entre escenas. Con 37 escenas en el proyecto, esto es crítico."
 
 ---
 
