@@ -154,7 +154,6 @@ position = Vector2(0, -120)
 color = Color(1, 0, 0, 1)
 energy = 1.0
 texture_scale = 0.5
-texture = preload("res://icon.svg")
 
 [node name="Particles" type="GPUParticles2D" parent="."]
 position = Vector2(0, 0)
