@@ -1,56 +1,111 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=10 format=3]
 
-[ext_resource type="Script" path="res://scripts/enemies/ukibuki.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://assets/characters/guardia/guardia_spritesheet.png" id="2_sheet"]
+[ext_resource type="Script"    path="res://scripts/enemies/guardia.gd"                    id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/projectile.tscn"              id="2_proj"]
+[ext_resource type="Texture2D" path="res://assets/characters/guardia/guardia_spritesheet.png" id="3_sheet"]
 
-[sub_resource type="AtlasTexture" id="AT_idle"]
-atlas = ExtResource("2_sheet")
+;; Guardia spritesheet: 1536x1024, 8 frames horizontales de 192x1024
+;; Usamos los 8 frames como animación de caminar/idle
+;; frame_w = 192, frame_h = 1024
+
+[sub_resource type="AtlasTexture" id="AT_0"]
+atlas = ExtResource("3_sheet")
 region = Rect2(0, 0, 192, 1024)
+
+[sub_resource type="AtlasTexture" id="AT_1"]
+atlas = ExtResource("3_sheet")
+region = Rect2(192, 0, 192, 1024)
+
+[sub_resource type="AtlasTexture" id="AT_2"]
+atlas = ExtResource("3_sheet")
+region = Rect2(384, 0, 192, 1024)
+
+[sub_resource type="AtlasTexture" id="AT_3"]
+atlas = ExtResource("3_sheet")
+region = Rect2(576, 0, 192, 1024)
+
+[sub_resource type="AtlasTexture" id="AT_4"]
+atlas = ExtResource("3_sheet")
+region = Rect2(768, 0, 192, 1024)
+
+[sub_resource type="AtlasTexture" id="AT_5"]
+atlas = ExtResource("3_sheet")
+region = Rect2(960, 0, 192, 1024)
+
+[sub_resource type="AtlasTexture" id="AT_6"]
+atlas = ExtResource("3_sheet")
+region = Rect2(1152, 0, 192, 1024)
+
+[sub_resource type="AtlasTexture" id="AT_7"]
+atlas = ExtResource("3_sheet")
+region = Rect2(1344, 0, 192, 1024)
 
 [sub_resource type="SpriteFrames" id="SF_guardia"]
 animations = [{
 "frames": [
-{"duration":1.0,"texture":SubResource("AT_idle")},
-{"duration":1.0,"texture":SubResource("AT_idle")},
-{"duration":1.0,"texture":SubResource("AT_idle")},
-{"duration":1.0,"texture":SubResource("AT_idle")}
+{"duration":1.0,"texture":SubResource("AT_0")},
+{"duration":1.0,"texture":SubResource("AT_1")},
+{"duration":1.0,"texture":SubResource("AT_2")},
+{"duration":1.0,"texture":SubResource("AT_3")}
 ],
-"loop": true, "name": &"idle", "speed": 6.0
+"loop": true, "name": &"idle", "speed": 5.0
 },{
 "frames": [
-{"duration":1.0,"texture":SubResource("AT_idle")},
-{"duration":1.0,"texture":SubResource("AT_idle")},
-{"duration":1.0,"texture":SubResource("AT_idle")},
-{"duration":1.0,"texture":SubResource("AT_idle")}
+{"duration":1.0,"texture":SubResource("AT_0")},
+{"duration":1.0,"texture":SubResource("AT_1")},
+{"duration":1.0,"texture":SubResource("AT_2")},
+{"duration":1.0,"texture":SubResource("AT_3")},
+{"duration":1.0,"texture":SubResource("AT_4")},
+{"duration":1.0,"texture":SubResource("AT_5")},
+{"duration":1.0,"texture":SubResource("AT_6")},
+{"duration":1.0,"texture":SubResource("AT_7")}
 ],
 "loop": true, "name": &"walk", "speed": 8.0
-},{
-"frames": [{"duration":1.0,"texture":SubResource("AT_idle")}],
-"loop": false, "name": &"attack", "speed": 6.0
-},{
-"frames": [{"duration":1.0,"texture":SubResource("AT_idle")}],
-"loop": false, "name": &"hurt", "speed": 8.0
-},{
-"frames": [{"duration":1.0,"texture":SubResource("AT_idle")}],
-"loop": false, "name": &"dead", "speed": 6.0
 }]
 
-[node name="Guardia" type="CharacterBody2D" groups=["enemies"]]
-script = ExtResource("1_script")
-max_health = 80
-damage = 25
-speed = 90
-patrol_distance = 200.0
-detection_range = 300.0
-attack_range = 260.0
-attack_cooldown = 2.0
-chase_speed_mult = 1.4
-unique_id = ""
+[sub_resource type="CapsuleShape2D" id="Shape_body"]
+radius = 18.0
+height = 40.0
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-scale = Vector2(0.08, 0.08)
+[sub_resource type="CircleShape2D" id="Shape_detect"]
+radius = 260.0
+
+[node name="Guardia" type="CharacterBody2D" groups=["enemies"]]
+collision_layer = 2
+collision_mask  = 1
+script = ExtResource("1_script")
+max_health      = 80
+damage          = 18
+speed           = 65.0
+patrol_distance = 180.0
+detection_range = 260.0
+attack_range    = 220.0
+attack_cooldown = 2.8
+chase_speed_mult = 1.3
+projectile_speed = 180.0
+projectile_scene = ExtResource("2_proj")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.055, 0.055)
 sprite_frames = SubResource("SF_guardia")
 animation = &"idle"
 autoplay = "idle"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="Collision" type="CollisionShape2D" parent="."]
+shape = SubResource("Shape_body")
+
+[node name="DetectionArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask  = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+shape = SubResource("Shape_detect")
+
+[node name="Light" type="PointLight2D" parent="."]
+color = Color(1.0, 0.4, 0.1, 1.0)
+energy = 0.9
+texture_scale = 0.4
+
+[node name="AttackTimer" type="Timer" parent="."]
+wait_time = 2.8
+autostart = true
